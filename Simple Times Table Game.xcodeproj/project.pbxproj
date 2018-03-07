@@ -12,6 +12,9 @@
 		F5B2D38B204F26CC005B93C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5B2D389204F26CC005B93C8 /* Main.storyboard */; };
 		F5B2D38D204F26CC005B93C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5B2D38C204F26CC005B93C8 /* Assets.xcassets */; };
 		F5B2D390204F26CC005B93C8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5B2D38E204F26CC005B93C8 /* LaunchScreen.storyboard */; };
+		F5B2D398204F4CAE005B93C8 /* ExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D397204F4CAE005B93C8 /* ExerciseViewController.swift */; };
+		F5B2D39C20503286005B93C8 /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D39B20503286005B93C8 /* TableCell.swift */; };
+		F5B2D39F205034DD005B93C8 /* TimesTable.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D39D205034DD005B93C8 /* TimesTable.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +25,9 @@
 		F5B2D38C204F26CC005B93C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F5B2D38F204F26CC005B93C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F5B2D391204F26CC005B93C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F5B2D397204F4CAE005B93C8 /* ExerciseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseViewController.swift; sourceTree = "<group>"; };
+		F5B2D39B20503286005B93C8 /* TableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
+		F5B2D39E205034DD005B93C8 /* TimesTable.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TimesTable.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +62,10 @@
 			children = (
 				F5B2D385204F26CC005B93C8 /* AppDelegate.swift */,
 				F5B2D387204F26CC005B93C8 /* ViewController.swift */,
+				F5B2D39D205034DD005B93C8 /* TimesTable.xcdatamodeld */,
+				F5B2D397204F4CAE005B93C8 /* ExerciseViewController.swift */,
 				F5B2D389204F26CC005B93C8 /* Main.storyboard */,
+				F5B2D39B20503286005B93C8 /* TableCell.swift */,
 				F5B2D38C204F26CC005B93C8 /* Assets.xcassets */,
 				F5B2D38E204F26CC005B93C8 /* LaunchScreen.storyboard */,
 				F5B2D391204F26CC005B93C8 /* Info.plist */,
@@ -90,6 +99,10 @@
 		F5B2D37A204F26CB005B93C8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				KnownAssetTags = (
+					1A,
+					2A,
+				);
 				LastSwiftUpdateCheck = 0830;
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "PWS-apps";
@@ -138,6 +151,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5B2D388204F26CC005B93C8 /* ViewController.swift in Sources */,
+				F5B2D398204F4CAE005B93C8 /* ExerciseViewController.swift in Sources */,
+				F5B2D39C20503286005B93C8 /* TableCell.swift in Sources */,
+				F5B2D39F205034DD005B93C8 /* TimesTable.xcdatamodeld in Sources */,
 				F5B2D386204F26CC005B93C8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,6 +322,19 @@
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F5B2D39D205034DD005B93C8 /* TimesTable.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F5B2D39E205034DD005B93C8 /* TimesTable.xcdatamodel */,
+			);
+			currentVersion = F5B2D39E205034DD005B93C8 /* TimesTable.xcdatamodel */;
+			path = TimesTable.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F5B2D37A204F26CB005B93C8 /* Project object */;
 }
