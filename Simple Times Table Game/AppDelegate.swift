@@ -328,7 +328,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     // MARK: - fetchRecordsForEntity
-    private func fetchRecordsForEntity(_ entity: String, key: String, arg: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> [NSManagedObject] {
+    func fetchRecordsForEntity(_ entity: String, key: String, arg: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> [NSManagedObject] {
         // Create Fetch Request
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
         let predicate = NSPredicate(format: "%K == %@", key, arg)

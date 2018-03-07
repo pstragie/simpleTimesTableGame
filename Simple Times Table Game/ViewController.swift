@@ -23,10 +23,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     // MARK: - Life cycle
     override func viewDidLoad() {
-        super.viewDidLoad()
-        let moc = self.appDelegate.persistentContainer.viewContext
-        let x = countTables(managedObjectContext: moc)
-        print("Aantal: \(x)")
+        super.viewDidLoad()        
         // Do any additional setup after loading the view, typically from a nib.
         do {
             try self.fetchedResultsController.performFetch()
@@ -53,11 +50,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if let sourceViewController = segue.source as? ExerciseViewController {
             //fetch records
             let moc = self.appDelegate.persistentContainer.viewContext
-            let table = fetchRecordsForEntity("TimesTable", key: "timestable", arg: sourceViewController.selectedTable!, inManagedObjectContext: moc)
+            let table = self.appDelegate.fetchRecordsForEntity("TimesTable", key: "timestable", arg: sourceViewController.selectedTable!, inManagedObjectContext: moc)
             let finished = sourceViewController.finished
             //let timestable = sourceViewController.selectedTable!
             let score = sourceViewController.score
-            let timer = Int(sourceViewController.timer.text!)
+            let timer = Int(sourceViewController.timerLabel.text!)
             let diff: Int = sourceViewController.difficultyLevel! + 1
             if finished == true {
                 if score < 10 {
@@ -65,9 +62,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     table.first?.setValue(String(diff), forKey: "star1")
                 } else if score == 10 && timer == 0 {
                     print("two bronze stars")
+                    table.first?.setValue(String(diff), forKey: "star1")
                     table.first?.setValue(String(diff), forKey: "star2")
                 } else if score == 10 && timer != 0 {
                     print("three bronze stars")
+                    table.first?.setValue(String(diff), forKey: "star1")
+                    table.first?.setValue(String(diff), forKey: "star2")
                     table.first?.setValue(String(diff), forKey: "star3")
                 }
             }
@@ -79,26 +79,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    // MARK: - fetchRecordsForEntity
-    private func fetchRecordsForEntity(_ entity: String, key: String, arg: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> [NSManagedObject] {
-        // Create Fetch Request
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
-        let predicate = NSPredicate(format: "%K == %@", key, arg)
-        fetchRequest.predicate = predicate
-        // Helpers
-        var result = [NSManagedObject]()
-        
-        do {
-            // Execute Fetch Request
-            let records = try managedObjectContext.fetch(fetchRequest)
-            if let records = records as? [NSManagedObject] {
-                result = records
-            }
-        } catch {
-            print("Unable to fetch managed objects for entity \(entity).")
-        }
-        return result
-    }
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -177,10 +157,6 @@ extension ViewController: NSFetchedResultsControllerDelegate {
         }
     }
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        
-    }
-    
     // MARK: - Table data
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -211,13 +187,13 @@ extension ViewController: NSFetchedResultsControllerDelegate {
         
         //         Fetch Stars
         let stars = fetchedResultsController.object(at: indexPath)
-        print("Stars table: \(stars)")
         //         Configure Cell
         cell.layer.cornerRadius = 3
         cell.layer.masksToBounds = true
         cell.layer.borderWidth = 1
         
         cell.timesTable.text = stars.timestable
+        
         if stars.star1 == "0" {
             cell.star1.image = #imageLiteral(resourceName: "empty_star")
         } else if stars.star1 == "1" {
@@ -245,6 +221,7 @@ extension ViewController: NSFetchedResultsControllerDelegate {
         } else if stars.star3 == "3" {
             cell.star3.image = #imageLiteral(resourceName: "gold_star")
         }
+ 
         
         return cell
     }
