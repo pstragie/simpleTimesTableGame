@@ -16,7 +16,7 @@ class TableCell: UITableViewCell {
     
     // MARK: -
     
-    @IBOutlet weak var timestable: UIButton!
+    @IBOutlet weak var timesTable: UILabel!
     @IBOutlet weak var star1: UIImageView!
     @IBOutlet weak var star2: UIImageView!
     @IBOutlet weak var star3: UIImageView!

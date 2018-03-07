@@ -7,28 +7,31 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    @IBOutlet weak var button1: UIButton!
-    @IBOutlet weak var button2: UIButton!
-    @IBOutlet weak var button3: UIButton!
-    @IBOutlet weak var button4: UIButton!
-    @IBOutlet weak var button5: UIButton!
-    @IBOutlet weak var button6: UIButton!
-    @IBOutlet weak var button7: UIButton!
-    @IBOutlet weak var button8: UIButton!
-    @IBOutlet weak var button9: UIButton!
-    @IBOutlet weak var buttonAll: UIButton!
-    @IBOutlet weak var buttonResetStars: UIButton!
+    // MARK: - Constants & Variables
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    let localdata = UserDefaults.standard
 
+    // MARK: - Outlets
+    @IBOutlet weak var buttonResetStars: UIButton!
     @IBOutlet weak var DifficultyControl: UISegmentedControl!
-    
-    
-    
+    @IBOutlet var tableView: UITableView!
+
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        do {
+            try self.fetchedResultsController.performFetch()
+        } catch {
+            let fetchError = error as NSError
+            print("Unable to Perform Fetch Request")
+            print("\(fetchError), \(fetchError.localizedDescription)")
+            fatalError("Could not fetch records: \(fetchError)")
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,7 +43,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBAction func unwindToOverview(segue: UIStoryboardSegue) {
         if let sourceViewController = segue.source as? ExerciseViewController {
             let finished = sourceViewController.finished
-            let timestable = sourceViewController.selectedTable!
+            //let timestable = sourceViewController.selectedTable!
             let score = sourceViewController.score
             let timer = Int(sourceViewController.timer.text!)
             if finished == true {
@@ -59,71 +62,44 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destination = segue.destination as! ExerciseViewController
-        var selectedTable = "0"
-        let S1 = "Segue1"
-        let S2 = "Segue2"
-        let S3 = "Segue3"
-        let S4 = "Segue4"
-        let S5 = "Segue5"
-        let S6 = "Segue6"
-        let S7 = "Segue7"
-        let S8 = "Segue8"
-        let S9 = "Segue9"
-        let SAll = "SegueAll"
         switch segue.identifier! {
-        case S1:
-            selectedTable = "1"
-        case S2:
-            selectedTable = "2"
-        case S3:
-            selectedTable = "3"
-       case S4:
-            selectedTable = "4"
-       case S5:
-            selectedTable = "5"
-       case S6:
-            selectedTable = "6"
-       case S7:
-            selectedTable = "7"
-       case S8:
-            selectedTable = "8"
-        case S9:
-            selectedTable = "9"
-        case SAll:
-            selectedTable = "All"
+        case "SegueToExercise":
+            let destination = segue.destination as! ExerciseViewController
+            let indexPath = tableView.indexPathForSelectedRow!
+            destination.selectedTable = String(describing: indexPath)
+            destination.difficultyLevel = Int(DifficultyControl.selectedSegmentIndex)
+
+        //            print("Segue: \(segue.identifier!)!")
         default:
             //            print("Segue: \(segue.identifier!)!")
             break
         }
-        destination.selectedTable = selectedTable
-        destination.difficultyLevel = Int(DifficultyControl.selectedSegmentIndex)
+        
     }
 
     // MARK: - fetchedResultsController
-    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<Tables> = {
+    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<TimesTable> = {
         // Create Fetch Request
-        let fetchRequest: NSFetchRequest<Tables> = Tables.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "mppnm", ascending: true)]
-        var format: String = "mppnm BEGINSWITH[c] %@"
-        let predicate = NSPredicate(format: format, "AlotofMumboJumboblablabla")
-        fetchRequest.predicate = predicate
+        let fetchRequest: NSFetchRequest<TimesTable> = TimesTable.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestable", ascending: true)]
         // Create Fetched Results Controller
-        
+        //let predicate = NSPredicate(format: "timestable BEGINSWITH[c] %@", "1")
+        //fetchRequest.predicate = predicate
         let context = self.appDelegate.persistentContainer.viewContext
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         // Configure Fetched Results Controller
-        fetchedResultsController.delegate = self
+        fetchedResultsController.delegate = self as? NSFetchedResultsControllerDelegate
         return fetchedResultsController
     }()
 
     // MARK: - Table data
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let medicijnen = fetchedResultsController.fetchedObjects else { return 0 }
+        guard let timestables = fetchedResultsController.fetchedObjects else { return 0 }
         tableView.layer.cornerRadius = 3
         tableView.layer.masksToBounds = true
         tableView.layer.borderWidth = 1
-        return medicijnen.count
+        print("number of rows: \(timestables.count)")
+        return timestables.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -131,10 +107,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
-    }
-    
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        // MARK: Add to Medicijnkast
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -155,10 +127,143 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         cell.layer.masksToBounds = true
         cell.layer.borderWidth = 1
         
-        cell.timestable.text = stars.table
+        cell.timesTable.text = stars.timestable
+        cell.star1.image = #imageLiteral(resourceName: "empty_star")
+        cell.star2.image = #imageLiteral(resourceName: "empty_star")
+        cell.star3.image = #imageLiteral(resourceName: "empty_star")
         
         return cell
     }
 
+    // MARK: - fetch all records from Userdata
+    private func fetchAllRecordsForEntity(_ entity: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> [NSManagedObject] {
+        // Create Fetch Request
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
+        // Helpers
+        var result = [NSManagedObject]()
+        
+        do {
+            // Execute Fetch Request
+            let records = try managedObjectContext.fetch(fetchRequest)
+            if let records = records as? [NSManagedObject] {
+                result = records
+            }
+        } catch {
+            print("Unable to fetch managed objects for entity \(entity).")
+        }
+        return result
+    }
+    
+    // MARK: - Copy to Userdefaults
+    func copyUserdataToUserdefaults(managedObjectContext: NSManagedObjectContext) {
+        //print("Copying Userdata to localdata")
+        // Read entity Userdata values
+        let userdata = fetchAllRecordsForEntity("TimesTable", inManagedObjectContext: managedObjectContext)
+        var tablearray: Array<Any> = []
+        // Check if Userdefaults exist
+        // Store to Userdefaults - Create array and store in localdata under key: mppcv
+        // Read array of userdata in localdata
+        if localdata.object(forKey: "userdata") != nil {
+            //print("userdata exists in localdata")
+            tablearray = localdata.array(forKey: "userdata")!
+        } else {
+            //print("userdata does not exist in localdata")
+            tablearray = [] as [Any]
+        }
+        
+        for userData in userdata {
+            //print("userData: ", userData)
+            let dict = ["table": (userData.value(forKey: "timestable")) as! String, "star1": (userData.value(forKey: "star1")) as! String, "star2": (userData.value(forKey: "star2")) as! String, "star3": (userData.value(forKey: "star3")) as! String,  "lastupdate": (userData.value(forKey: "lastupdate")) as! Date] as [String : Any]
+            //print("dict: ", dict)
+            
+            
+            // Add mppcv to array of userdata in localdata
+            tablearray.append(userData.value(forKey: "timestable")!)
+            localdata.set(tablearray, forKey: "userdata")
+            localdata.set(dict, forKey: (userData.value(forKey: "timestable")) as! String)
+            //print("saved \(String(describing: userData.value(forKey: "mppcv"))) to localdata")
+        }
+    }
+
+    // MARK: - private fetch records
+    private func fetchRecordsForEntity(_ entity: String, key: String, arg: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> [NSManagedObject] {
+        // Create Fetch Request
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
+        // Helpers
+        var result = [NSManagedObject]()
+        
+        do {
+            // Execute Fetch Request
+            let records = try managedObjectContext.fetch(fetchRequest)
+            if let records = records as? [NSManagedObject] {
+                result = records
+            }
+        } catch {
+            print("Unable to fetch managed objects for entity \(entity).")
+        }
+        return result
+    }
+    
+    // MARK: - private create record
+    private func createRecordForEntity(_ entity: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> NSManagedObject? {
+        // Helpers
+        var result: NSManagedObject?
+        // Create Entity Description
+        let entityDescription = NSEntityDescription.entity(forEntityName: entity, in: managedObjectContext)
+        if let entityDescription = entityDescription {
+            // Create Managed Object
+            result = NSManagedObject(entity: entityDescription, insertInto: managedObjectContext)
+        }
+        return result
+    }
+    
+    // MARK: - add userdata
+    func addUserData(tableValue: String, userkey: String, uservalue: Bool, managedObjectContext: NSManagedObjectContext) {
+        // one-to-one relationship
+        // Check if record exists
+        //print("addUserData: \(mppcvValue), \(userkey), \(uservalue)")
+        let userdata = fetchRecordsForEntity("TimesTable", key: "timestable", arg: tableValue, inManagedObjectContext: managedObjectContext)
+        if userdata.count == 0 {
+            //            print("data line does not exist")
+            if let newUserData = createRecordForEntity("TimesTable", inManagedObjectContext: managedObjectContext) {
+                newUserData.setValue(uservalue, forKey: userkey)
+                newUserData.setValue(tableValue, forKey: "timestable")
+                let TT = fetchRecordsForEntity("TimesTable", key: "timestable", arg: tableValue, inManagedObjectContext: managedObjectContext)
+                newUserData.setValue(Date(), forKey: "lastupdate")
+                for tt in TT {
+                    tt.setValue(newUserData, forKeyPath: "userdata")
+                }
+            } else {
+                print("not newUserData")
+            }
+        } else {
+            print("data line exists")
+            for userData in userdata {
+                userData.setValue(uservalue, forKey: userkey)
+                userData.setValue(tableValue, forKey: "timestable")
+                userData.setValue(Date(), forKey: "lastupdate")
+            }
+            
+        }
+    }
+    
+    // MARK: - Copy Userdefaults to UserData (DB) --> after update!
+    func copyUserDefaultsToUserData(managedObjectContext: NSManagedObjectContext) {
+        let context = self.appDelegate.persistentContainer.viewContext
+        //        print("Copying localdata to Userdata")
+        // Read UserDefaults array: from localdata, key: userdata
+        //        print("Localdata: \(String(describing: localdata.array(forKey: "userdata")))")
+        // Use UserDefaults array values to obtain dictionary data
+        for userData in localdata.array(forKey: "userdata")! {
+            //            print("userdata: \(userData)")
+            let dict = localdata.dictionary(forKey: (userData as! String))
+            //            print("Dict: \(dict!)")
+            for (key, value) in dict! {
+                if key == "timestable" {
+                    addUserData(tableValue: (userData as! String), userkey: key, uservalue: (value as! Bool), managedObjectContext: context)
+                }
+            }
+        }
+    }
 }
 

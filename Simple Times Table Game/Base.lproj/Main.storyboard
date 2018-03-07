@@ -26,46 +26,46 @@
                                 <rect key="frame" x="46" y="138" width="283" height="390"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="8ju-eI-Gas" customClass="TableCell" customModule="Simple_Times_Table_Game" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="283" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TableCell" rowHeight="60" id="8ju-eI-Gas" customClass="TableCell" customModule="Simple_Times_Table_Game" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="283" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8ju-eI-Gas" id="Hwi-pK-GWd">
-                                            <rect key="frame" x="0.0" y="0.0" width="283" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="283" height="59"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Wxu-Nb-K3V">
-                                                    <rect key="frame" x="13" y="13" width="220" height="48"/>
+                                                    <rect key="frame" x="5" y="13" width="273" height="40"/>
                                                     <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xTG-8n-SF1">
-                                                            <rect key="frame" x="0.0" y="0.0" width="40" height="48"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                                            <state key="normal" title="1"/>
-                                                            <connections>
-                                                                <segue destination="3yz-Lp-PFl" kind="show" identifier="Segue1" id="qqV-wa-koW"/>
-                                                            </connections>
-                                                        </button>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="timesTable" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kkD-fG-MvW">
+                                                            <rect key="frame" x="0.0" y="0.0" width="53" height="40"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_star" translatesAutoresizingMaskIntoConstraints="NO" id="KKI-dh-8CC">
-                                                            <rect key="frame" x="60" y="0.0" width="40" height="48"/>
+                                                            <rect key="frame" x="73" y="0.0" width="54" height="40"/>
                                                         </imageView>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_star" translatesAutoresizingMaskIntoConstraints="NO" id="Xkb-Yj-GKz">
-                                                            <rect key="frame" x="120" y="0.0" width="40" height="48"/>
+                                                            <rect key="frame" x="147" y="0.0" width="53" height="40"/>
                                                         </imageView>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_star" translatesAutoresizingMaskIntoConstraints="NO" id="wcX-zm-ZRu">
-                                                            <rect key="frame" x="180" y="0.0" width="40" height="48"/>
+                                                            <rect key="frame" x="220" y="0.0" width="53" height="40"/>
                                                         </imageView>
                                                     </subviews>
                                                 </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Wxu-Nb-K3V" firstAttribute="leading" secondItem="Hwi-pK-GWd" secondAttribute="leadingMargin" constant="5" id="k5p-yR-HG5"/>
-                                                <constraint firstItem="Wxu-Nb-K3V" firstAttribute="top" secondItem="Hwi-pK-GWd" secondAttribute="topMargin" constant="5" id="lnv-hv-Dnx"/>
+                                                <constraint firstItem="Wxu-Nb-K3V" firstAttribute="leading" secondItem="Hwi-pK-GWd" secondAttribute="leading" constant="5" id="Pl7-fp-thc"/>
+                                                <constraint firstItem="Wxu-Nb-K3V" firstAttribute="top" secondItem="Hwi-pK-GWd" secondAttribute="topMargin" constant="5" id="dro-yg-Y38"/>
+                                                <constraint firstAttribute="trailing" secondItem="Wxu-Nb-K3V" secondAttribute="trailing" constant="5" id="eFv-k4-sNa"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="star1" destination="KKI-dh-8CC" id="MvN-ol-3cW"/>
                                             <outlet property="star2" destination="Xkb-Yj-GKz" id="UDE-Gb-fF1"/>
                                             <outlet property="star3" destination="wcX-zm-ZRu" id="rkE-bO-XDn"/>
-                                            <outlet property="timestable" destination="xTG-8n-SF1" id="hef-Ob-2gb"/>
+                                            <outlet property="timesTable" destination="kkD-fG-MvW" id="PA9-NV-WNs"/>
+                                            <segue destination="3yz-Lp-PFl" kind="show" identifier="SegueToExercise" id="AKe-ij-bAX"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -116,8 +116,8 @@
                     </view>
                     <connections>
                         <outlet property="DifficultyControl" destination="28I-gy-m7I" id="v4a-IK-qbk"/>
-                        <outlet property="button1" destination="xTG-8n-SF1" id="Gib-Ee-Ybv"/>
                         <outlet property="buttonResetStars" destination="pRX-bp-bTC" id="RBg-LE-rnv"/>
+                        <outlet property="tableView" destination="dVg-EI-XO7" id="hUv-3a-yU1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -225,7 +225,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aSg-7d-wVh" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="r5U-Q7-3wn" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1014" y="57"/>
+            <point key="canvasLocation" x="825" y="36"/>
         </scene>
     </scenes>
     <resources>
