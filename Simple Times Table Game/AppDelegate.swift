@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Step 2: Delete the app from the simulator
             // Step 3: Delete the csv files and add the new csv files
             // Step 4: Set the newDbFiles to "true"
-            newDbFiles = true
+            newDbFiles = false
 
             // Step 5: Run the app (10 seconds or more to read and load all the files)
             // Step 6a: Locate the database files (3)
@@ -122,6 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        self.saveContext()
     }
 
     // MARK: - Core Data Saving support
@@ -429,29 +430,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - persistentContainer
     lazy var persistentContainer: NSPersistentContainer = {
-        //        print("Loading persistentContainer")
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-         */
         let container = NSPersistentContainer(name: "Datamodel")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                NSLog("CoreData error \(error), \(String(describing: error._userInfo))")
-                self.errorHandler(error)
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                fatalError("Unresolved CoreData error \(error), \(error.userInfo)")
+                fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
         return container

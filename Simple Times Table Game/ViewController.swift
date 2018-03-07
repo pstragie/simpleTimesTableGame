@@ -14,6 +14,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: - Constants & Variables
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let localdata = UserDefaults.standard
+    var errorHandler: (Error) -> Void = {_ in }
 
     // MARK: - Outlets
     @IBOutlet weak var buttonResetStars: UIButton!
@@ -23,6 +24,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        let moc = self.appDelegate.persistentContainer.viewContext
+        let x = countTables(managedObjectContext: moc)
+        print("Aantal: \(x)")
         // Do any additional setup after loading the view, typically from a nib.
         do {
             try self.fetchedResultsController.performFetch()
@@ -38,35 +42,71 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.tableView.reloadData()
+    }
 
     // MARK: - Unwind
     @IBAction func unwindToOverview(segue: UIStoryboardSegue) {
         if let sourceViewController = segue.source as? ExerciseViewController {
+            //fetch records
+            let moc = self.appDelegate.persistentContainer.viewContext
+            let table = fetchRecordsForEntity("TimesTable", key: "timestable", arg: sourceViewController.selectedTable!, inManagedObjectContext: moc)
             let finished = sourceViewController.finished
             //let timestable = sourceViewController.selectedTable!
             let score = sourceViewController.score
             let timer = Int(sourceViewController.timer.text!)
+            let diff: Int = sourceViewController.difficultyLevel! + 1
             if finished == true {
                 if score < 10 {
                     print("one bronze star")
-
+                    table.first?.setValue(String(diff), forKey: "star1")
                 } else if score == 10 && timer == 0 {
                     print("two bronze stars")
+                    table.first?.setValue(String(diff), forKey: "star2")
                 } else if score == 10 && timer != 0 {
                     print("three bronze stars")
+                    table.first?.setValue(String(diff), forKey: "star3")
                 }
             }
-            
+            do {
+                try moc.save()
+            } catch {
+                fatalError("Could not save")
+            }
         }
     }
     
+    // MARK: - fetchRecordsForEntity
+    private func fetchRecordsForEntity(_ entity: String, key: String, arg: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> [NSManagedObject] {
+        // Create Fetch Request
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
+        let predicate = NSPredicate(format: "%K == %@", key, arg)
+        fetchRequest.predicate = predicate
+        // Helpers
+        var result = [NSManagedObject]()
+        
+        do {
+            // Execute Fetch Request
+            let records = try managedObjectContext.fetch(fetchRequest)
+            if let records = records as? [NSManagedObject] {
+                result = records
+            }
+        } catch {
+            print("Unable to fetch managed objects for entity \(entity).")
+        }
+        return result
+    }
+
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
         case "SegueToExercise":
             let destination = segue.destination as! ExerciseViewController
             let indexPath = tableView.indexPathForSelectedRow!
-            destination.selectedTable = String(describing: indexPath)
+            destination.selectedTable = String(describing: indexPath.row + 1)
             destination.difficultyLevel = Int(DifficultyControl.selectedSegmentIndex)
 
         //            print("Segue: \(segue.identifier!)!")
@@ -80,7 +120,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: - fetchedResultsController
     fileprivate lazy var fetchedResultsController: NSFetchedResultsController<TimesTable> = {
         // Create Fetch Request
-        let fetchRequest: NSFetchRequest<TimesTable> = TimesTable.fetchRequest()
+        let fetchRequest = NSFetchRequest<TimesTable>(entityName: "TimesTable")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestable", ascending: true)]
         // Create Fetched Results Controller
         //let predicate = NSPredicate(format: "timestable BEGINSWITH[c] %@", "1")
@@ -88,32 +128,82 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let context = self.appDelegate.persistentContainer.viewContext
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         // Configure Fetched Results Controller
-        fetchedResultsController.delegate = self as? NSFetchedResultsControllerDelegate
+        fetchedResultsController.delegate = self
         return fetchedResultsController
     }()
 
+    func countTables(managedObjectContext: NSManagedObjectContext) -> Int {
+        let fetchReq: NSFetchRequest<TimesTable> = TimesTable.fetchRequest()
+        do {
+            let aantal = try managedObjectContext.fetch(fetchReq).count
+            return aantal
+        } catch {
+            return 0
+        }
+    }
+
+    
+}
+// MARK: - Extension
+extension ViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
+        //updateView()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch (type) {
+        case .insert:
+            if let indexPath = newIndexPath {
+                tableView.insertRows(at: [indexPath], with: .fade)
+            }
+            break;
+        case .delete:
+            if let indexPath = indexPath {
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+            break;
+        case .update:
+            tableView.reloadData()
+            break;
+        default:
+            break
+            //print("...")
+        }
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        
+    }
+    
     // MARK: - Table data
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let timestables = fetchedResultsController.fetchedObjects else { return 0 }
+        guard let rows = fetchedResultsController.fetchedObjects else { return 0 }
+        //print("aantal rijen in tabel: \(medicijnen.count)")
         tableView.layer.cornerRadius = 3
         tableView.layer.masksToBounds = true
         tableView.layer.borderWidth = 1
-        print("number of rows: \(timestables.count)")
-        return timestables.count
+        return rows.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100.0
+        return 70.0
     }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        return false
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableCell.reuseIdentifier, for: indexPath) as? TableCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath) as? TableCell else {
             fatalError("Unexpected Index Path")
         }
         
@@ -121,20 +211,44 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         //         Fetch Stars
         let stars = fetchedResultsController.object(at: indexPath)
-        
+        print("Stars table: \(stars)")
         //         Configure Cell
         cell.layer.cornerRadius = 3
         cell.layer.masksToBounds = true
         cell.layer.borderWidth = 1
         
         cell.timesTable.text = stars.timestable
-        cell.star1.image = #imageLiteral(resourceName: "empty_star")
-        cell.star2.image = #imageLiteral(resourceName: "empty_star")
-        cell.star3.image = #imageLiteral(resourceName: "empty_star")
+        if stars.star1 == "0" {
+            cell.star1.image = #imageLiteral(resourceName: "empty_star")
+        } else if stars.star1 == "1" {
+            cell.star1.image = #imageLiteral(resourceName: "bronze_star")
+        } else if stars.star1 == "2" {
+            cell.star1.image = #imageLiteral(resourceName: "silver_star")
+        } else if stars.star1 == "3" {
+            cell.star1.image = #imageLiteral(resourceName: "gold_star")
+        }
+        if stars.star2 == "0" {
+            cell.star2.image = #imageLiteral(resourceName: "empty_star")
+        } else if stars.star2 == "1" {
+            cell.star2.image = #imageLiteral(resourceName: "bronze_star")
+        } else if stars.star2 == "2" {
+            cell.star2.image = #imageLiteral(resourceName: "silver_star")
+        } else if stars.star2 == "3" {
+            cell.star2.image = #imageLiteral(resourceName: "gold_star")
+        }
+        if stars.star3 == "0" {
+            cell.star3.image = #imageLiteral(resourceName: "empty_star")
+        } else if stars.star3 == "1" {
+            cell.star3.image = #imageLiteral(resourceName: "bronze_star")
+        } else if stars.star3 == "2" {
+            cell.star3.image = #imageLiteral(resourceName: "silver_star")
+        } else if stars.star3 == "3" {
+            cell.star3.image = #imageLiteral(resourceName: "gold_star")
+        }
         
         return cell
     }
-
+    
     // MARK: - fetch all records from Userdata
     private func fetchAllRecordsForEntity(_ entity: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> [NSManagedObject] {
         // Create Fetch Request
@@ -184,7 +298,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             //print("saved \(String(describing: userData.value(forKey: "mppcv"))) to localdata")
         }
     }
-
+    
     // MARK: - private fetch records
     private func fetchRecordsForEntity(_ entity: String, key: String, arg: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> [NSManagedObject] {
         // Create Fetch Request
@@ -265,5 +379,5 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
         }
     }
-}
 
+}

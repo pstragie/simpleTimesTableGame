@@ -36,7 +36,7 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Wxu-Nb-K3V">
                                                     <rect key="frame" x="5" y="13" width="273" height="40"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="timesTable" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kkD-fG-MvW">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="timesTable" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kkD-fG-MvW">
                                                             <rect key="frame" x="0.0" y="0.0" width="53" height="40"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                             <nil key="textColor"/>
@@ -69,6 +69,11 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <sections/>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="Vcg-pc-9eB"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="Mt3-uM-8SM"/>
+                                </connections>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pRX-bp-bTC">
                                 <rect key="frame" x="36" y="588" width="120" height="30"/>
@@ -99,7 +104,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="1" green="0.87261615859999997" blue="0.2761612289" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="pRX-bp-bTC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="2Oj-G5-xh0"/>
                             <constraint firstItem="xLe-Jm-Zov" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="2gy-ry-fg9"/>
@@ -173,7 +178,9 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ss-99-bVl">
                                 <rect key="frame" x="16" y="28" width="46" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Back"/>
+                                <state key="normal" title="Back">
+                                    <color key="titleColor" red="0.08235294118" green="0.21176470589999999" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="goBack:" destination="3yz-Lp-PFl" eventType="touchUpInside" id="MfW-rC-raY"/>
                                 </connections>
@@ -225,7 +232,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aSg-7d-wVh" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="r5U-Q7-3wn" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="825" y="36"/>
+            <point key="canvasLocation" x="958" y="83"/>
         </scene>
     </scenes>
     <resources>
