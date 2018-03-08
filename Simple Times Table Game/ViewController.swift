@@ -15,16 +15,30 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let localdata = UserDefaults.standard
     var errorHandler: (Error) -> Void = {_ in }
+    var maxScore: Int = 10
 
     // MARK: - Outlets
     @IBOutlet weak var buttonResetStars: UIButton!
     @IBOutlet weak var DifficultyControl: UISegmentedControl!
     @IBOutlet var tableView: UITableView!
+    @IBOutlet weak var startButton: UIButton!
+    @IBAction func resetAllStarsButtonPressed(_ sender: UIButton) {
+        let controller = UIAlertController(title: "All stars will be deleted!", message: "Are you sure you want to delete all hard earned stars?", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default) { alertAction in self.resetAllStars() }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { alertAction in
+        }
+        
+        controller.addAction(ok)
+        controller.addAction(cancel)
+        
+        present(controller, animated: true, completion: nil)
 
+        //resetAllStars()
+    }
     // MARK: - Life cycle
     override func viewDidLoad() {
-        super.viewDidLoad()        
-        // Do any additional setup after loading the view, typically from a nib.
+        super.viewDidLoad()
+        setupLayout()
         do {
             try self.fetchedResultsController.performFetch()
         } catch {
@@ -47,28 +61,40 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     // MARK: - Unwind
     @IBAction func unwindToOverview(segue: UIStoryboardSegue) {
+        startButton.isEnabled = false
         if let sourceViewController = segue.source as? ExerciseViewController {
             //fetch records
             let moc = self.appDelegate.persistentContainer.viewContext
-            let table = self.appDelegate.fetchRecordsForEntity("TimesTable", key: "timestable", arg: sourceViewController.selectedTable!, inManagedObjectContext: moc)
+            
             let finished = sourceViewController.finished
             //let timestable = sourceViewController.selectedTable!
-            let score = sourceViewController.score
             let timer = Int(sourceViewController.timerLabel.text!)
             let diff: Int = sourceViewController.difficultyLevel! + 1
-            if finished == true {
-                if score < 10 {
-                    print("one bronze star")
-                    table.first?.setValue(String(diff), forKey: "star1")
-                } else if score == 10 && timer == 0 {
-                    print("two bronze stars")
-                    table.first?.setValue(String(diff), forKey: "star1")
-                    table.first?.setValue(String(diff), forKey: "star2")
-                } else if score == 10 && timer != 0 {
-                    print("three bronze stars")
-                    table.first?.setValue(String(diff), forKey: "star1")
-                    table.first?.setValue(String(diff), forKey: "star2")
-                    table.first?.setValue(String(diff), forKey: "star3")
+            if diff == 2 {
+                self.maxScore = 11
+            } else if diff == 3 {
+                self.maxScore = 14
+            } else {
+                self.maxScore = 10
+            }
+            for (tt, score) in sourceViewController.scorePerTable {
+                if tt != 99 {
+                    let table = self.appDelegate.fetchRecordsForEntity("TimesTable", key: "timestable", arg: String(tt), inManagedObjectContext: moc)
+                    if finished == true {
+                        if score < self.maxScore {
+                            print("one bronze star")
+                            table.first?.setValue(String(diff), forKey: "star1")
+                        } else if score == self.maxScore && timer == 0 {
+                            print("two bronze stars")
+                            table.first?.setValue(String(diff), forKey: "star1")
+                            table.first?.setValue(String(diff), forKey: "star2")
+                        } else if score == self.maxScore && timer != 0 {
+                            print("three bronze stars")
+                            table.first?.setValue(String(diff), forKey: "star1")
+                            table.first?.setValue(String(diff), forKey: "star2")
+                            table.first?.setValue(String(diff), forKey: "star3")
+                        }
+                    }
                 }
             }
             do {
@@ -79,15 +105,42 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    // MARK: - function Reset All Stars
+    func resetAllStars() {
+        let moc = self.appDelegate.persistentContainer.viewContext
+        for tt in [1,2,3,4,5,6,7,8,9] {
+            let table = self.appDelegate.fetchRecordsForEntity("TimesTable", key: "timestable", arg: String(tt), inManagedObjectContext: moc)
+            table.first?.setValue("0", forKey: "star1")
+            table.first?.setValue("0", forKey: "star2")
+            table.first?.setValue("0", forKey: "star3")
+        }
+        do {
+            try moc.save()
+        } catch {
+            fatalError("Could not reset stars")
+        }
+        tableView.reloadData()
+    }
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
+            
         case "SegueToExercise":
-            let destination = segue.destination as! ExerciseViewController
-            let indexPath = tableView.indexPathForSelectedRow!
-            destination.selectedTable = String(describing: indexPath.row + 1)
-            destination.difficultyLevel = Int(DifficultyControl.selectedSegmentIndex)
+            if tableView.indexPathsForSelectedRows?.count == 0 {
+                let controller = UIAlertController(title: "No times table selected!", message: "Select at least one table.", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "OK", style: .default)
+                controller.addAction(ok)
+                present(controller, animated: true, completion: nil)
+        
+            } else {
+                let destination = segue.destination as! ExerciseViewController
+                //let indexPath = tableView.indexPathForSelectedRow!
+                let selTables = tableView.indexPathsForSelectedRows
+                destination.selectedTables = selTables
+                destination.difficultyLevel = Int(DifficultyControl.selectedSegmentIndex)
+            }
+            
 
         //            print("Segue: \(segue.identifier!)!")
         default:
@@ -112,6 +165,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return fetchedResultsController
     }()
 
+    // MARK: - setup layout
+    func setupLayout() {
+        startButton.layer.cornerRadius = 10
+        startButton.isEnabled = false
+        tableView.tableFooterView = UIView()
+    }
+    
+    // MARK: - func count Tables
     func countTables(managedObjectContext: NSManagedObjectContext) -> Int {
         let fetchReq: NSFetchRequest<TimesTable> = TimesTable.fetchRequest()
         do {
@@ -162,9 +223,6 @@ extension ViewController: NSFetchedResultsControllerDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let rows = fetchedResultsController.fetchedObjects else { return 0 }
         //print("aantal rijen in tabel: \(medicijnen.count)")
-        tableView.layer.cornerRadius = 3
-        tableView.layer.masksToBounds = true
-        tableView.layer.borderWidth = 1
         return rows.count
     }
     
@@ -178,12 +236,23 @@ extension ViewController: NSFetchedResultsControllerDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.indexPathsForSelectedRows?.count != 0 {
+            startButton.isEnabled = true
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        if tableView.indexPathsForSelectedRows?.count == 0 {
+            startButton.isEnabled = false
+        }
+    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath) as? TableCell else {
             fatalError("Unexpected Index Path")
         }
         
-        cell.selectionStyle = .none
+        cell.selectionStyle = .blue
         
         //         Fetch Stars
         let stars = fetchedResultsController.object(at: indexPath)

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F55BBED52050EB76008F0DEE /* AirHorn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F55BBED32050EB76008F0DEE /* AirHorn.mp3 */; };
+		F55BBED62050EB76008F0DEE /* Tick.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F55BBED42050EB76008F0DEE /* Tick.mp3 */; };
 		F5B2D386204F26CC005B93C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D385204F26CC005B93C8 /* AppDelegate.swift */; };
 		F5B2D388204F26CC005B93C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D387204F26CC005B93C8 /* ViewController.swift */; };
 		F5B2D38B204F26CC005B93C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5B2D389204F26CC005B93C8 /* Main.storyboard */; };
@@ -22,6 +24,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F55BBED32050EB76008F0DEE /* AirHorn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = AirHorn.mp3; sourceTree = "<group>"; };
+		F55BBED42050EB76008F0DEE /* Tick.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Tick.mp3; sourceTree = "<group>"; };
 		F5B2D382204F26CB005B93C8 /* Simple Times Table Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple Times Table Game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B2D385204F26CC005B93C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F5B2D387204F26CC005B93C8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -49,6 +53,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F55BBED72050EB7E008F0DEE /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				F55BBED32050EB76008F0DEE /* AirHorn.mp3 */,
+				F55BBED42050EB76008F0DEE /* Tick.mp3 */,
+			);
+			name = Sounds;
+			sourceTree = "<group>";
+		};
 		F5B2D379204F26CB005B93C8 = {
 			isa = PBXGroup;
 			children = (
@@ -68,6 +81,7 @@
 		F5B2D384204F26CB005B93C8 /* Simple Times Table Game */ = {
 			isa = PBXGroup;
 			children = (
+				F55BBED72050EB7E008F0DEE /* Sounds */,
 				F5B2D3A020503E49005B93C8 /* begindata.csv */,
 				F5B2D39D205034DD005B93C8 /* Datamodel.xcdatamodeld */,
 				F5B2D3A8205055AF005B93C8 /* Datamodel.sqlite */,
@@ -149,10 +163,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F55BBED62050EB76008F0DEE /* Tick.mp3 in Resources */,
 				F5B2D390204F26CC005B93C8 /* LaunchScreen.storyboard in Resources */,
 				F5B2D3AD205055AF005B93C8 /* Datamodel.sqlite-wal in Resources */,
 				F5B2D3AB205055AF005B93C8 /* Datamodel.sqlite in Resources */,
 				F5B2D3AC205055AF005B93C8 /* Datamodel.sqlite-shm in Resources */,
+				F55BBED52050EB76008F0DEE /* AirHorn.mp3 in Resources */,
 				F5B2D38D204F26CC005B93C8 /* Assets.xcassets in Resources */,
 				F5B2D3A120503E49005B93C8 /* begindata.csv in Resources */,
 				F5B2D38B204F26CC005B93C8 /* Main.storyboard in Resources */,
@@ -338,6 +354,7 @@
 				F5B2D396204F26CC005B93C8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
