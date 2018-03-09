@@ -13,20 +13,28 @@ import AVFoundation
 class ExerciseViewController: UIViewController {
     
     // MARK: - var&let
-    var selectedTable: String? = "All"
+    var bewerkingen: Array<String> = []
+    var bewerking: String = "vermenigvuldigen"
+    //var selectedTable: String? = "All"
     var selectedTables: [IndexPath]?
-    var tablesDict: Dictionary<Int,Array<Int>>? = [0:[]]
+    var tablesDictV: Dictionary<Int,Array<Int>>? = [:]
+    var tablesDictD: Dictionary<Int, Array<Int>>? = [:]
     var multiplier: Int?
     var tableMult: Int?
     var finished: Bool = false
     var score: Int = 0
-    var scorePerTable: Dictionary<Int, Int> = [99: 0]
+    var scorePerTableV: Dictionary<Int, Int> = [:]
+    var scorePerTableD: Dictionary<Int, Int> = [:]
+    var scorePerTableDV: Dictionary<Int, Int> = [:]
     var difficultyLevel: Int?
     var numberOfExercises: Int = 10
-    var tablesArray: Array<Int> = []
-    var numberArray: Array<Int> = [1,2,3,4,5,6,7,8,9,10]
+    var tablesArrayV: Array<Int> = []
+    var tablesArrayD: Array<Int> = []
+    var numberArray: Array<Int> = []
+    var divideArray: Array<Int> = []
     var shuffledArray: Array<Int>? = []
     var shuffledTable: Array<Int>? = []
+    var shuffledDivide: Array<Int>? = []
     var seconds = 60 //This variable will hold a starting value of seconds. It could be any amount above 0.
     var timer = Timer()
     var player: AVAudioPlayer?
@@ -38,9 +46,10 @@ class ExerciseViewController: UIViewController {
     @IBOutlet weak var tableNumber: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var submitButton: UIButton!
+    @IBOutlet weak var bewerkingsTeken: UILabel!
     
     @IBAction func goBack(_ sender: UIButton) {
-        print("Back button pressed!")
+        //print("Back button pressed!")
         let controller = UIAlertController(title: "Progress will be lost!", message: "Are you sure you want to go back?", preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default) { alertAction in self.performSegue(withIdentifier: "unwindToOverview", sender: self) }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { alertAction in
@@ -56,7 +65,11 @@ class ExerciseViewController: UIViewController {
     
     @IBAction func submitAnswer(_ sender: UIButton) {
         if resultInputField.text != "" {
-            checkAnswer()
+            if self.bewerking == "vermenigvuldigen" {
+                checkAnswerV()
+            } else if self.bewerking == "delen" {
+                checkAnswerD()
+            }
             viewWillAppear(false)
         } else {
             resultInputField.placeholder = "Enter the result..."
@@ -68,6 +81,7 @@ class ExerciseViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         //print("View did Load")
+        print("bewerkingen: \(self.bewerkingen)")
         setupLayout()
         prepareNumbers()
         DispatchQueue.main.async {
@@ -87,21 +101,94 @@ class ExerciseViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
         //print("view will appear")
-        if self.numberOfExercises > 0 {
-            resultInputField.becomeFirstResponder()
-            let randomTable = Int(arc4random_uniform(UInt32(self.tablesArray.count)))
-            tableMult = self.tablesArray[randomTable]
-            multiplier = tablesDict?[tableMult!]?[0]
-            
-            randomNumber.text = String(describing: multiplier!)
-            tableNumber.text = String(describing: tableMult!)
-            tablesDict?[tableMult!]?.remove(at: 0)
-            if tablesDict?[tableMult!]?.count == 0 {
-                let emptyIndex = self.tablesArray.index(of: tableMult!)
-                self.tablesArray.remove(at: emptyIndex!)
+        if bewerkingen.count == 1 {
+            for bew in bewerkingen {
+                if bew == "vermenigvuldigen" {
+                    self.bewerking = bew
+                    if self.numberOfExercises > 0 {
+                        resultInputField.becomeFirstResponder()
+                        let randomTable = Int(arc4random_uniform(UInt32(self.tablesArrayV.count)))
+                        tableMult = self.tablesArrayV[randomTable]
+                        multiplier = tablesDictV?[tableMult!]?[0]
+                        self.bewerkingsTeken.text = "X"
+                        randomNumber.text = String(describing: multiplier!)
+                        tableNumber.text = String(describing: tableMult!)
+                        tablesDictV?[tableMult!]?.remove(at: 0)
+                        if tablesDictV?[tableMult!]?.count == 0 {
+                            let emptyIndex = self.tablesArrayV.index(of: tableMult!)
+                            self.tablesArrayV.remove(at: emptyIndex!)
+                        }
+                    }
+                }
+                if bew == "delen" {
+                    self.bewerking = bew
+                    if self.numberOfExercises > 0 {
+                        resultInputField.becomeFirstResponder()
+                        let randomTable = Int(arc4random_uniform(UInt32(self.tablesArrayD.count)))
+                        tableMult = self.tablesArrayD[randomTable]
+                        multiplier = tablesDictD?[tableMult!]?[0]
+                        self.bewerkingsTeken.text = ":"
+                        randomNumber.text = String(describing: multiplier!)
+                        tableNumber.text = String(describing: tableMult!)
+                        tablesDictD?[tableMult!]?.remove(at: 0)
+                        if tablesDictD?[tableMult!]?.count == 0 {
+                            let emptyIndex = self.tablesArrayD.index(of: tableMult!)
+                            self.tablesArrayD.remove(at: emptyIndex!)
+                        }
+                    }
+                }
+
+            }
+        } else if bewerkingen.count == 2 {
+            // Mixed exercise muliply and divide
+            // Kies een bewerking ad random
+            let randombew = Int(arc4random_uniform(UInt32(self.bewerkingen.count)))
+            let bew = self.bewerkingen[randombew]
+            if self.numberOfExercises > 0 {
+                resultInputField.becomeFirstResponder()
+                if bew == "vermenigvuldigen" {
+                    self.bewerking = "vermenigvuldigen"
+                    let randomTable = Int(arc4random_uniform(UInt32(self.tablesArrayV.count)))
+                    tableMult = self.tablesArrayV[randomTable]
+                    multiplier = tablesDictV?[tableMult!]?[0]
+                    bewerkingsTeken.text = "X"
+                    randomNumber.text = String(describing: multiplier!)
+                    tableNumber.text = String(describing: tableMult!)
+                    tablesDictV?[tableMult!]?.remove(at: 0)
+                    if tablesDictV?[tableMult!]?.count == 0 {
+                        let emptyIndex = self.tablesArrayV.index(of: tableMult!)
+                        self.tablesArrayV.remove(at: emptyIndex!)
+                    }
+                    if tablesArrayV.count == 0 {
+                        let emptyBew = self.bewerkingen.index(of: "vermenigvuldigen")
+                        self.bewerkingen.remove(at: emptyBew!)
+                    }
+                } else if bew == "delen" {
+                    self.bewerking = "delen"
+                    let randomTable = Int(arc4random_uniform(UInt32(self.tablesArrayD.count)))
+                    tableMult = self.tablesArrayD[randomTable]
+                    multiplier = tablesDictD?[tableMult!]?[0]
+                    bewerkingsTeken.text = ":"
+                    randomNumber.text = String(describing: multiplier!)
+                    tableNumber.text = String(describing: tableMult!)
+                    tablesDictD?[tableMult!]?.remove(at: 0)
+                    if tablesDictD?[tableMult!]?.count == 0 {
+                        let emptyIndex = self.tablesArrayD.index(of: tableMult!)
+                        self.tablesArrayD.remove(at: emptyIndex!)
+                    }
+
+                    if tablesArrayD.count == 0 {
+                        let emptyBew = self.bewerkingen.index(of: "delen")
+                        self.bewerkingen.remove(at: emptyBew!)
+                    }
+                }
+                print("tablesDictV: \(String(describing: self.tablesDictV))")
+                print("tablesDictD: \(String(describing: self.tablesDictD))")
+                print("tablesArrayV: \(self.tablesArrayV)")
+                print("tablesArrayD: \(self.tablesArrayD)")
+                print("bewerkingen: \(self.bewerkingen)")
             }
         }
-        print(self.scorePerTable)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -117,6 +204,7 @@ class ExerciseViewController: UIViewController {
     func setupLayout() {
         backButton.layer.cornerRadius = 5
         submitButton.layer.cornerRadius = 5
+        
     }
     // MARK: - setup progress bar
     func setupProgressStars() {
@@ -138,32 +226,59 @@ class ExerciseViewController: UIViewController {
     func prepareNumbers() {
         // Fill tablesArray from selected rows
         for x in selectedTables! {
-            self.tablesArray.append(x.row + 1)
+            self.tablesArrayV.append(x.row + 1)
+            self.tablesArrayD.append(x.row + 1)
         }
-        print("tablesArray: \(tablesArray)")
-        // Fill numberArray from selected difficulty level
-        if difficultyLevel == 1 {
+        // Fill numberArray from selected difficulty level1
+        if difficultyLevel == 0 {
+            numberArray = [1,2,3,4,5,6,7,8,9,10]
+            for x in self.tablesArrayD {
+                for y in numberArray {
+                    self.divideArray.append(x * y)
+                }
+            }
+            print(self.divideArray)
+        } else if difficultyLevel == 1 {
             numberArray = [0,1,2,3,4,5,6,7,8,9,10]
+            for x in self.tablesArrayD {
+                if x != 0 {
+                    for y in numberArray {
+                        self.divideArray.append(x * y)
+                    }
+                }
+            }
         } else if difficultyLevel == 2 {
             numberArray = [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
+            for x in self.tablesArrayD {
+                if x != 0 {
+                    for y in numberArray {
+                        self.divideArray.append(x * y)
+                    }
+                }
+            }
         }
         // Set number of exercises
-        numberOfExercises = numberArray.count * tablesArray.count
-        // Shuffle multipliers and add to tableDict
-        for x in 0..<tablesArray.count {
+        numberOfExercises = numberArray.count * tablesArrayV.count * self.bewerkingen.count
+        // Shuffle multipliers and add to tableDictV
+        for x in 0..<tablesArrayV.count {
             shuffledArray = shuffleArray(array: numberArray)
-            self.tablesDict?[tablesArray[x]] = shuffledArray
+            self.tablesDictV?[tablesArrayV[x]] = shuffledArray
         }
-        print("tablesDict: \(self.tablesDict!)")
+        // Shuffle dividing numbers and add to tableDictD
+        for x in 0..<tablesArrayD.count {
+            let shuffledDividers = shuffleArray(array: self.divideArray)
+            self.tablesDictD?[tablesArrayD[x]] = shuffledDividers
+        }
+        print("tablesDictD: \(String(describing: self.tablesDictD))")
         // Reset global score
         score = 0
         // Prepare score per table
-        for t in self.tablesArray {
-            self.scorePerTable[t] = 0
+        for t in self.tablesArrayV {
+            self.scorePerTableV[t] = 0
+            self.scorePerTableD[t] = 0
         }
-        print("score per table: \(self.scorePerTable)")
         // Set timer
-        self.seconds = (3 - Int(difficultyLevel!)) * 20 * self.tablesArray.count
+        self.seconds = ((3 - Int(difficultyLevel!)) * 20 * self.tablesArrayV.count * self.bewerkingen.count) + 5
         timerLabel.text = String(self.seconds)
         // Set inputfield
         resultInputField.becomeFirstResponder()
@@ -222,17 +337,13 @@ class ExerciseViewController: UIViewController {
         }
     }
     // MARK: - Check answer
-    func checkAnswer() {
-        //print("Checking answer...")
-        //print(Int(resultInputField.text!)!)
-        //print(self.multiplier!)
-        //print(Int(tableNumber.text!)!)
+    func checkAnswerV() {
         if Int(resultInputField.text!)! == self.multiplier! * self.tableMult! {
             //print("Correct answer")
             score += 1
-            let tableScore = self.scorePerTable[self.tableMult!]
+            let tableScore = self.scorePerTableV[self.tableMult!]
             let newScore = tableScore! + 1
-            scorePerTable[tableMult!] = newScore
+            scorePerTableV[tableMult!] = newScore
         } else {
             //print("Wrong answer")
         }
@@ -240,7 +351,6 @@ class ExerciseViewController: UIViewController {
         //print("number of Exercises: \(numberOfExercises)")
         var answerString: String = "answers"
         if numberOfExercises == 0 {
-            print(self.scorePerTable)
             timer.invalidate()
             finished = true
             if score == 1 {
@@ -255,8 +365,42 @@ class ExerciseViewController: UIViewController {
         
             present(finishedAlert, animated: true, completion: nil)
         }
+        print("scoreV: \(scorePerTableV)")
+        print("scoreD: \(scorePerTableD)")
         resultInputField.text = ""
         reloadInputViews()
     }
-    
+    func checkAnswerD() {
+        if Int(resultInputField.text!)! == self.multiplier! / self.tableMult! {
+            //print("Correct answer")
+            score += 1
+            let tableScore = self.scorePerTableD[self.tableMult!]
+            let newScore = tableScore! + 1
+            scorePerTableD[tableMult!] = newScore
+        } else {
+            //print("Wrong answer")
+        }
+        numberOfExercises -= 1
+        //print("number of Exercises: \(numberOfExercises)")
+        var answerString: String = "answers"
+        if numberOfExercises == 0 {
+            timer.invalidate()
+            finished = true
+            if score == 1 {
+                answerString = "answer"
+            } else if score > 1 {
+                answerString = "answers"
+            }
+            let finishedAlert = UIAlertController(title: "Finished", message: "You have \(score) correct \(answerString).", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style: .default) { alertAction in self.performSegue(withIdentifier: "unwindToOverview", sender: self) }
+            
+            finishedAlert.addAction(ok)
+            
+            present(finishedAlert, animated: true, completion: nil)
+        }
+        print("scoreV: \(scorePerTableV)")
+        print("scoreD: \(scorePerTableD)")
+        resultInputField.text = ""
+        reloadInputViews()
+    }
 }

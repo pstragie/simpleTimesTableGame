@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  Simple Times Table Game
+
+  Created by Pieter Stragier on 09/03/2018.
+  Copyright © 2018 PWS-apps. All rights reserved.
+*/
+"1. Choose level" = "1. Kies niveau";
+"2. Choose operator" = "2. Kies bewerking";
+"3. Choose one or more times tables" = "3. Kies één of meer tafels";
+"OK" = "OK";

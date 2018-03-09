@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		F55BBED52050EB76008F0DEE /* AirHorn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F55BBED32050EB76008F0DEE /* AirHorn.mp3 */; };
 		F55BBED62050EB76008F0DEE /* Tick.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F55BBED42050EB76008F0DEE /* Tick.mp3 */; };
+		F568BF162051C859006DF904 /* begindataDelen.csv in Resources */ = {isa = PBXBuildFile; fileRef = F568BF152051C859006DF904 /* begindataDelen.csv */; };
+		F568BF182051C878006DF904 /* begindataVermDelen.csv in Resources */ = {isa = PBXBuildFile; fileRef = F568BF172051C877006DF904 /* begindataVermDelen.csv */; };
+		F568BF222051E49C006DF904 /* Datamodel.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = F568BF1F2051E49C006DF904 /* Datamodel.sqlite */; };
+		F568BF232051E49C006DF904 /* Datamodel.sqlite-shm in Resources */ = {isa = PBXBuildFile; fileRef = F568BF202051E49C006DF904 /* Datamodel.sqlite-shm */; };
+		F568BF242051E49C006DF904 /* Datamodel.sqlite-wal in Resources */ = {isa = PBXBuildFile; fileRef = F568BF212051E49C006DF904 /* Datamodel.sqlite-wal */; };
+		F568BF2920520835006DF904 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F568BF2B20520835006DF904 /* Localizable.strings */; };
 		F5B2D386204F26CC005B93C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D385204F26CC005B93C8 /* AppDelegate.swift */; };
 		F5B2D388204F26CC005B93C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D387204F26CC005B93C8 /* ViewController.swift */; };
 		F5B2D38B204F26CC005B93C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5B2D389204F26CC005B93C8 /* Main.storyboard */; };
@@ -17,15 +23,21 @@
 		F5B2D398204F4CAE005B93C8 /* ExerciseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D397204F4CAE005B93C8 /* ExerciseViewController.swift */; };
 		F5B2D39C20503286005B93C8 /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D39B20503286005B93C8 /* TableCell.swift */; };
 		F5B2D39F205034DD005B93C8 /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D39D205034DD005B93C8 /* Datamodel.xcdatamodeld */; };
-		F5B2D3A120503E49005B93C8 /* begindata.csv in Resources */ = {isa = PBXBuildFile; fileRef = F5B2D3A020503E49005B93C8 /* begindata.csv */; };
-		F5B2D3AB205055AF005B93C8 /* Datamodel.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = F5B2D3A8205055AF005B93C8 /* Datamodel.sqlite */; };
-		F5B2D3AC205055AF005B93C8 /* Datamodel.sqlite-shm in Resources */ = {isa = PBXBuildFile; fileRef = F5B2D3A9205055AF005B93C8 /* Datamodel.sqlite-shm */; };
-		F5B2D3AD205055AF005B93C8 /* Datamodel.sqlite-wal in Resources */ = {isa = PBXBuildFile; fileRef = F5B2D3AA205055AF005B93C8 /* Datamodel.sqlite-wal */; };
+		F5B2D3A120503E49005B93C8 /* begindataVermenigvuldigen.csv in Resources */ = {isa = PBXBuildFile; fileRef = F5B2D3A020503E49005B93C8 /* begindataVermenigvuldigen.csv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F55BBED32050EB76008F0DEE /* AirHorn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = AirHorn.mp3; sourceTree = "<group>"; };
 		F55BBED42050EB76008F0DEE /* Tick.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Tick.mp3; sourceTree = "<group>"; };
+		F568BF152051C859006DF904 /* begindataDelen.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = begindataDelen.csv; sourceTree = "<group>"; };
+		F568BF172051C877006DF904 /* begindataVermDelen.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = begindataVermDelen.csv; sourceTree = "<group>"; };
+		F568BF1F2051E49C006DF904 /* Datamodel.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = Datamodel.sqlite; sourceTree = "<group>"; };
+		F568BF202051E49C006DF904 /* Datamodel.sqlite-shm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Datamodel.sqlite-shm"; sourceTree = "<group>"; };
+		F568BF212051E49C006DF904 /* Datamodel.sqlite-wal */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Datamodel.sqlite-wal"; sourceTree = "<group>"; };
+		F568BF2520520748006DF904 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Main.strings; sourceTree = "<group>"; };
+		F568BF262052074D006DF904 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F568BF2A20520835006DF904 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F568BF2C20520845006DF904 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F5B2D382204F26CB005B93C8 /* Simple Times Table Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple Times Table Game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B2D385204F26CC005B93C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F5B2D387204F26CC005B93C8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -36,10 +48,7 @@
 		F5B2D397204F4CAE005B93C8 /* ExerciseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseViewController.swift; sourceTree = "<group>"; };
 		F5B2D39B20503286005B93C8 /* TableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
 		F5B2D39E205034DD005B93C8 /* Datamodel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Datamodel.xcdatamodel; sourceTree = "<group>"; };
-		F5B2D3A020503E49005B93C8 /* begindata.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = begindata.csv; sourceTree = "<group>"; };
-		F5B2D3A8205055AF005B93C8 /* Datamodel.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = Datamodel.sqlite; sourceTree = "<group>"; };
-		F5B2D3A9205055AF005B93C8 /* Datamodel.sqlite-shm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Datamodel.sqlite-shm"; sourceTree = "<group>"; };
-		F5B2D3AA205055AF005B93C8 /* Datamodel.sqlite-wal */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Datamodel.sqlite-wal"; sourceTree = "<group>"; };
+		F5B2D3A020503E49005B93C8 /* begindataVermenigvuldigen.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = begindataVermenigvuldigen.csv; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +74,7 @@
 		F5B2D379204F26CB005B93C8 = {
 			isa = PBXGroup;
 			children = (
+				F568BF2B20520835006DF904 /* Localizable.strings */,
 				F5B2D384204F26CB005B93C8 /* Simple Times Table Game */,
 				F5B2D383204F26CB005B93C8 /* Products */,
 			);
@@ -82,11 +92,13 @@
 			isa = PBXGroup;
 			children = (
 				F55BBED72050EB7E008F0DEE /* Sounds */,
-				F5B2D3A020503E49005B93C8 /* begindata.csv */,
+				F5B2D3A020503E49005B93C8 /* begindataVermenigvuldigen.csv */,
+				F568BF152051C859006DF904 /* begindataDelen.csv */,
+				F568BF172051C877006DF904 /* begindataVermDelen.csv */,
 				F5B2D39D205034DD005B93C8 /* Datamodel.xcdatamodeld */,
-				F5B2D3A8205055AF005B93C8 /* Datamodel.sqlite */,
-				F5B2D3A9205055AF005B93C8 /* Datamodel.sqlite-shm */,
-				F5B2D3AA205055AF005B93C8 /* Datamodel.sqlite-wal */,
+				F568BF1F2051E49C006DF904 /* Datamodel.sqlite */,
+				F568BF202051E49C006DF904 /* Datamodel.sqlite-shm */,
+				F568BF212051E49C006DF904 /* Datamodel.sqlite-wal */,
 				F5B2D389204F26CC005B93C8 /* Main.storyboard */,
 				F5B2D385204F26CC005B93C8 /* AppDelegate.swift */,
 				F5B2D387204F26CC005B93C8 /* ViewController.swift */,
@@ -164,13 +176,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				F55BBED62050EB76008F0DEE /* Tick.mp3 in Resources */,
+				F568BF2920520835006DF904 /* Localizable.strings in Resources */,
 				F5B2D390204F26CC005B93C8 /* LaunchScreen.storyboard in Resources */,
-				F5B2D3AD205055AF005B93C8 /* Datamodel.sqlite-wal in Resources */,
-				F5B2D3AB205055AF005B93C8 /* Datamodel.sqlite in Resources */,
-				F5B2D3AC205055AF005B93C8 /* Datamodel.sqlite-shm in Resources */,
+				F568BF232051E49C006DF904 /* Datamodel.sqlite-shm in Resources */,
+				F568BF242051E49C006DF904 /* Datamodel.sqlite-wal in Resources */,
+				F568BF162051C859006DF904 /* begindataDelen.csv in Resources */,
+				F568BF182051C878006DF904 /* begindataVermDelen.csv in Resources */,
 				F55BBED52050EB76008F0DEE /* AirHorn.mp3 in Resources */,
 				F5B2D38D204F26CC005B93C8 /* Assets.xcassets in Resources */,
-				F5B2D3A120503E49005B93C8 /* begindata.csv in Resources */,
+				F568BF222051E49C006DF904 /* Datamodel.sqlite in Resources */,
+				F5B2D3A120503E49005B93C8 /* begindataVermenigvuldigen.csv in Resources */,
 				F5B2D38B204F26CC005B93C8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -193,10 +208,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		F568BF2B20520835006DF904 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F568BF2A20520835006DF904 /* nl */,
+				F568BF2C20520845006DF904 /* Base */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		F5B2D389204F26CC005B93C8 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				F5B2D38A204F26CC005B93C8 /* Base */,
+				F568BF2520520748006DF904 /* nl */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -205,6 +230,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				F5B2D38F204F26CC005B93C8 /* Base */,
+				F568BF262052074D006DF904 /* nl */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -216,6 +242,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -267,6 +294,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -315,7 +343,7 @@
 				INFOPLIST_FILE = "Simple Times Table Game/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.PWS-apps.Simple-Times-Table-Game";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.PWS-apps.SimpleTimesTableGame";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -329,7 +357,7 @@
 				INFOPLIST_FILE = "Simple Times Table Game/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.PWS-apps.Simple-Times-Table-Game";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.PWS-apps.SimpleTimesTableGame";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

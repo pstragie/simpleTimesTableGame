@@ -231,7 +231,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Store date to track updates
         UserDefaults.standard.setValue(Date(), forKey: "last_update")
-        let filename = "begindata"
+        var filename: String = ""
+        if entitynaam == "Vermenigvuldigen" {
+            filename = "begindataVermenigvuldigen"
+        } else if entitynaam == "Delen" {
+            filename = "begindataDelen"
+        } else if entitynaam == "VermDelen" {
+            filename = "begindataVermDelen"
+        }
         var items:[Dictionary<String,String>] = [[:]]
         print("Preloading data...")
         // Retrieve data from the source file
@@ -268,7 +275,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             progressie = readLines/totalLines
             print("progressie: \(progressie)")
             //            print("saveAttributes: \(entitynaam), \(dict)")
-            var newdict: Dictionary<String,Any> = [:]
+            var newdict: Dictionary<String,String> = [:]
             for (key, value) in item {
                 let key = key.replacingOccurrences(of: "\"", with: "")
                 newdict[key] = value
@@ -284,7 +291,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if seedCoreDataContainerIfFirstLaunch() {
             //destroyPersistentStore()
             print("First Launch!!!")
-            let Entities = ["TimesTable"]
+            let Entities = ["Vermenigvuldigen", "Delen", "VermDelen"]
             for entitynaam in Entities {
                 //cleanCoreData(entitynaam: entitynaam)
                 print(entitynaam)
@@ -307,9 +314,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if !previouslyLaunched {
             UserDefaults.standard.set(true, forKey: "previouslyLaunched")
             return true
-            
         } else {
-            
             return false
         }
     }
@@ -349,17 +354,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     // MARK: - saveAttributes
-    func saveAttributes(entitynaam: String, dict: [String:Any]) {
+    func saveAttributes(entitynaam: String, dict: [String:String]) {
         let managedObjectContext = persistentContainer.viewContext
         print("saving attributes...")
         
-        if entitynaam == "TimesTable" {
+        
             if let newTable = createRecordForEntity(entitynaam, inManagedObjectContext: managedObjectContext) {
                 for (key, value) in dict {
                     newTable.setValue(value, forKey: key)
                 }
             }
-        }
+        
         
         do {
             try managedObjectContext.save()

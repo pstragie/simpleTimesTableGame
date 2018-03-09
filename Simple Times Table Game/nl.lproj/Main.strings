@@ -1,0 +1,45 @@
+
+/* Class = "UIButton"; normalTitle = "Back"; ObjectID = "4Ss-99-bVl"; */
+"4Ss-99-bVl.normalTitle" = “Terug”;
+
+/* Class = "UIButton"; normalTitle = "OK"; ObjectID = "8uM-ru-d9d"; */
+"8uM-ru-d9d.normalTitle" = "OK";
+
+/* Class = "UISegmentedControl"; DjU-Nx-6SU.segmentTitles[0] = "x"; ObjectID = "DjU-Nx-6SU"; */
+"DjU-Nx-6SU.segmentTitles[0]" = "x";
+
+/* Class = "UISegmentedControl"; DjU-Nx-6SU.segmentTitles[1] = ":"; ObjectID = "DjU-Nx-6SU"; */
+"DjU-Nx-6SU.segmentTitles[1]" = ":";
+
+/* Class = "UISegmentedControl"; DjU-Nx-6SU.segmentTitles[2] = "x :"; ObjectID = "DjU-Nx-6SU"; */
+"DjU-Nx-6SU.segmentTitles[2]" = "x :";
+
+/* Class = "UIButton"; normalTitle = "START"; ObjectID = "IHX-L2-CbD"; */
+"IHX-L2-CbD.normalTitle" = "START";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "PtK-HJ-Cv2"; */
+"PtK-HJ-Cv2.text" = "Label";
+
+/* Class = "UILabel"; text = "Timer"; ObjectID = "RcB-vQ-aZW"; */
+"RcB-vQ-aZW.text" = "Timer";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Vwx-nM-Oig"; */
+"Vwx-nM-Oig.text" = "Label";
+
+/* Class = "UILabel"; text = "X"; ObjectID = "fqY-dr-Lbh"; */
+"fqY-dr-Lbh.text" = "X";
+
+/* Class = "UILabel"; text = "1. Choose level"; ObjectID = "fqk-8x-o5e"; */
+"fqk-8x-o5e.text" = "1. Kies moeilijkheid”;
+
+/* Class = "UILabel"; text = "2. Choose operator"; ObjectID = "jHg-Z8-R1g"; */
+"jHg-Z8-R1g.text" = "2. Kies bewerking“;
+
+/* Class = "UILabel"; text = "timesTable"; ObjectID = "kkD-fG-MvW"; */
+"kkD-fG-MvW.text" = "timesTable";
+
+/* Class = "UIButton"; normalTitle = "Reset all stars"; ObjectID = "pRX-bp-bTC"; */
+"pRX-bp-bTC.normalTitle" = “Alle sterren wissen”;
+
+/* Class = "UILabel"; text = "3. Choose one or more times tables"; ObjectID = "xLe-Jm-Zov"; */
+"xLe-Jm-Zov.text" = "3. Kies één of meer tafels“;
