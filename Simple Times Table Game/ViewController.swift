@@ -25,7 +25,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet var tableView: UITableView!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var BewerkingControl: UISegmentedControl!
-    
+    @IBOutlet weak var startButtonSelection: UIButton!
     @IBAction func BewerkingControlChanged(_ sender: UISegmentedControl) {
         viewWillLayoutSubviews()
     }
@@ -47,6 +47,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
+//        print("localdata at load: \(String(describing: localdata.array(forKey: "Vermenigvuldigen")))")
         do {
             try self.fetchedResultsControllerV.performFetch()
         } catch {
@@ -64,7 +65,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        print("view will layout subviews")
+//        print("view will layout subviews")
         if BewerkingControl.selectedSegmentIndex == 2 {
             do {
                 try self.fetchedResultsControllerVD.performFetch()
@@ -99,138 +100,143 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: - Unwind
     @IBAction func unwindToOverview(segue: UIStoryboardSegue) {
         startButton.isEnabled = false
+        startButtonSelection.isEnabled = false
+        let moc = self.appDelegate.persistentContainer.viewContext
         if let sourceViewController = segue.source as? ExerciseViewController {
-            //fetch records
-            let moc = self.appDelegate.persistentContainer.viewContext
-            
-            let finished = sourceViewController.finished
-            //let timestable = sourceViewController.selectedTable!
-            let timer = Int(sourceViewController.timerLabel.text!)
-            let diff: Int = sourceViewController.difficultyLevel! + 1
-            if diff == 2 {
-                self.maxScore = 11
-            } else if diff == 3 {
-                self.maxScore = 14
-            } else {
-                self.maxScore = 10
-            }
-            if BewerkingControl.selectedSegmentIndex == 0 {
-                for (tt, score) in sourceViewController.scorePerTableV {
-                    if tt != 99 {
-                        let table = self.appDelegate.fetchRecordsForEntity("Vermenigvuldigen", key: "timestable", arg: String(tt), inManagedObjectContext: moc)
-                        let curstar1 = Int(table.first?.value(forKey: "star1") as! String)
-                        let curstar2 = Int(table.first?.value(forKey: "star2") as! String)
-                        let curstar3 = Int(table.first?.value(forKey: "star3") as! String)
-                        if finished == true {
-                            if score < self.maxScore {
-                                if diff > curstar1! {
-                                    table.first?.setValue(String(diff), forKey: "star1")
-                                }
-                            } else if score == self.maxScore && timer == 0 {
-                                if diff > curstar1! {
-                                    table.first?.setValue(String(diff), forKey: "star1")
-                                }
-                                if diff > curstar2! {
-                                    table.first?.setValue(String(diff), forKey: "star2")
-                                }
-                            } else if score == self.maxScore && timer != 0 {
-                                if diff > curstar1! {
-                                    table.first?.setValue(String(diff), forKey: "star1")
-                                }
-                                if diff > curstar2! {
-                                    table.first?.setValue(String(diff), forKey: "star2")
-                                }
-                                if diff > curstar3! {
-                                    table.first?.setValue(String(diff), forKey: "star3")
-                                }
-                            }
-                        }
-                    }
-                }
-            } else if BewerkingControl.selectedSegmentIndex == 1 {
-                for (tt, score) in sourceViewController.scorePerTableD {
-                    if tt != 99 {
-                        let table = self.appDelegate.fetchRecordsForEntity("Delen", key: "timestable", arg: String(tt), inManagedObjectContext: moc)
-                        let curstar1 = Int(table.first?.value(forKey: "star1") as! String)
-                        let curstar2 = Int(table.first?.value(forKey: "star2") as! String)
-                        let curstar3 = Int(table.first?.value(forKey: "star3") as! String)
-                        if finished == true {
-                            if score < self.maxScore {
-                                if diff > curstar1! {
-                                    table.first?.setValue(String(diff), forKey: "star1")
-                                }
-                            } else if score == self.maxScore && timer == 0 {
-                                if diff > curstar1! {
-                                    table.first?.setValue(String(diff), forKey: "star1")
-                                }
-                                if diff > curstar2! {
-                                    table.first?.setValue(String(diff), forKey: "star2")
-                                }
-                            } else if score == self.maxScore && timer != 0 {
-                                if diff > curstar1! {
-                                    table.first?.setValue(String(diff), forKey: "star1")
-                                }
-                                if diff > curstar2! {
-                                    table.first?.setValue(String(diff), forKey: "star2")
-                                }
-                                if diff > curstar3! {
-                                    table.first?.setValue(String(diff), forKey: "star3")
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
+            if sourceViewController.AllSelect == 1 {
+                //fetch records
                 
-                for (ttD, valueD) in sourceViewController.scorePerTableD {
-                    for (ttV, valueV) in sourceViewController.scorePerTableV {
-                        if ttD == ttV {
-                            let newScore = valueD + valueV
-                            self.scorePerTableDV[ttD] = newScore
+                
+                let finished = sourceViewController.finished
+                //let timestable = sourceViewController.selectedTable!
+                let timer = Int(sourceViewController.timerLabel.text!)
+                let diff: Int = sourceViewController.difficultyLevel! + 1
+                if diff == 2 {
+                    self.maxScore = 11
+                } else if diff == 3 {
+                    self.maxScore = 14
+                } else {
+                    self.maxScore = 10
+                }
+                if BewerkingControl.selectedSegmentIndex == 0 {
+                    for (tt, score) in sourceViewController.scorePerTableV {
+                        if tt != 99 {
+                            let table = self.appDelegate.fetchRecordsForEntity("Vermenigvuldigen", key: "timestable", arg: String(tt), inManagedObjectContext: moc)
+                            let curstar1 = Int(table.first?.value(forKey: "star1") as! String)
+                            let curstar2 = Int(table.first?.value(forKey: "star2") as! String)
+                            let curstar3 = Int(table.first?.value(forKey: "star3") as! String)
+                            if finished == true {
+                                if score < self.maxScore {
+                                    if diff > curstar1! {
+                                        table.first?.setValue(String(diff), forKey: "star1")
+                                    }
+                                } else if score == self.maxScore && timer == 0 {
+                                    if diff > curstar1! {
+                                        table.first?.setValue(String(diff), forKey: "star1")
+                                    }
+                                    if diff > curstar2! {
+                                        table.first?.setValue(String(diff), forKey: "star2")
+                                    }
+                                } else if score == self.maxScore && timer != 0 {
+                                    if diff > curstar1! {
+                                        table.first?.setValue(String(diff), forKey: "star1")
+                                    }
+                                    if diff > curstar2! {
+                                        table.first?.setValue(String(diff), forKey: "star2")
+                                    }
+                                    if diff > curstar3! {
+                                        table.first?.setValue(String(diff), forKey: "star3")
+                                    }
+                                }
+                            }
                         }
                     }
-                }
-                print("scorePerTableDV: \(self.scorePerTableDV)")
-                for (tt, score) in self.scorePerTableDV {
-                    if tt != 99 {
-                        let table = self.appDelegate.fetchRecordsForEntity("VermDelen", key: "timestable", arg: String(tt), inManagedObjectContext: moc)
-                        let curstar1 = Int(table.first?.value(forKey: "star1") as! String)
-                        let curstar2 = Int(table.first?.value(forKey: "star2") as! String)
-                        let curstar3 = Int(table.first?.value(forKey: "star3") as! String)
-                        if finished == true {
-                            if score < self.maxScore * 2 {
-                                if diff > curstar1! {
-                                    table.first?.setValue(String(diff), forKey: "star1")
+                } else if BewerkingControl.selectedSegmentIndex == 1 {
+                    for (tt, score) in sourceViewController.scorePerTableD {
+                        if tt != 99 {
+                            let table = self.appDelegate.fetchRecordsForEntity("Delen", key: "timestable", arg: String(tt), inManagedObjectContext: moc)
+                            let curstar1 = Int(table.first?.value(forKey: "star1") as! String)
+                            let curstar2 = Int(table.first?.value(forKey: "star2") as! String)
+                            let curstar3 = Int(table.first?.value(forKey: "star3") as! String)
+                            if finished == true {
+                                if score < self.maxScore {
+                                    if diff > curstar1! {
+                                        table.first?.setValue(String(diff), forKey: "star1")
+                                    }
+                                } else if score == self.maxScore && timer == 0 {
+                                    if diff > curstar1! {
+                                        table.first?.setValue(String(diff), forKey: "star1")
+                                    }
+                                    if diff > curstar2! {
+                                        table.first?.setValue(String(diff), forKey: "star2")
+                                    }
+                                } else if score == self.maxScore && timer != 0 {
+                                    if diff > curstar1! {
+                                        table.first?.setValue(String(diff), forKey: "star1")
+                                    }
+                                    if diff > curstar2! {
+                                        table.first?.setValue(String(diff), forKey: "star2")
+                                    }
+                                    if diff > curstar3! {
+                                        table.first?.setValue(String(diff), forKey: "star3")
+                                    }
                                 }
-                            } else if score == self.maxScore * 2 && timer == 0 {
-                                if diff > curstar1! {
-                                    table.first?.setValue(String(diff), forKey: "star1")
-                                }
-                                if diff > curstar2! {
-                                    table.first?.setValue(String(diff), forKey: "star2")
-                                }
-                            } else if score == self.maxScore * 2 && timer != 0 {
-                                if diff > curstar1! {
-                                    table.first?.setValue(String(diff), forKey: "star1")
-                                }
-                                if diff > curstar2! {
-                                    table.first?.setValue(String(diff), forKey: "star2")
-                                }
-                                if diff > curstar3! {
-                                    table.first?.setValue(String(diff), forKey: "star3")
+                            }
+                        }
+                    }
+                } else {
+                    
+                    for (ttD, valueD) in sourceViewController.scorePerTableD {
+                        for (ttV, valueV) in sourceViewController.scorePerTableV {
+                            if ttD == ttV {
+                                let newScore = valueD + valueV
+                                self.scorePerTableDV[ttD] = newScore
+                            }
+                        }
+                    }
+//                    print("scorePerTableDV: \(self.scorePerTableDV)")
+                    for (tt, score) in self.scorePerTableDV {
+                        if tt != 99 {
+                            let table = self.appDelegate.fetchRecordsForEntity("VermDelen", key: "timestable", arg: String(tt), inManagedObjectContext: moc)
+                            let curstar1 = Int(table.first?.value(forKey: "star1") as! String)
+                            let curstar2 = Int(table.first?.value(forKey: "star2") as! String)
+                            let curstar3 = Int(table.first?.value(forKey: "star3") as! String)
+                            if finished == true {
+                                if score < self.maxScore * 2 {
+                                    if diff > curstar1! {
+                                        table.first?.setValue(String(diff), forKey: "star1")
+                                    }
+                                } else if score == self.maxScore * 2 && timer == 0 {
+                                    if diff > curstar1! {
+                                        table.first?.setValue(String(diff), forKey: "star1")
+                                    }
+                                    if diff > curstar2! {
+                                        table.first?.setValue(String(diff), forKey: "star2")
+                                    }
+                                } else if score == self.maxScore * 2 && timer != 0 {
+                                    if diff > curstar1! {
+                                        table.first?.setValue(String(diff), forKey: "star1")
+                                    }
+                                    if diff > curstar2! {
+                                        table.first?.setValue(String(diff), forKey: "star2")
+                                    }
+                                    if diff > curstar3! {
+                                        table.first?.setValue(String(diff), forKey: "star3")
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
 
-            do {
-                try moc.save()
-            } catch {
-                fatalError("Could not save")
+                do {
+                    try moc.save()
+                } catch {
+                    fatalError("Could not save")
+                }
             }
+            copyUserdataToUserdefaults(managedObjectContext: moc)
         }
     }
     
@@ -272,39 +278,39 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         switch segue.identifier! {
             
         case "SegueToExercise":
-            if tableView.indexPathsForSelectedRows?.count == 0 {
-                let controller = UIAlertController(title: "No times table selected!", message: "Select at least one table.", preferredStyle: .alert)
-                let ok = UIAlertAction(title: "OK", style: .default)
-                controller.addAction(ok)
-                present(controller, animated: true, completion: nil)
-        
-            } else {
-                let destination = segue.destination as! ExerciseViewController
-                //let indexPath = tableView.indexPathForSelectedRow!
-                if BewerkingControl.selectedSegmentIndex == 1 {
-                    self.geselecteerdeBewerking.append("delen")
-                    destination.bewerkingen.append("delen")
-                } else if BewerkingControl.selectedSegmentIndex == 0 {
-                    self.geselecteerdeBewerking.append("vermenigvuldigen")
-                    destination.bewerkingen.append("vermenigvuldigen")
-                } else {
-                    self.geselecteerdeBewerking.append("vermenigvuldigen")
-                    self.geselecteerdeBewerking.append("delen")
-                    destination.bewerkingen.append("vermenigvuldigen")
-                    destination.bewerkingen.append("delen")
-                }
-                let selTables = tableView.indexPathsForSelectedRows
-                destination.selectedTables = selTables
-                destination.difficultyLevel = Int(DifficultyControl.selectedSegmentIndex)
-            }
-            
-
-        //            print("Segue: \(segue.identifier!)!")
+            let destination = segue.destination as! ExerciseViewController
+            destination.AllSelect = 1
+        case "SegueSelection":
+            let destination = segue.destination as! ExerciseViewController
+            destination.AllSelect = 0
         default:
-            //            print("Segue: \(segue.identifier!)!")
             break
         }
-        
+        if tableView.indexPathsForSelectedRows?.count == 0 {
+            let controller = UIAlertController(title: "No times table selected!", message: "Select at least one table.", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style: .default)
+            controller.addAction(ok)
+            present(controller, animated: true, completion: nil)
+            
+        } else {
+            let destination = segue.destination as! ExerciseViewController
+            //let indexPath = tableView.indexPathForSelectedRow!
+            if BewerkingControl.selectedSegmentIndex == 1 {
+                self.geselecteerdeBewerking.append("delen")
+                destination.bewerkingen.append("delen")
+            } else if BewerkingControl.selectedSegmentIndex == 0 {
+                self.geselecteerdeBewerking.append("vermenigvuldigen")
+                destination.bewerkingen.append("vermenigvuldigen")
+            } else {
+                self.geselecteerdeBewerking.append("vermenigvuldigen")
+                self.geselecteerdeBewerking.append("delen")
+                destination.bewerkingen.append("vermenigvuldigen")
+                destination.bewerkingen.append("delen")
+            }
+            let selTables = tableView.indexPathsForSelectedRows
+            destination.selectedTables = selTables
+            destination.difficultyLevel = Int(DifficultyControl.selectedSegmentIndex)
+        }
     }
 
     // MARK: - fetchedResultsController
@@ -351,14 +357,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }()
     // MARK: - setup layout
     func setupLayout() {
+        tableView.estimatedRowHeight = 40.0
+        tableView.rowHeight = UITableViewAutomaticDimension
         startButton.layer.cornerRadius = 10
-        startButton.isEnabled = false
+        startButtonSelection.isEnabled = false
         startButton.layer.shadowColor = UIColor.black.cgColor
         startButton.layer.shadowOffset = CGSize(width: 0.1, height: 3.0)
         startButton.layer.shadowRadius = 0.5
         startButton.layer.shadowOpacity = 0.8
         startButton.layer.masksToBounds = false
         startButton.layer.cornerRadius = 10
+        
+        startButtonSelection.layer.cornerRadius = 10
+        startButtonSelection.isEnabled = false
+        startButtonSelection.layer.shadowColor = UIColor.black.cgColor
+        startButtonSelection.layer.shadowOffset = CGSize(width: 0.1, height: 3.0)
+        startButtonSelection.layer.shadowRadius = 0.5
+        startButtonSelection.layer.shadowOpacity = 0.8
+        startButtonSelection.layer.masksToBounds = false
+        startButtonSelection.layer.cornerRadius = 10
         tableView.tableFooterView = UIView()
         
         (DifficultyControl.subviews[2] as UIView).tintColor = UIColor(red: 150/255, green: 90/255, blue:56/255, alpha:1)
@@ -416,9 +433,11 @@ extension ViewController: NSFetchedResultsControllerDelegate {
         }
         
     }
-    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return tableView.frame.size.height/10
+    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70.0
+        return tableView.frame.size.height/10
     }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return false
@@ -430,12 +449,14 @@ extension ViewController: NSFetchedResultsControllerDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.indexPathsForSelectedRows?.count != 0 {
             startButton.isEnabled = true
+            startButtonSelection.isEnabled = true
         }
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         if tableView.indexPathsForSelectedRows?.count == 0 {
             startButton.isEnabled = false
+            startButtonSelection.isEnabled = false
         }
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -445,9 +466,9 @@ extension ViewController: NSFetchedResultsControllerDelegate {
         
         cell.selectionStyle = .blue
         //         Configure Cell
-        cell.layer.cornerRadius = 3
+        cell.layer.cornerRadius = 10
         cell.layer.masksToBounds = true
-        cell.layer.borderWidth = 1
+        cell.layer.borderWidth = 0
         //         Fetch Stars
         if BewerkingControl.selectedSegmentIndex == 2 {
             let stars = fetchedResultsControllerVD.object(at: indexPath)
@@ -571,32 +592,26 @@ extension ViewController: NSFetchedResultsControllerDelegate {
     
     // MARK: - Copy to Userdefaults
     func copyUserdataToUserdefaults(managedObjectContext: NSManagedObjectContext) {
-        //print("Copying Userdata to localdata")
+//        print("Copying Userdata to localdata")
         // Read entity Userdata values
-        let userdata = fetchAllRecordsForEntity("TimesTable", inManagedObjectContext: managedObjectContext)
-        var tablearray: Array<Any> = []
-        // Check if Userdefaults exist
-        // Store to Userdefaults - Create array and store in localdata under key: mppcv
-        // Read array of userdata in localdata
-        if localdata.object(forKey: "userdata") != nil {
-            //print("userdata exists in localdata")
-            tablearray = localdata.array(forKey: "userdata")!
-        } else {
-            //print("userdata does not exist in localdata")
+        let Entities = ["Vermenigvuldigen", "Delen", "VermDelen"]
+        for entity in Entities {
+            let userdata = fetchAllRecordsForEntity(entity, inManagedObjectContext: managedObjectContext)
+            var tablearray: Array<Any>
+            // Check if Userdefaults exist
+            // Store to Userdefaults - Create array and store in localdata under key: ?
+            // Read array of userdata in localdata
             tablearray = [] as [Any]
-        }
-        
-        for userData in userdata {
-            //print("userData: ", userData)
-            let dict = ["table": (userData.value(forKey: "timestable")) as! String, "star1": (userData.value(forKey: "star1")) as! String, "star2": (userData.value(forKey: "star2")) as! String, "star3": (userData.value(forKey: "star3")) as! String,  "lastupdate": (userData.value(forKey: "lastupdate")) as! Date] as [String : Any]
-            //print("dict: ", dict)
             
+            for userData in userdata {
+                //print("userData: ", userData)
+                let dict = [userData.value(forKey: "timestable") as! String: ["star1": (userData.value(forKey: "star1")) as! String, "star2": (userData.value(forKey: "star2")) as! String, "star3": (userData.value(forKey: "star3")) as! String]] as [String : Any]
+                //print("dict: ", dict)
+                tablearray.append(dict)
+            }
             
-            // Add mppcv to array of userdata in localdata
-            tablearray.append(userData.value(forKey: "timestable")!)
-            localdata.set(tablearray, forKey: "userdata")
-            localdata.set(dict, forKey: (userData.value(forKey: "timestable")) as! String)
-            //print("saved \(String(describing: userData.value(forKey: "mppcv"))) to localdata")
+            //print("tableArray: \(tablearray)")
+            localdata.set(tablearray, forKey: entity)
         }
     }
     
@@ -604,6 +619,8 @@ extension ViewController: NSFetchedResultsControllerDelegate {
     private func fetchRecordsForEntity(_ entity: String, key: String, arg: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> [NSManagedObject] {
         // Create Fetch Request
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
+        let predicate = NSPredicate(format: "%K == %@", key, arg)
+        fetchRequest.predicate = predicate
         // Helpers
         var result = [NSManagedObject]()
         
@@ -633,51 +650,57 @@ extension ViewController: NSFetchedResultsControllerDelegate {
     }
     
     // MARK: - add userdata
-    func addUserData(tableValue: String, userkey: String, uservalue: Bool, managedObjectContext: NSManagedObjectContext) {
-        // one-to-one relationship
+    func addUserData(entity: String, timestable: String, star1: String, star2: String, star3: String, managedObjectContext: NSManagedObjectContext) {
+        // no relationship
         // Check if record exists
-        //print("addUserData: \(mppcvValue), \(userkey), \(uservalue)")
-        let userdata = fetchRecordsForEntity("TimesTable", key: "timestable", arg: tableValue, inManagedObjectContext: managedObjectContext)
+//        print("addUserData: \(timestable), \(star1), \(star2), \(star3)")
+        let userdata = fetchRecordsForEntity(entity, key: "timestable", arg: timestable, inManagedObjectContext: managedObjectContext)
         if userdata.count == 0 {
-            //            print("data line does not exist")
-            if let newUserData = createRecordForEntity("TimesTable", inManagedObjectContext: managedObjectContext) {
-                newUserData.setValue(uservalue, forKey: userkey)
-                newUserData.setValue(tableValue, forKey: "timestable")
-                let TT = fetchRecordsForEntity("TimesTable", key: "timestable", arg: tableValue, inManagedObjectContext: managedObjectContext)
-                newUserData.setValue(Date(), forKey: "lastupdate")
-                for tt in TT {
-                    tt.setValue(newUserData, forKeyPath: "userdata")
-                }
+//            print("data line does not exist")
+            if let newUserData = createRecordForEntity(entity, inManagedObjectContext: managedObjectContext) {
+                newUserData.setValue(timestable, forKey: "timestable")
+                newUserData.setValue(star1, forKey: "star1")
+                newUserData.setValue(star2, forKey: "star2")
+                newUserData.setValue(star3, forKey: "star3")
             } else {
-                print("not newUserData")
+//                print("not newUserData")
             }
         } else {
-            print("data line exists")
+//            print("data line exists")
             for userData in userdata {
-                userData.setValue(uservalue, forKey: userkey)
-                userData.setValue(tableValue, forKey: "timestable")
-                userData.setValue(Date(), forKey: "lastupdate")
+                userData.setValue(timestable, forKey: "timestable")
+                userData.setValue(star1, forKey: "star1")
+                userData.setValue(star2, forKey: "star2")
+                userData.setValue(star3, forKey: "star3")
             }
             
+        }
+        do {
+            try managedObjectContext.save()
+        } catch {
+            fatalError("Could not save defaults to userdata")
         }
     }
     
     // MARK: - Copy Userdefaults to UserData (DB) --> after update!
     func copyUserDefaultsToUserData(managedObjectContext: NSManagedObjectContext) {
+//        print("copy user defaults to user data in persistent container")
         let context = self.appDelegate.persistentContainer.viewContext
-        //        print("Copying localdata to Userdata")
+//        print("Copying localdata to Userdata")
         // Read UserDefaults array: from localdata, key: userdata
-        //        print("Localdata: \(String(describing: localdata.array(forKey: "userdata")))")
+        //print("Localdata: \(String(describing: localdata.array(forKey: "Vermenigvuldigen")))")
         // Use UserDefaults array values to obtain dictionary data
-        for userData in localdata.array(forKey: "userdata")! {
-            //            print("userdata: \(userData)")
-            let dict = localdata.dictionary(forKey: (userData as! String))
-            //            print("Dict: \(dict!)")
-            for (key, value) in dict! {
-                if key == "timestable" {
-                    addUserData(tableValue: (userData as! String), userkey: key, uservalue: (value as! Bool), managedObjectContext: context)
+        let Entities = ["Vermenigvuldigen", "Delen", "VermDelen"]
+        for entity in Entities {
+//            print("entity: \(entity)")
+            let tablearray = localdata.array(forKey: entity)!
+            for x in tablearray {
+                for (tt, stars) in x as! Dictionary<String, Any> {
+                    let stars = stars as! Dictionary<String, String>
+                    addUserData(entity: entity, timestable: tt, star1: stars["star1"]!, star2: stars["star2"]!, star3: stars["star3"]!, managedObjectContext: context)
                 }
             }
+            
         }
     }
 

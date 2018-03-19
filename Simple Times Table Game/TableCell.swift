@@ -20,12 +20,16 @@ class TableCell: UITableViewCell {
     @IBOutlet weak var star1: UIImageView!
     @IBOutlet weak var star2: UIImageView!
     @IBOutlet weak var star3: UIImageView!
+    @IBOutlet weak var BGView: UIView!
     
     
     // MARK: - Initialization
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        BGView.layer.cornerRadius = 10
+        BGView.layer.borderWidth = 1
+        BGView.layer.borderColor = UIColor.darkGray.cgColor
     }
     
 }

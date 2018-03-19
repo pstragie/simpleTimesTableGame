@@ -22,13 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        // MARK: Check current version
         let defaults = UserDefaults.standard
         
+        // MARK: Check current version
         guard let currentAppVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String, let previousVersion = defaults.string(forKey: "appVersion") else {
             // Key does not exist in UserDefaults, must be a fresh install
-            print("Fresh install")
+//            print("Fresh install")
             // Writing version to UserDefaults for the first time
             defaults.set(appBuild, forKey: "appVersion")
             
@@ -123,6 +122,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         self.saveContext()
+    }
+
+    // MARK: didUpdate userActivity
+    func application(_ application: UIApplication, didUpdate userActivity: NSUserActivity) {
+//        print("App did update!")
+        // Copy Userdefaults to Userdata entity
+        for entity in localdata.array(forKey: "userdata")! {
+            print("entity: ", entity)
+            let entdict = localdata.dictionary(forKey: entity as! String)
+            print("entdict: ", entdict!)
+        }
     }
 
     // MARK: - Core Data Saving support
@@ -290,7 +300,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func seedPersistentStoreWithManagedObjectContext(_ managedObjectContext: NSManagedObjectContext) {
         if seedCoreDataContainerIfFirstLaunch() {
             //destroyPersistentStore()
-            print("First Launch!!!")
+//            print("First Launch!!!")
             let Entities = ["Vermenigvuldigen", "Delen", "VermDelen"]
             for entitynaam in Entities {
                 //cleanCoreData(entitynaam: entitynaam)
@@ -298,7 +308,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 loadAllAttributes(entitynaam: entitynaam)
             }
         } else {
-            print("Not the first launch!!!")
+//            print("Not the first launch!!!")
             // Check for updates
             /* let Entities = ["MPP"]
              for entitynaam in Entities {
@@ -402,7 +412,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             //            print("Files Exist!")
             if newBuild == true {
-                //                print("New build") // Copy the files
+//                print("New build: \(String(describing: Bundle.main.infoDictionary?["CFBundleVersion"] as! String))") // Copy the files
                 
                 let sourceSqliteURLs = [URL(fileURLWithPath: Bundle.main.path(forResource: "Datamodel", ofType: "sqlite")!), URL(fileURLWithPath: Bundle.main.path(forResource: "Datamodel", ofType: "sqlite-wal")!), URL(fileURLWithPath: Bundle.main.path(forResource: "Datamodel", ofType: "sqlite-shm")!)]
                 let destSqliteURLs = [URL(fileURLWithPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "/Datamodel.sqlite"), URL(fileURLWithPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "/Datamodel.sqlite-wal"), URL(fileURLWithPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "/Datamodel.sqlite-shm")]
@@ -425,9 +435,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                 }
                 //                print("Files Copied!")
-                //ViewController().copyUserDefaultsToUserData(managedObjectContext: persistentContainer.viewContext)
+                // Copy localdata (userdefaults) over persistent container data
+                ViewController().copyUserDefaultsToUserData(managedObjectContext: persistentContainer.viewContext)
+                
             } else {
-                //                print("Same build") // No need to copy the files.
+//                print("Same build") // No need to copy the files.
             }
         }
     }

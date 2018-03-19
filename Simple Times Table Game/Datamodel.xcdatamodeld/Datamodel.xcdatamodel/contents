@@ -13,14 +13,13 @@
         <attribute name="timestable" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Vermenigvuldigen" representedClassName="Vermenigvuldigen" syncable="YES" codeGenerationType="class">
-        <attribute name="lastupdate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="star1" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="star2" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="star3" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestable" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Vermenigvuldigen" positionX="-63" positionY="-18" width="128" height="120"/>
+        <element name="Vermenigvuldigen" positionX="-63" positionY="-18" width="128" height="105"/>
         <element name="Delen" positionX="-63" positionY="18" width="128" height="105"/>
         <element name="VermDelen" positionX="-54" positionY="27" width="128" height="105"/>
     </elements>
