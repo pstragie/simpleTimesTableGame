@@ -199,6 +199,13 @@
                                     <action selector="resetAllStarsButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mL8-N5-Rjb"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D0M-NH-maE">
+                                <rect key="frame" x="299" y="629" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="unlockFullVersionButt:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0bC-sV-OYu"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -206,7 +213,9 @@
                             <constraint firstItem="pRX-bp-bTC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="30" id="1nH-z7-4DI"/>
                             <constraint firstItem="dVg-EI-XO7" firstAttribute="top" secondItem="xLe-Jm-Zov" secondAttribute="bottom" constant="15" id="4rx-D3-tKL"/>
                             <constraint firstItem="BaT-Ms-XhH" firstAttribute="top" secondItem="dVg-EI-XO7" secondAttribute="bottom" constant="20" id="6Fe-2M-p2H"/>
+                            <constraint firstAttribute="trailing" secondItem="D0M-NH-maE" secondAttribute="trailing" constant="30" id="AVg-xe-uOQ"/>
                             <constraint firstItem="BaT-Ms-XhH" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="30" id="JtN-Es-sMS"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="D0M-NH-maE" secondAttribute="bottom" constant="8" id="Qjn-iT-NKi"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="pRX-bp-bTC" secondAttribute="bottom" constant="8" id="Uw9-7w-Z3k"/>
                             <constraint firstItem="el8-0j-p9e" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="30" id="XvB-PU-QFd"/>
                             <constraint firstAttribute="trailingMargin" secondItem="el8-0j-p9e" secondAttribute="trailing" constant="30" id="ZL0-0Z-7KX"/>
@@ -229,6 +238,7 @@
                         <outlet property="BewerkingControl" destination="DjU-Nx-6SU" id="sbT-m2-klY"/>
                         <outlet property="DifficultyControl" destination="28I-gy-m7I" id="v4a-IK-qbk"/>
                         <outlet property="buttonResetStars" destination="pRX-bp-bTC" id="RBg-LE-rnv"/>
+                        <outlet property="buyFullVersionButton" destination="D0M-NH-maE" id="Hcx-Jx-dUQ"/>
                         <outlet property="startButton" destination="IHX-L2-CbD" id="O51-bD-y7o"/>
                         <outlet property="startButtonSelection" destination="Uct-Wf-0RK" id="njn-Ht-dCn"/>
                         <outlet property="tableView" destination="dVg-EI-XO7" id="hUv-3a-yU1"/>
@@ -236,6 +246,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="32.799999999999997" y="86.806596701649184"/>
         </scene>
         <!--Exercise View Controller-->
         <scene sceneID="FTm-o8-Q8I">
@@ -281,13 +292,13 @@
                                     <constraint firstAttribute="height" constant="60" id="WSU-Ts-9Ai"/>
                                 </constraints>
                             </stackView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" highlighted="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ek9-sS-YTM">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" highlighted="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="ek9-sS-YTM">
                                 <rect key="frame" x="56" y="330" width="263" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="ay0-Na-Woz"/>
                                 </constraints>
                                 <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad" keyboardAppearance="light" returnKeyType="done"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ss-99-bVl">

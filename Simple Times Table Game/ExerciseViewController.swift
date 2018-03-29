@@ -9,8 +9,9 @@
 import UIKit
 import AudioToolbox
 import AVFoundation
+import GoogleMobileAds
 
-class ExerciseViewController: UIViewController {
+class ExerciseViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - var&let
     var bewerkingen: Array<String> = []
@@ -40,6 +41,10 @@ class ExerciseViewController: UIViewController {
     var timer = Timer()
     var player: AVAudioPlayer?
     var starProgress = UIView()
+    var wrongAnswers: Dictionary<Int, Dictionary<String, Int>> = [:]
+    var wrongAnswerMessage: String = ""
+    var resultView = UIView()
+    var interstitial: GADInterstitial!
     
     // MARK: - Outlets
     @IBOutlet weak var backButton: UIButton!
@@ -66,16 +71,7 @@ class ExerciseViewController: UIViewController {
     @IBOutlet weak var resultInputField: UITextField!
     
     @IBAction func submitAnswer(_ sender: UIButton) {
-        if resultInputField.text != "" {
-            if self.bewerking == "vermenigvuldigen" {
-                checkAnswerV()
-            } else if self.bewerking == "delen" {
-                checkAnswerD()
-            }
-            viewWillAppear(false)
-        } else {
-            resultInputField.placeholder = "Enter the result..."
-        }
+        checkResult()
     }
     
     // MARK: - Life cycle
@@ -85,6 +81,7 @@ class ExerciseViewController: UIViewController {
         //print("View did Load")
         setupLayout()
         prepareNumbers()
+        self.resultInputField.delegate = self
 //        print("Number of Ex.: \(self.numberOfExercises)")
         if self.AllSelect == 1 {
             timerLabel.isHidden = false
@@ -94,6 +91,12 @@ class ExerciseViewController: UIViewController {
         } else {
             timerLabel.isHidden = true
         }
+        /* iTunes Store link: "ca-app-pub-4147233946078865/2007865568" */
+        /* Google ad test: ca-app-pub-3940256099942544/4411468910" */
+        interstitial = GADInterstitial(adUnitID: "ca-app-pub-4147233946078865/2007865568")
+        let request = GADRequest()
+        request.testDevices = [kGADSimulatorID]
+        interstitial.load(request)
     }
     
     override func viewWillLayoutSubviews() {
@@ -202,6 +205,17 @@ class ExerciseViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: - show ad
+    func showGoogleMobileInterstitial() {
+        if !STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
+            if interstitial.isReady {
+                interstitial.present(fromRootViewController: self)
+            } else {
+                print("Ad wasn't ready")
+            }
+        }
+    }
+    // MARK: - setup layout
     func setupLayout() {
         backButton.layer.cornerRadius = 5
         submitButton.layer.cornerRadius = 5
@@ -224,6 +238,22 @@ class ExerciseViewController: UIViewController {
         self.starProgress.addSubview(horStack)
     }
     
+    // MARK: - keyboard return function
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        checkResult()
+        return true
+    }
+    
+    // MARK: - check result function
+    func checkResult() {
+        if resultInputField.text != "" {
+            checkAnswer(bewerking: self.bewerking)
+            resultInputField.placeholder = "Your answer"
+            viewWillAppear(false)
+        } else {
+            resultInputField.placeholder = "Enter the result..."
+        }
+    }
     // MARK: - prepare numbers
     func prepareNumbers() {
         // Fill tablesArray from selected rows
@@ -233,9 +263,9 @@ class ExerciseViewController: UIViewController {
         }
         // Fill numberArray from selected difficulty level1
         if difficultyLevel == 0 {
-            numberArray = [1,2,3,4,5,6,7,8,9,10]
+            self.numberArray = [1,2,3,4,5,6,7,8,9,10]
             for x in self.tablesArrayD {
-                for y in numberArray {
+                for y in self.numberArray {
                     if ((self.tablesDictD?[x]) != nil) {
                         var arr: Array<Int> = (self.tablesDictD?[x])!
                         arr.append(x * y)
@@ -247,10 +277,10 @@ class ExerciseViewController: UIViewController {
                 }
             }
         } else if difficultyLevel == 1 {
-            numberArray = [0,1,2,3,4,5,6,7,8,9,10]
+            self.numberArray = [0,1,2,3,4,5,6,7,8,9,10]
             for x in self.tablesArrayD {
                 if x != 0 {
-                    for y in numberArray {
+                    for y in self.numberArray {
                         if ((tablesDictD?[x]) != nil) {
                             var arr: Array<Int> = (self.tablesDictD?[x])!
                             arr.append(x * y)
@@ -262,10 +292,10 @@ class ExerciseViewController: UIViewController {
                 }
             }
         } else if difficultyLevel == 2 {
-            numberArray = [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
+            self.numberArray = [0,1,2,3,4,5,6,7,8,9,10,11]
             for x in self.tablesArrayD {
                 if x != 0 {
-                    for y in numberArray {
+                    for y in self.numberArray {
                         if ((tablesDictD?[x]) != nil) {
                             var arr: Array<Int> = (self.tablesDictD?[x])!
                             arr.append(x * y)
@@ -280,7 +310,7 @@ class ExerciseViewController: UIViewController {
         
         // Set number of exercises
         if self.AllSelect == 1 {
-            numberOfExercises = numberArray.count * tablesArrayV.count * self.bewerkingen.count
+            numberOfExercises = self.numberArray.count * tablesArrayV.count * self.bewerkingen.count
         } else if self.AllSelect == 0 {
             numberOfExercises = 20 - max((20 - ((selectedTables?.count)! * 5)),0)
         }
@@ -303,7 +333,7 @@ class ExerciseViewController: UIViewController {
             self.scorePerTableD[t] = 0
         }
         // Set timer
-        self.seconds = ((3 - Int(difficultyLevel!)) * 20 * self.tablesArrayV.count * self.bewerkingen.count) + 5
+        self.seconds = ((5 - Int(difficultyLevel!)) * self.numberArray.count * self.bewerkingen.count)
         timerLabel.text = String(self.seconds)
         // Set inputfield
         resultInputField.becomeFirstResponder()
@@ -361,20 +391,58 @@ class ExerciseViewController: UIViewController {
             print(error.description)
         }
     }
-    // MARK: - Check answer
-    func checkAnswerV() {
-        if Int(resultInputField.text!)! == self.multiplier! * self.tableMult! {
-            //print("Correct answer")
-            score += 1
-            let tableScore = self.scorePerTableV[self.tableMult!]
-            let newScore = tableScore! + 1
-            scorePerTableV[tableMult!] = newScore
+    
+    // MARK: - Animate function
+    func animateInputField(correct: Bool) {
+        if correct {
+            UIView.animate(withDuration: 0.1, delay: 0.0, options: [], animations:  {
+                self.resultInputField.backgroundColor = UIColor.green.withAlphaComponent(0.8)
+            }, completion: {(finished: Bool) in
+                UIView.animate(withDuration: 0.1, delay: 0.1, animations: {self.resultInputField.backgroundColor = UIColor.white})}
+            )
         } else {
-            //print("Wrong answer")
+            UIView.animate(withDuration: 0.1, delay: 0.0, options: [], animations:  {
+                self.resultInputField.backgroundColor = UIColor.red.withAlphaComponent(0.9)
+            }, completion: {(finished: Bool) in
+                UIView.animate(withDuration: 0.1, delay: 0.1, animations: {self.resultInputField.backgroundColor = UIColor.white})}
+            )
         }
+    }
+    // MARK: - Check answer
+    func checkAnswer(bewerking: String) {
+        var correct: Bool = true
+        if bewerking == "delen" {
+            correct = Int(resultInputField.text!)! == self.multiplier! / self.tableMult!
+            if correct {
+                //print("Correct answer")
+                animateInputField(correct: true)
+                score += 1
+                let tableScore = self.scorePerTableD[self.tableMult!]
+                let newScore = tableScore! + 1
+                scorePerTableD[tableMult!] = newScore
+            } else {
+                //print("Wrong answer")
+                animateInputField(correct: false)
+                wrongAnswers[self.multiplier!] = [bewerking:self.tableMult!]
+            }
+        } else if bewerking == "vermenigvuldigen" {
+            correct = Int(resultInputField.text!)! == self.multiplier! * self.tableMult!
+            if correct {
+                //print("Correct answer")
+                animateInputField(correct: true)
+                score += 1
+                let tableScore = self.scorePerTableV[self.tableMult!]
+                let newScore = tableScore! + 1
+                scorePerTableV[tableMult!] = newScore
+            } else {
+                //print("Wrong answer")
+                animateInputField(correct: false)
+                wrongAnswers[self.multiplier!] = [bewerking:self.tableMult!]
+            }
+        }
+        
         numberOfExercises -= 1
         //print("number of Exercises: \(numberOfExercises)")
-        var answerString: String = "answers"
         if numberOfExercises == 0 {
             timer.invalidate()
             // Stop sound
@@ -384,59 +452,145 @@ class ExerciseViewController: UIViewController {
             } catch let error as NSError {
                 print(error.description)
             }
-
             finished = true
-            if score == 1 {
-                answerString = "answer"
-            } else if score > 1 {
-                answerString = "answers"
+            if self.wrongAnswers.count > 0 {
+                var sign: String = "x"
+                var a: Int = 1
+                var b: Int = 1
+                var result: String = "1"
+                for (multiplier, array) in wrongAnswers {
+                    for (bewerking, y) in array {
+                        a = multiplier
+                        b = y
+                        if bewerking == "vermenigvuldigen" {
+                            sign = "x"
+                            result = String(a * b)
+                        } else {
+                            sign = ":"
+                            result = String(a / b)
+                        }
+                    }
+                    
+                    self.wrongAnswerMessage += "\(a) \(sign) \(b) = \(result)\n"
+                }
             }
-            let finishedAlert = UIAlertController(title: "Finished", message: "You have \(score) correct \(answerString).", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default) { alertAction in self.performSegue(withIdentifier: "unwindToOverview", sender: self) }
-            
-            finishedAlert.addAction(ok)
-        
-            present(finishedAlert, animated: true, completion: nil)
+            setupResultView(score: score, message: self.wrongAnswerMessage)
+            resultView.isHidden = false
         }
         resultInputField.text = ""
         reloadInputViews()
     }
-    func checkAnswerD() {
-        if Int(resultInputField.text!)! == self.multiplier! / self.tableMult! {
-            //print("Correct answer")
-            score += 1
-            let tableScore = self.scorePerTableD[self.tableMult!]
-            let newScore = tableScore! + 1
-            scorePerTableD[tableMult!] = newScore
-        } else {
-            //print("Wrong answer")
-        }
-        numberOfExercises -= 1
-        //print("number of Exercises: \(numberOfExercises)")
+    
+    // MARK: setup result window
+    func setupResultView(score: Int, message: String) {
+        //        print("setup AppVersionView")
+        self.resultView.isHidden = true
+        self.resultView.translatesAutoresizingMaskIntoConstraints = false
+        let width: CGFloat = self.view.frame.width
+        let height: CGFloat = self.view.frame.height
+        self.resultView=UIView(frame:CGRect(x: (self.view.center.x)-(width/3), y: (self.view.center.y)-(height/3), width: width / 1.5, height: height / 1.5))
+        
+        resultView.backgroundColor = UIColor.orange
+        resultView.layer.cornerRadius = 8
+        resultView.layer.borderWidth = 1
+        resultView.layer.borderColor = UIColor.black.cgColor
+        self.view.addSubview(resultView)
+        self.resultView.isHidden = true
+        
+        let viewTitle = UILabel()
+        viewTitle.text = "Finished!"
+        viewTitle.font = UIFont.boldSystemFont(ofSize: 40)
+        viewTitle.textColor = UIColor.white
+        viewTitle.textAlignment = .center
+        viewTitle.adjustsFontSizeToFitWidth = true
+        viewTitle.minimumScaleFactor = 0.2
+        viewTitle.translatesAutoresizingMaskIntoConstraints = false
+        
         var answerString: String = "answers"
-        if numberOfExercises == 0 {
-            timer.invalidate()
-            // Stop sound
-            do {
-                try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-                try AVAudioSession.sharedInstance().setActive(false)
-            } catch let error as NSError {
-                print(error.description)
-            }
-            finished = true
-            if score == 1 {
-                answerString = "answer"
-            } else if score > 1 {
-                answerString = "answers"
-            }
-            let finishedAlert = UIAlertController(title: "Finished", message: "You have \(score) correct \(answerString).", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default) { alertAction in self.performSegue(withIdentifier: "unwindToOverview", sender: self) }
-            
-            finishedAlert.addAction(ok)
-            
-            present(finishedAlert, animated: true, completion: nil)
+        let viewCorrect = UILabel()
+        if score == 1 {
+            answerString = "answer"
+        } else {
+            answerString = "answers"
         }
-        resultInputField.text = ""
-        reloadInputViews()
+        viewCorrect.text = "You have \(score) correct \(answerString)."
+        viewCorrect.font = UIFont.boldSystemFont(ofSize: 30)
+        viewCorrect.textColor = UIColor.white
+        viewCorrect.textAlignment = .center
+        viewCorrect.adjustsFontSizeToFitWidth = true
+        viewCorrect.minimumScaleFactor = 0.2
+        viewCorrect.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        var wrongString: String = "answers"
+        if wrongAnswers.count == 1 {
+            wrongString = "answer"
+        } else {
+            wrongString = "answers"
+        }
+        let viewWrong = UILabel()
+        viewWrong.text = "Wrong \(wrongString):"
+        viewWrong.font = UIFont.systemFont(ofSize: 26)
+        viewWrong.textColor = UIColor.white
+        viewWrong.textAlignment = .center
+        viewWrong.adjustsFontSizeToFitWidth = true
+        viewWrong.minimumScaleFactor = 0.2
+        viewWrong.translatesAutoresizingMaskIntoConstraints = false
+        
+        let viewWrongResults = UILabel()
+        viewWrongResults.text = "\(message)"
+        viewWrongResults.font = UIFont.systemFont(ofSize: 26)
+        viewWrongResults.textColor = UIColor.white
+        viewWrongResults.textAlignment = .center
+        viewWrongResults.adjustsFontSizeToFitWidth = true
+        viewWrongResults.minimumScaleFactor = 0.2
+        viewWrongResults.numberOfLines = wrongAnswers.count + 1
+        viewWrongResults.translatesAutoresizingMaskIntoConstraints = false
+        
+        // MARK: OK button!
+        let buttonOK = UIButton()
+        buttonOK.setTitle("OK", for: .normal)
+        buttonOK.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        buttonOK.setTitleColor(.blue, for: .normal)
+        buttonOK.setTitleColor(.red, for: .highlighted)
+        buttonOK.backgroundColor = .white
+        buttonOK.titleLabel?.adjustsFontSizeToFitWidth = true
+        buttonOK.titleLabel?.minimumScaleFactor = 0.2
+        buttonOK.layer.cornerRadius = 8
+        buttonOK.layer.borderWidth = 1
+        buttonOK.layer.borderColor = UIColor.gray.cgColor
+        buttonOK.showsTouchWhenHighlighted = true
+        buttonOK.translatesAutoresizingMaskIntoConstraints = false
+        buttonOK.addTarget(self, action: #selector(finishedOK), for: .touchUpInside)
+        
+        // MARK: Vertical stack
+        var vertStack = UIStackView(arrangedSubviews: [viewTitle, viewCorrect, viewWrong, viewWrongResults, buttonOK])
+        if wrongAnswers.count == 0 {
+            vertStack = UIStackView(arrangedSubviews: [viewTitle, viewCorrect, buttonOK])
+        } else {
+            vertStack = UIStackView(arrangedSubviews: [viewTitle, viewCorrect, viewWrong, viewWrongResults, buttonOK])
+        }
+        
+        vertStack.axis = .vertical
+        vertStack.distribution = .fillProportionally
+        vertStack.alignment = .fill
+        vertStack.spacing = 8
+        vertStack.translatesAutoresizingMaskIntoConstraints = false
+        self.resultView.addSubview(vertStack)
+        
+        //Stackview Layout (constraints)
+        vertStack.leftAnchor.constraint(equalTo: resultView.leftAnchor, constant: 20).isActive = true
+        vertStack.topAnchor.constraint(equalTo: resultView.topAnchor, constant: 15).isActive = true
+        vertStack.rightAnchor.constraint(equalTo: resultView.rightAnchor, constant: -20).isActive = true
+        vertStack.heightAnchor.constraint(equalTo: resultView.heightAnchor, constant: -20).isActive = true
+        vertStack.layoutMargins = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
+        vertStack.isLayoutMarginsRelativeArrangement = true
+    }
+    
+    func finishedOK() {
+        resultView.isHidden = true
+        self.showGoogleMobileInterstitial()
+        self.performSegue(withIdentifier: "unwindToOverview", sender: self)
+        
     }
 }

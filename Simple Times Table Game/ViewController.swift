@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreData
+import StoreKit
+import GoogleMobileAds
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -18,7 +20,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var maxScore: Int = 10
     var geselecteerdeBewerking: Array<String> = ["Vermenigvuldigen"]
     var scorePerTableDV: Dictionary<Int, Int> = [:]
-
+    var iapProducts = [SKProduct]()
+    
     // MARK: - Outlets
     @IBOutlet weak var buttonResetStars: UIButton!
     @IBOutlet weak var DifficultyControl: UISegmentedControl!
@@ -29,9 +32,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBAction func BewerkingControlChanged(_ sender: UISegmentedControl) {
         viewWillLayoutSubviews()
     }
+    @IBOutlet weak var buyFullVersionButton: UIButton!
     
+    // MARK: - UNLOCK PREMIUM BUTTON
+    @IBAction func unlockFullVersionButt(_ sender: Any) {
+        STTGFull.store.buyProduct(iapProducts[0])
+    }
     @IBAction func resetAllStarsButtonPressed(_ sender: UIButton) {
-        let controller = UIAlertController(title: "All stars will be deleted!", message: "Are you sure you want to delete all hard earned stars in this table?", preferredStyle: .alert)
+        let controller = UIAlertController(title: "All stars will be deleted!", message: "Are you sure you want to delete all hard earned stars for the seleted operator?", preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default) { alertAction in self.resetAllStars() }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { alertAction in
         }
@@ -56,6 +64,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             print("\(fetchError), \(fetchError.localizedDescription)")
             fatalError("Could not fetch records: \(fetchError)")
         }
+        STTGFull.store.requestProducts{success, products in
+            if success {
+                self.iapProducts = products!
+                self.tableView.reloadData()
+            }
+        }
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -103,6 +118,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         startButtonSelection.isEnabled = false
         let moc = self.appDelegate.persistentContainer.viewContext
         if let sourceViewController = segue.source as? ExerciseViewController {
+            
             if sourceViewController.AllSelect == 1 {
                 //fetch records
                 
@@ -114,7 +130,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 if diff == 2 {
                     self.maxScore = 11
                 } else if diff == 3 {
-                    self.maxScore = 14
+                    self.maxScore = 12
                 } else {
                     self.maxScore = 10
                 }
@@ -240,6 +256,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    
+    
     // MARK: - function Reset All Stars
     func resetAllStars() {
         let moc = self.appDelegate.persistentContainer.viewContext
@@ -274,6 +292,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     // MARK: - Navigation
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        
+        if tableView.indexPathsForSelectedRows == nil {
+            let controller = UIAlertController(title: "No times table selected!", message: "Select at least one table.", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style: .default)
+            controller.addAction(ok)
+            present(controller, animated: true, completion: nil)
+            return false
+        }
+        
+        return true
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
             
@@ -286,7 +317,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         default:
             break
         }
-        if tableView.indexPathsForSelectedRows?.count == 0 {
+        if tableView.indexPathsForSelectedRows == nil {
             let controller = UIAlertController(title: "No times table selected!", message: "Select at least one table.", preferredStyle: .alert)
             let ok = UIAlertAction(title: "OK", style: .default)
             controller.addAction(ok)
@@ -357,6 +388,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }()
     // MARK: - setup layout
     func setupLayout() {
+        buyFullVersionButton.setTitle("Buy Full version", for: .normal)
+        
+        if STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
+            buyFullVersionButton.isHidden = true
+        } else {
+            buyFullVersionButton.isHidden = false
+        }
+        
         tableView.estimatedRowHeight = 40.0
         tableView.rowHeight = UITableViewAutomaticDimension
         startButton.layer.cornerRadius = 10
@@ -381,7 +420,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         (DifficultyControl.subviews[2] as UIView).tintColor = UIColor(red: 150/255, green: 90/255, blue:56/255, alpha:1)
         (DifficultyControl.subviews[1] as UIView).tintColor = UIColor(red: 204/255, green: 194/255, blue: 194/255, alpha: 1)
         (DifficultyControl.subviews[0] as UIView).tintColor = UIColor(red: 201/255, green: 137/255, blue: 16/255, alpha: 1)
-        
+        let font = UIFont.systemFont(ofSize: 25)
+        BewerkingControl.setTitleTextAttributes([NSFontAttributeName: font], for: .normal)
     }
     
 }
@@ -463,112 +503,232 @@ extension ViewController: NSFetchedResultsControllerDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath) as? TableCell else {
             fatalError("Unexpected Index Path")
         }
-        
         cell.selectionStyle = .blue
         //         Configure Cell
         cell.layer.cornerRadius = 10
         cell.layer.masksToBounds = true
         cell.layer.borderWidth = 0
-        //         Fetch Stars
-        if BewerkingControl.selectedSegmentIndex == 2 {
-            let stars = fetchedResultsControllerVD.object(at: indexPath)
-            cell.timesTable.text = stars.timestable
-            
-            if stars.star1 == "0" {
-                cell.star1.image = #imageLiteral(resourceName: "empty_star")
-            } else if stars.star1 == "1" {
-                cell.star1.image = #imageLiteral(resourceName: "bronze_star")
-            } else if stars.star1 == "2" {
-                cell.star1.image = #imageLiteral(resourceName: "silver_star")
-            } else if stars.star1 == "3" {
-                cell.star1.image = #imageLiteral(resourceName: "gold_star")
+        
+        if !STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
+            if indexPath.row == 5 || indexPath.row == 8 {
+                cell.isUserInteractionEnabled = false
+                cell.star1.image = #imageLiteral(resourceName: "Black_Lock")
+                cell.star2.image = #imageLiteral(resourceName: "Black_Lock")
+                cell.star3.image = #imageLiteral(resourceName: "Black_Lock")
+                if BewerkingControl.selectedSegmentIndex == 2 {
+                    let stars = fetchedResultsControllerVD.object(at: indexPath)
+                    cell.timesTable.text = stars.timestable
+                } else if BewerkingControl.selectedSegmentIndex == 1 {
+                    let stars = fetchedResultsControllerD.object(at: indexPath)
+                    cell.timesTable.text = stars.timestable
+                } else {
+                    let stars = fetchedResultsControllerV.object(at: indexPath)
+                    cell.timesTable.text = stars.timestable
+                }
+            } else {
+                cell.isUserInteractionEnabled = true
+                //         Fetch Stars
+                if BewerkingControl.selectedSegmentIndex == 2 {
+                    let stars = fetchedResultsControllerVD.object(at: indexPath)
+                    cell.timesTable.text = stars.timestable
+                    
+                    if stars.star1 == "0" {
+                        cell.star1.image = #imageLiteral(resourceName: "empty_star")
+                    } else if stars.star1 == "1" {
+                        cell.star1.image = #imageLiteral(resourceName: "bronze_star")
+                    } else if stars.star1 == "2" {
+                        cell.star1.image = #imageLiteral(resourceName: "silver_star")
+                    } else if stars.star1 == "3" {
+                        cell.star1.image = #imageLiteral(resourceName: "gold_star")
+                    }
+                    if stars.star2 == "0" {
+                        cell.star2.image = #imageLiteral(resourceName: "empty_star")
+                    } else if stars.star2 == "1" {
+                        cell.star2.image = #imageLiteral(resourceName: "bronze_star")
+                    } else if stars.star2 == "2" {
+                        cell.star2.image = #imageLiteral(resourceName: "silver_star")
+                    } else if stars.star2 == "3" {
+                        cell.star2.image = #imageLiteral(resourceName: "gold_star")
+                    }
+                    if stars.star3 == "0" {
+                        cell.star3.image = #imageLiteral(resourceName: "empty_star")
+                    } else if stars.star3 == "1" {
+                        cell.star3.image = #imageLiteral(resourceName: "bronze_star")
+                    } else if stars.star3 == "2" {
+                        cell.star3.image = #imageLiteral(resourceName: "silver_star")
+                    } else if stars.star3 == "3" {
+                        cell.star3.image = #imageLiteral(resourceName: "gold_star")
+                    }
+                    return cell
+                    
+                } else if BewerkingControl.selectedSegmentIndex == 1 {
+                    let stars = fetchedResultsControllerD.object(at: indexPath)
+                    cell.timesTable.text = stars.timestable
+                    
+                    if stars.star1 == "0" {
+                        cell.star1.image = #imageLiteral(resourceName: "empty_star")
+                    } else if stars.star1 == "1" {
+                        cell.star1.image = #imageLiteral(resourceName: "bronze_star")
+                    } else if stars.star1 == "2" {
+                        cell.star1.image = #imageLiteral(resourceName: "silver_star")
+                    } else if stars.star1 == "3" {
+                        cell.star1.image = #imageLiteral(resourceName: "gold_star")
+                    }
+                    if stars.star2 == "0" {
+                        cell.star2.image = #imageLiteral(resourceName: "empty_star")
+                    } else if stars.star2 == "1" {
+                        cell.star2.image = #imageLiteral(resourceName: "bronze_star")
+                    } else if stars.star2 == "2" {
+                        cell.star2.image = #imageLiteral(resourceName: "silver_star")
+                    } else if stars.star2 == "3" {
+                        cell.star2.image = #imageLiteral(resourceName: "gold_star")
+                    }
+                    if stars.star3 == "0" {
+                        cell.star3.image = #imageLiteral(resourceName: "empty_star")
+                    } else if stars.star3 == "1" {
+                        cell.star3.image = #imageLiteral(resourceName: "bronze_star")
+                    } else if stars.star3 == "2" {
+                        cell.star3.image = #imageLiteral(resourceName: "silver_star")
+                    } else if stars.star3 == "3" {
+                        cell.star3.image = #imageLiteral(resourceName: "gold_star")
+                    }
+                    return cell
+                    
+                } else {
+                    let stars = fetchedResultsControllerV.object(at: indexPath)
+                    cell.timesTable.text = stars.timestable
+                    
+                    if stars.star1 == "0" {
+                        cell.star1.image = #imageLiteral(resourceName: "empty_star")
+                    } else if stars.star1 == "1" {
+                        cell.star1.image = #imageLiteral(resourceName: "bronze_star")
+                    } else if stars.star1 == "2" {
+                        cell.star1.image = #imageLiteral(resourceName: "silver_star")
+                    } else if stars.star1 == "3" {
+                        cell.star1.image = #imageLiteral(resourceName: "gold_star")
+                    }
+                    if stars.star2 == "0" {
+                        cell.star2.image = #imageLiteral(resourceName: "empty_star")
+                    } else if stars.star2 == "1" {
+                        cell.star2.image = #imageLiteral(resourceName: "bronze_star")
+                    } else if stars.star2 == "2" {
+                        cell.star2.image = #imageLiteral(resourceName: "silver_star")
+                    } else if stars.star2 == "3" {
+                        cell.star2.image = #imageLiteral(resourceName: "gold_star")
+                    }
+                    if stars.star3 == "0" {
+                        cell.star3.image = #imageLiteral(resourceName: "empty_star")
+                    } else if stars.star3 == "1" {
+                        cell.star3.image = #imageLiteral(resourceName: "bronze_star")
+                    } else if stars.star3 == "2" {
+                        cell.star3.image = #imageLiteral(resourceName: "silver_star")
+                    } else if stars.star3 == "3" {
+                        cell.star3.image = #imageLiteral(resourceName: "gold_star")
+                    }
+                }
             }
-            if stars.star2 == "0" {
-                cell.star2.image = #imageLiteral(resourceName: "empty_star")
-            } else if stars.star2 == "1" {
-                cell.star2.image = #imageLiteral(resourceName: "bronze_star")
-            } else if stars.star2 == "2" {
-                cell.star2.image = #imageLiteral(resourceName: "silver_star")
-            } else if stars.star2 == "3" {
-                cell.star2.image = #imageLiteral(resourceName: "gold_star")
-            }
-            if stars.star3 == "0" {
-                cell.star3.image = #imageLiteral(resourceName: "empty_star")
-            } else if stars.star3 == "1" {
-                cell.star3.image = #imageLiteral(resourceName: "bronze_star")
-            } else if stars.star3 == "2" {
-                cell.star3.image = #imageLiteral(resourceName: "silver_star")
-            } else if stars.star3 == "3" {
-                cell.star3.image = #imageLiteral(resourceName: "gold_star")
-            }
-            return cell
-            
-        } else if BewerkingControl.selectedSegmentIndex == 1 {
-            let stars = fetchedResultsControllerD.object(at: indexPath)
-            cell.timesTable.text = stars.timestable
-            
-            if stars.star1 == "0" {
-                cell.star1.image = #imageLiteral(resourceName: "empty_star")
-            } else if stars.star1 == "1" {
-                cell.star1.image = #imageLiteral(resourceName: "bronze_star")
-            } else if stars.star1 == "2" {
-                cell.star1.image = #imageLiteral(resourceName: "silver_star")
-            } else if stars.star1 == "3" {
-                cell.star1.image = #imageLiteral(resourceName: "gold_star")
-            }
-            if stars.star2 == "0" {
-                cell.star2.image = #imageLiteral(resourceName: "empty_star")
-            } else if stars.star2 == "1" {
-                cell.star2.image = #imageLiteral(resourceName: "bronze_star")
-            } else if stars.star2 == "2" {
-                cell.star2.image = #imageLiteral(resourceName: "silver_star")
-            } else if stars.star2 == "3" {
-                cell.star2.image = #imageLiteral(resourceName: "gold_star")
-            }
-            if stars.star3 == "0" {
-                cell.star3.image = #imageLiteral(resourceName: "empty_star")
-            } else if stars.star3 == "1" {
-                cell.star3.image = #imageLiteral(resourceName: "bronze_star")
-            } else if stars.star3 == "2" {
-                cell.star3.image = #imageLiteral(resourceName: "silver_star")
-            } else if stars.star3 == "3" {
-                cell.star3.image = #imageLiteral(resourceName: "gold_star")
-            }
-            return cell
-            
         } else {
-            let stars = fetchedResultsControllerV.object(at: indexPath)
-            cell.timesTable.text = stars.timestable
-            
-            if stars.star1 == "0" {
-                cell.star1.image = #imageLiteral(resourceName: "empty_star")
-            } else if stars.star1 == "1" {
-                cell.star1.image = #imageLiteral(resourceName: "bronze_star")
-            } else if stars.star1 == "2" {
-                cell.star1.image = #imageLiteral(resourceName: "silver_star")
-            } else if stars.star1 == "3" {
-                cell.star1.image = #imageLiteral(resourceName: "gold_star")
+            //         Fetch Stars
+            if BewerkingControl.selectedSegmentIndex == 2 {
+                let stars = fetchedResultsControllerVD.object(at: indexPath)
+                cell.timesTable.text = stars.timestable
+                
+                if stars.star1 == "0" {
+                    cell.star1.image = #imageLiteral(resourceName: "empty_star")
+                } else if stars.star1 == "1" {
+                    cell.star1.image = #imageLiteral(resourceName: "bronze_star")
+                } else if stars.star1 == "2" {
+                    cell.star1.image = #imageLiteral(resourceName: "silver_star")
+                } else if stars.star1 == "3" {
+                    cell.star1.image = #imageLiteral(resourceName: "gold_star")
+                }
+                if stars.star2 == "0" {
+                    cell.star2.image = #imageLiteral(resourceName: "empty_star")
+                } else if stars.star2 == "1" {
+                    cell.star2.image = #imageLiteral(resourceName: "bronze_star")
+                } else if stars.star2 == "2" {
+                    cell.star2.image = #imageLiteral(resourceName: "silver_star")
+                } else if stars.star2 == "3" {
+                    cell.star2.image = #imageLiteral(resourceName: "gold_star")
+                }
+                if stars.star3 == "0" {
+                    cell.star3.image = #imageLiteral(resourceName: "empty_star")
+                } else if stars.star3 == "1" {
+                    cell.star3.image = #imageLiteral(resourceName: "bronze_star")
+                } else if stars.star3 == "2" {
+                    cell.star3.image = #imageLiteral(resourceName: "silver_star")
+                } else if stars.star3 == "3" {
+                    cell.star3.image = #imageLiteral(resourceName: "gold_star")
+                }
+                return cell
+                
+            } else if BewerkingControl.selectedSegmentIndex == 1 {
+                let stars = fetchedResultsControllerD.object(at: indexPath)
+                cell.timesTable.text = stars.timestable
+                
+                if stars.star1 == "0" {
+                    cell.star1.image = #imageLiteral(resourceName: "empty_star")
+                } else if stars.star1 == "1" {
+                    cell.star1.image = #imageLiteral(resourceName: "bronze_star")
+                } else if stars.star1 == "2" {
+                    cell.star1.image = #imageLiteral(resourceName: "silver_star")
+                } else if stars.star1 == "3" {
+                    cell.star1.image = #imageLiteral(resourceName: "gold_star")
+                }
+                if stars.star2 == "0" {
+                    cell.star2.image = #imageLiteral(resourceName: "empty_star")
+                } else if stars.star2 == "1" {
+                    cell.star2.image = #imageLiteral(resourceName: "bronze_star")
+                } else if stars.star2 == "2" {
+                    cell.star2.image = #imageLiteral(resourceName: "silver_star")
+                } else if stars.star2 == "3" {
+                    cell.star2.image = #imageLiteral(resourceName: "gold_star")
+                }
+                if stars.star3 == "0" {
+                    cell.star3.image = #imageLiteral(resourceName: "empty_star")
+                } else if stars.star3 == "1" {
+                    cell.star3.image = #imageLiteral(resourceName: "bronze_star")
+                } else if stars.star3 == "2" {
+                    cell.star3.image = #imageLiteral(resourceName: "silver_star")
+                } else if stars.star3 == "3" {
+                    cell.star3.image = #imageLiteral(resourceName: "gold_star")
+                }
+                return cell
+                
+            } else {
+                let stars = fetchedResultsControllerV.object(at: indexPath)
+                cell.timesTable.text = stars.timestable
+                
+                if stars.star1 == "0" {
+                    cell.star1.image = #imageLiteral(resourceName: "empty_star")
+                } else if stars.star1 == "1" {
+                    cell.star1.image = #imageLiteral(resourceName: "bronze_star")
+                } else if stars.star1 == "2" {
+                    cell.star1.image = #imageLiteral(resourceName: "silver_star")
+                } else if stars.star1 == "3" {
+                    cell.star1.image = #imageLiteral(resourceName: "gold_star")
+                }
+                if stars.star2 == "0" {
+                    cell.star2.image = #imageLiteral(resourceName: "empty_star")
+                } else if stars.star2 == "1" {
+                    cell.star2.image = #imageLiteral(resourceName: "bronze_star")
+                } else if stars.star2 == "2" {
+                    cell.star2.image = #imageLiteral(resourceName: "silver_star")
+                } else if stars.star2 == "3" {
+                    cell.star2.image = #imageLiteral(resourceName: "gold_star")
+                }
+                if stars.star3 == "0" {
+                    cell.star3.image = #imageLiteral(resourceName: "empty_star")
+                } else if stars.star3 == "1" {
+                    cell.star3.image = #imageLiteral(resourceName: "bronze_star")
+                } else if stars.star3 == "2" {
+                    cell.star3.image = #imageLiteral(resourceName: "silver_star")
+                } else if stars.star3 == "3" {
+                    cell.star3.image = #imageLiteral(resourceName: "gold_star")
+                }
             }
-            if stars.star2 == "0" {
-                cell.star2.image = #imageLiteral(resourceName: "empty_star")
-            } else if stars.star2 == "1" {
-                cell.star2.image = #imageLiteral(resourceName: "bronze_star")
-            } else if stars.star2 == "2" {
-                cell.star2.image = #imageLiteral(resourceName: "silver_star")
-            } else if stars.star2 == "3" {
-                cell.star2.image = #imageLiteral(resourceName: "gold_star")
-            }
-            if stars.star3 == "0" {
-                cell.star3.image = #imageLiteral(resourceName: "empty_star")
-            } else if stars.star3 == "1" {
-                cell.star3.image = #imageLiteral(resourceName: "bronze_star")
-            } else if stars.star3 == "2" {
-                cell.star3.image = #imageLiteral(resourceName: "silver_star")
-            } else if stars.star3 == "3" {
-                cell.star3.image = #imageLiteral(resourceName: "gold_star")
-            }
-            return cell
         }
+        return cell
     }
     
     // MARK: - fetch all records from Userdata
