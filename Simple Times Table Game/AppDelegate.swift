@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -96,6 +97,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Save Managed Object Context
         self.saveContext()
+        
+        // MARK: Google Analytics
+        FirebaseApp.configure()
         
         return true
 

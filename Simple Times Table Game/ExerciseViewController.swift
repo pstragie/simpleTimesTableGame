@@ -589,7 +589,9 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
     
     func finishedOK() {
         resultView.isHidden = true
-        self.showGoogleMobileInterstitial()
+        if !STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
+            self.showGoogleMobileInterstitial()
+        }
         self.performSegue(withIdentifier: "unwindToOverview", sender: self)
         
     }

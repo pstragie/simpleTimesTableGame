@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C3AA1F56760A8421E187038C /* Pods_Simple_Times_Table_Game.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07AEE9D6DF5DDB2954E0128A /* Pods_Simple_Times_Table_Game.framework */; };
+		F5486A1E206D87F700A35B2F /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = F5486A1D206D87F700A35B2F /* Podfile */; };
 		F55AFE37206D50D800DCBCD0 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55AFE36206D50D800DCBCD0 /* AdSupport.framework */; };
 		F55AFE39206D50E400DCBCD0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55AFE38206D50E400DCBCD0 /* AudioToolbox.framework */; };
 		F55AFE3B206D50EE00DCBCD0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55AFE3A206D50EE00DCBCD0 /* AVFoundation.framework */; };
@@ -18,7 +20,6 @@
 		F55AFE47206D513600DCBCD0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55AFE46206D513600DCBCD0 /* SystemConfiguration.framework */; };
 		F55AFE4C206D579100DCBCD0 /* FullVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55AFE4A206D579100DCBCD0 /* FullVersion.swift */; };
 		F55AFE4D206D579100DCBCD0 /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55AFE4B206D579100DCBCD0 /* IAPHelper.swift */; };
-		F55AFE4F206D57B800DCBCD0 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55AFE4E206D57B800DCBCD0 /* GoogleMobileAds.framework */; };
 		F55BBED52050EB76008F0DEE /* AirHorn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F55BBED32050EB76008F0DEE /* AirHorn.mp3 */; };
 		F55BBED62050EB76008F0DEE /* Tick.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F55BBED42050EB76008F0DEE /* Tick.mp3 */; };
 		F568BF162051C859006DF904 /* begindataDelen.csv in Resources */ = {isa = PBXBuildFile; fileRef = F568BF152051C859006DF904 /* begindataDelen.csv */; };
@@ -40,6 +41,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		07AEE9D6DF5DDB2954E0128A /* Pods_Simple_Times_Table_Game.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Simple_Times_Table_Game.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		48C23EB0811E590E1D87E8E4 /* Pods-Simple Times Table Game.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Simple Times Table Game.release.xcconfig"; path = "Pods/Target Support Files/Pods-Simple Times Table Game/Pods-Simple Times Table Game.release.xcconfig"; sourceTree = "<group>"; };
+		5D197E9C7C15BE245E2FE38E /* Pods-Simple Times Table Game.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Simple Times Table Game.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Simple Times Table Game/Pods-Simple Times Table Game.debug.xcconfig"; sourceTree = "<group>"; };
+		F5486A1D206D87F700A35B2F /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		F5486A1F206DA2C600A35B2F /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = "../../../Downloads/GoogleMobileAdsSdkiOS-7.30.0/GoogleMobileAds.framework"; sourceTree = "<group>"; };
+		F5486A21206DAAFE00A35B2F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F55AFE34206D4DCB00DCBCD0 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		F55AFE36206D50D800DCBCD0 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		F55AFE38206D50E400DCBCD0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -84,7 +91,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F55AFE4F206D57B800DCBCD0 /* GoogleMobileAds.framework in Frameworks */,
 				F55AFE47206D513600DCBCD0 /* SystemConfiguration.framework in Frameworks */,
 				F5EA52E82060829200E0CA13 /* StoreKit.framework in Frameworks */,
 				F55AFE45206D511E00DCBCD0 /* MessageUI.framework in Frameworks */,
@@ -95,12 +101,22 @@
 				F55AFE3B206D50EE00DCBCD0 /* AVFoundation.framework in Frameworks */,
 				F55AFE39206D50E400DCBCD0 /* AudioToolbox.framework in Frameworks */,
 				F55AFE37206D50D800DCBCD0 /* AdSupport.framework in Frameworks */,
+				C3AA1F56760A8421E187038C /* Pods_Simple_Times_Table_Game.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6BFE5574D5FAFA4603AAAB2C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5D197E9C7C15BE245E2FE38E /* Pods-Simple Times Table Game.debug.xcconfig */,
+				48C23EB0811E590E1D87E8E4 /* Pods-Simple Times Table Game.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		F55BBED72050EB7E008F0DEE /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,10 +129,12 @@
 		F5B2D379204F26CB005B93C8 = {
 			isa = PBXGroup;
 			children = (
+				F5486A1D206D87F700A35B2F /* Podfile */,
 				F568BF2B20520835006DF904 /* Localizable.strings */,
 				F5B2D384204F26CB005B93C8 /* Simple Times Table Game */,
 				F5B2D383204F26CB005B93C8 /* Products */,
 				F5EA52E62060829200E0CA13 /* Frameworks */,
+				6BFE5574D5FAFA4603AAAB2C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -131,6 +149,7 @@
 		F5B2D384204F26CB005B93C8 /* Simple Times Table Game */ = {
 			isa = PBXGroup;
 			children = (
+				F5486A21206DAAFE00A35B2F /* GoogleService-Info.plist */,
 				F5EA52ED206A661F00E0CA13 /* Datamodel.sqlite */,
 				F5EA52EE206A661F00E0CA13 /* Datamodel.sqlite-shm */,
 				F5EA52EF206A661F00E0CA13 /* Datamodel.sqlite-wal */,
@@ -156,6 +175,7 @@
 		F5EA52E62060829200E0CA13 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F5486A1F206DA2C600A35B2F /* GoogleMobileAds.framework */,
 				F55AFE4E206D57B800DCBCD0 /* GoogleMobileAds.framework */,
 				F55AFE48206D540E00DCBCD0 /* GoogleMobileAds.framework */,
 				F55AFE46206D513600DCBCD0 /* SystemConfiguration.framework */,
@@ -169,6 +189,7 @@
 				F55AFE36206D50D800DCBCD0 /* AdSupport.framework */,
 				F55AFE34206D4DCB00DCBCD0 /* iAd.framework */,
 				F5EA52E72060829200E0CA13 /* StoreKit.framework */,
+				07AEE9D6DF5DDB2954E0128A /* Pods_Simple_Times_Table_Game.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -180,9 +201,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F5B2D394204F26CC005B93C8 /* Build configuration list for PBXNativeTarget "Simple Times Table Game" */;
 			buildPhases = (
+				4608D265B5DFE63CCD4E048D /* [CP] Check Pods Manifest.lock */,
 				F5B2D37E204F26CB005B93C8 /* Sources */,
 				F5B2D37F204F26CB005B93C8 /* Frameworks */,
 				F5B2D380204F26CB005B93C8 /* Resources */,
+				FDAA42544890F122E031F0EC /* [CP] Embed Pods Frameworks */,
+				69D86D8E62083FE0EA1E8E14 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -251,6 +275,7 @@
 				F568BF182051C878006DF904 /* begindataVermDelen.csv in Resources */,
 				F55BBED52050EB76008F0DEE /* AirHorn.mp3 in Resources */,
 				F5B2D38D204F26CC005B93C8 /* Assets.xcassets in Resources */,
+				F5486A1E206D87F700A35B2F /* Podfile in Resources */,
 				F5B2D3A120503E49005B93C8 /* begindataVermenigvuldigen.csv in Resources */,
 				F5B2D38B204F26CC005B93C8 /* Main.storyboard in Resources */,
 				F5EA52F1206A661F00E0CA13 /* Datamodel.sqlite-shm in Resources */,
@@ -258,6 +283,62 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4608D265B5DFE63CCD4E048D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Simple Times Table Game-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		69D86D8E62083FE0EA1E8E14 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Simple Times Table Game/Pods-Simple Times Table Game-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FDAA42544890F122E031F0EC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Simple Times Table Game/Pods-Simple Times Table Game-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Simple Times Table Game/Pods-Simple Times Table Game-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F5B2D37E204F26CB005B93C8 /* Sources */ = {
@@ -408,21 +489,15 @@
 		};
 		F5B2D395204F26CC005B93C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D197E9C7C15BE245E2FE38E /* Pods-Simple Times Table Game.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = HUS279SULR;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/",
-					"$(PROJECT_DIR)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Simple Times Table Game/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.PWSapps.SimpleTimesTableGame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
@@ -431,21 +506,15 @@
 		};
 		F5B2D396204F26CC005B93C8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 48C23EB0811E590E1D87E8E4 /* Pods-Simple Times Table Game.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = HUS279SULR;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/",
-					"$(PROJECT_DIR)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Simple Times Table Game/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.PWSapps.SimpleTimesTableGame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
