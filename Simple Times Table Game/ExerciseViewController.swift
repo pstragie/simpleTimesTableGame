@@ -339,7 +339,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
             self.scorePerTableD[t] = 0
         }
         // Set timer
-        self.seconds = ((5 - Int(difficultyLevel!)) * self.numberArray.count * self.bewerkingen.count)
+        self.seconds = ((5 - Int(difficultyLevel!)) * (self.selectedTables?.count)! * self.numberArray.count * self.bewerkingen.count)
         timerLabel.text = String(self.seconds)
         // Set inputfield
         resultInputField.becomeFirstResponder()
@@ -370,15 +370,15 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
             timerLabel.textColor = UIColor.red
             timerLabel.text = "\(seconds)"
             timer.invalidate()
-//            playSound(resource: "AirHorn", ext: "mp3", vol: 0.5)
+            playSound(resource: "AirHorn", ext: "mp3", vol: 0.5)
         } else if seconds < 6 {
             timerLabel.textColor = UIColor.orange
             timerLabel.text = "\(seconds)"
-//            playSound(resource: "Tick", ext: "mp3", vol: 0.7)
+            playSound(resource: "Tick", ext: "mp3", vol: 0.7)
         } else {
             timerLabel.textColor = UIColor.green
             timerLabel.text = "\(seconds)"
-//            playSound(resource: "Tick", ext: "mp3", vol: 0.5)
+            playSound(resource: "Tick", ext: "mp3", vol: 0.5)
         }
     }
     

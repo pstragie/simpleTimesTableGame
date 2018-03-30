@@ -23,14 +23,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let defaults = UserDefaults.standard
         
         // MARK: Check current version
-        guard let currentAppVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String, let previousVersion = defaults.string(forKey: "appVersion") else {
+        guard let currentAppVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String, let previousVersion = localdata.string(forKey: "appVersion") else {
             // Key does not exist in UserDefaults, must be a fresh install
 //            print("Fresh install")
             // Writing version to UserDefaults for the first time
-            defaults.set(appBuild, forKey: "appVersion")
+            localdata.set(appBuild, forKey: "appVersion")
             
             // MARK: Load from CSV, for update of database!
             // Developer use only! Load persistent store with data from csv files.
@@ -87,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // Updating new version to UserDefaults
-        defaults.set(currentAppVersion, forKey: "appVersion")
+        localdata.set(currentAppVersion, forKey: "appVersion")
         
         // MARK: preloaDBData of three database files included in the app
         // For distribution purposes!
@@ -136,11 +135,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didUpdate userActivity: NSUserActivity) {
 //        print("App did update!")
         // Copy Userdefaults to Userdata entity
-        for entity in localdata.array(forKey: "userdata")! {
-            print("entity: ", entity)
-            let entdict = localdata.dictionary(forKey: entity as! String)
-            print("entdict: ", entdict!)
-        }
+        print("application did update... copy user defaults to user data")
         ViewController().copyUserDefaultsToUserData(managedObjectContext: persistentContainer.viewContext)
     }
 
@@ -434,14 +429,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
             // MARK: Print UserDefaults
-            /*print("localdata: ", localdata)
-             for (key, value) in localdata.dictionaryRepresentation() {
-             print("\(key) = \(value) \n")
-             }*/
+            //print("localdata: ", localdata)
+            for (key, value) in localdata.dictionaryRepresentation() {
+                print("\(key) = \(value) \n")
+            }
         } else {
             //            print("Files Exist!")
             if newBuild == true {
-//                print("New build: \(String(describing: Bundle.main.infoDictionary?["CFBundleVersion"] as! String))") // Copy the files
+                print("New build: \(String(describing: Bundle.main.infoDictionary?["CFBundleVersion"] as! String))") // Copy the files
                 
                 let sourceSqliteURLs = [URL(fileURLWithPath: Bundle.main.path(forResource: "Datamodel", ofType: "sqlite")!), URL(fileURLWithPath: Bundle.main.path(forResource: "Datamodel", ofType: "sqlite-wal")!), URL(fileURLWithPath: Bundle.main.path(forResource: "Datamodel", ofType: "sqlite-shm")!)]
                 let destSqliteURLs = [URL(fileURLWithPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "/Datamodel.sqlite"), URL(fileURLWithPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "/Datamodel.sqlite-wal"), URL(fileURLWithPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "/Datamodel.sqlite-shm")]
@@ -463,12 +458,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         fatalError("Could not copy sqlite to destination.")
                     }
                 }
-                //                print("Files Copied!")
+//                print("Files Copied!")
                 // Copy localdata (userdefaults) over persistent container data
+//                print("Appdelegate copy user defaults to user data")
                 ViewController().copyUserDefaultsToUserData(managedObjectContext: persistentContainer.viewContext)
                 
             } else {
-//                print("Same build") // No need to copy the files.
+                print("Same build") // No need to copy the files.
             }
         }
     }

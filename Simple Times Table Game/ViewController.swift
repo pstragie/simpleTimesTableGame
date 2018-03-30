@@ -91,7 +91,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-//        print("view will layout subviews")
+        // print("view will layout subviews")
         if BewerkingControl.selectedSegmentIndex == 2 {
             do {
                 try self.fetchedResultsControllerVD.performFetch()
@@ -129,11 +129,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         startButtonSelection.isEnabled = false
         let moc = self.appDelegate.persistentContainer.viewContext
         if let sourceViewController = segue.source as? ExerciseViewController {
-            
             if sourceViewController.AllSelect == 1 {
                 //fetch records
-                
-                
                 let finished = sourceViewController.finished
                 //let timestable = sourceViewController.selectedTable!
                 let timer = Int(sourceViewController.timerLabel.text!)
@@ -299,6 +296,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         } catch {
             fatalError("Could not reset stars")
         }
+        self.copyUserdataToUserdefaults(managedObjectContext: moc)
         tableView.reloadData()
     }
 
@@ -766,24 +764,35 @@ extension ViewController: NSFetchedResultsControllerDelegate {
     func copyUserdataToUserdefaults(managedObjectContext: NSManagedObjectContext) {
 //        print("Copying Userdata to localdata")
         // Read entity Userdata values
+        var starDict: Dictionary<String, Any> = [:]
+        
         let Entities = ["Vermenigvuldigen", "Delen", "VermDelen"]
         for entity in Entities {
+            var starArray: Array<Any> = []
             let userdata = fetchAllRecordsForEntity(entity, inManagedObjectContext: managedObjectContext)
-            var tablearray: Array<Any>
             // Check if Userdefaults exist
+            if localdata.object(forKey: "userdata") != nil {
+//                print("userdata exists in localdata")
+                starDict = localdata.dictionary(forKey: "userdata")!
+            } else {
+//                print("userdata does not exist in localdata")
+                starDict = [:] as Dictionary<String,Any>
+            }
             // Store to Userdefaults - Create array and store in localdata under key: ?
             // Read array of userdata in localdata
-            tablearray = [] as [Any]
+
             
             for userData in userdata {
-                //print("userData: ", userData)
+//                print("userData: ", userData)
                 let dict = [userData.value(forKey: "timestable") as! String: ["star1": (userData.value(forKey: "star1")) as! String, "star2": (userData.value(forKey: "star2")) as! String, "star3": (userData.value(forKey: "star3")) as! String]] as [String : Any]
-                //print("dict: ", dict)
-                tablearray.append(dict)
+//                print("dict: ", dict)
+                // Add dict to array
+                starArray.append(dict)
             }
-            
-            //print("tableArray: \(tablearray)")
-            localdata.set(tablearray, forKey: entity)
+            starDict[entity] = starArray
+//            print("starDict: \(starDict)")
+            localdata.set(starDict, forKey: "userdata")
+//            print("localdata after copy to defaults: \(String(describing: localdata.dictionary(forKey: "userdata")))")
         }
     }
     
@@ -845,7 +854,6 @@ extension ViewController: NSFetchedResultsControllerDelegate {
                 userData.setValue(star2, forKey: "star2")
                 userData.setValue(star3, forKey: "star3")
             }
-            
         }
         do {
             try managedObjectContext.save()
@@ -857,22 +865,30 @@ extension ViewController: NSFetchedResultsControllerDelegate {
     // MARK: - Copy Userdefaults to UserData (DB) --> after update!
     func copyUserDefaultsToUserData(managedObjectContext: NSManagedObjectContext) {
 //        print("copy user defaults to user data in persistent container")
+//        print("localdata: \(String(describing: localdata.dictionary(forKey: "userdata")))")
         let context = self.appDelegate.persistentContainer.viewContext
-//        print("Copying localdata to Userdata")
         // Read UserDefaults array: from localdata, key: userdata
-        //print("Localdata: \(String(describing: localdata.array(forKey: "Vermenigvuldigen")))")
+//        print("Localdata: \(String(describing: localdata.array(forKey: "Vermenigvuldigen")))")
         // Use UserDefaults array values to obtain dictionary data
         let Entities = ["Vermenigvuldigen", "Delen", "VermDelen"]
         for entity in Entities {
 //            print("entity: \(entity)")
-            let tablearray = localdata.array(forKey: entity)!
-            for x in tablearray {
-                for (tt, stars) in x as! Dictionary<String, Any> {
-                    let stars = stars as! Dictionary<String, String>
-                    addUserData(entity: entity, timestable: tt, star1: stars["star1"]!, star2: stars["star2"]!, star3: stars["star3"]!, managedObjectContext: context)
-                }
-            }
             
+            let starDict = localdata.dictionary(forKey: "userdata")
+//            print("Dict: \(starDict!)")
+            for (key, value) in starDict! {
+//                print("key: \(key)")
+//                print("value: \(value)")
+                if key == entity  {
+                    for sterretjes in value as! Array<Any> {
+                        for (tt, stars) in sterretjes as! Dictionary<String, Any> {
+                            let stars = stars as! Dictionary<String, String>
+                            addUserData(entity: entity, timestable: tt, star1: stars["star1"]!, star2: stars["star2"]!, star3: stars["star3"]!, managedObjectContext: context)
+                        }
+                    }
+                }
+                
+            }
         }
     }
 
