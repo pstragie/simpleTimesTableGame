@@ -37,6 +37,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: - UNLOCK PREMIUM BUTTON
     @IBAction func unlockFullVersionButt(_ sender: Any) {
         STTGFull.store.buyProduct(iapProducts[0])
+        self.tableView.reloadData()
     }
     @IBAction func resetAllStarsButtonPressed(_ sender: UIButton) {
         let controller = UIAlertController(title: "All stars will be deleted!", message: "Are you sure you want to delete all hard earned stars for the seleted operator?", preferredStyle: .alert)
@@ -625,6 +626,7 @@ extension ViewController: NSFetchedResultsControllerDelegate {
                     } else if stars.star3 == "3" {
                         cell.star3.image = #imageLiteral(resourceName: "gold_star")
                     }
+                    return cell
                 }
             }
         } else {
@@ -632,7 +634,7 @@ extension ViewController: NSFetchedResultsControllerDelegate {
             if BewerkingControl.selectedSegmentIndex == 2 {
                 let stars = fetchedResultsControllerVD.object(at: indexPath)
                 cell.timesTable.text = stars.timestable
-                
+                cell.isUserInteractionEnabled = true
                 if stars.star1 == "0" {
                     cell.star1.image = #imageLiteral(resourceName: "empty_star")
                 } else if stars.star1 == "1" {
