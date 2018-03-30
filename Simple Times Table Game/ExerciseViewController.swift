@@ -45,6 +45,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
     var wrongAnswerMessage: String = ""
     var resultView = UIView()
     var interstitial: GADInterstitial!
+    var mode: String?
     
     // MARK: - Outlets
     @IBOutlet weak var backButton: UIButton!
@@ -57,16 +58,19 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var grassImagePattern: UIImageView!
     @IBAction func goBack(_ sender: UIButton) {
         //print("Back button pressed!")
-        let controller = UIAlertController(title: "Progress will be lost!", message: "Are you sure you want to go back?", preferredStyle: .alert)
-        let ok = UIAlertAction(title: "OK", style: .default) { alertAction in self.performSegue(withIdentifier: "unwindToOverview", sender: self) }
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { alertAction in
+        if AllSelect != 1 {
+            self.performSegue(withIdentifier: "unwindToOverview", sender: self)
+        } else {
+            let controller = UIAlertController(title: NSLocalizedString("Progress will be lost!", comment: ""), message: NSLocalizedString("Are you sure you want to go back?", comment: ""), preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style: .default) { alertAction in self.performSegue(withIdentifier: "unwindToOverview", sender: self) }
+            let cancel = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { alertAction in
+            }
+            
+            controller.addAction(ok)
+            controller.addAction(cancel)
+            
+            present(controller, animated: true, completion: nil)
         }
-        
-        controller.addAction(ok)
-        controller.addAction(cancel)
-        
-        present(controller, animated: true, completion: nil)
-
     }
     @IBOutlet weak var resultInputField: UITextField!
     
@@ -254,10 +258,10 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
     func checkResult() {
         if resultInputField.text != "" {
             checkAnswer(bewerking: self.bewerking)
-            resultInputField.placeholder = "Your answer"
+            resultInputField.placeholder = NSLocalizedString("Your answer...", comment: "")
             viewWillAppear(false)
         } else {
-            resultInputField.placeholder = "Enter the result..."
+            resultInputField.placeholder = NSLocalizedString("Enter the result...", comment: "")
         }
     }
     // MARK: - prepare numbers
@@ -343,7 +347,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         timerLabel.text = String(self.seconds)
         // Set inputfield
         resultInputField.becomeFirstResponder()
-        resultInputField.placeholder = "Your answer..."
+        resultInputField.placeholder = NSLocalizedString("Your answer...", comment: "")
     }
     
     // MARK: - shuffle Array
@@ -504,7 +508,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         self.resultView.isHidden = true
         
         let viewTitle = UILabel()
-        viewTitle.text = "Finished!"
+        viewTitle.text = NSLocalizedString("Finished!", comment: "")
         viewTitle.font = UIFont.boldSystemFont(ofSize: 40)
         viewTitle.textColor = UIColor.white
         viewTitle.textAlignment = .center
@@ -515,11 +519,11 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         var answerString: String = "answers"
         let viewCorrect = UILabel()
         if score == 1 {
-            answerString = "answer"
+            answerString = NSLocalizedString("answer", comment: "")
         } else {
-            answerString = "answers"
+            answerString = NSLocalizedString("answers", comment: "")
         }
-        viewCorrect.text = "You have \(score) correct \(answerString)."
+        viewCorrect.text = NSLocalizedString("You have", comment: "") + " \(score) " + NSLocalizedString("correct \(answerString).", comment: "")
         viewCorrect.font = UIFont.boldSystemFont(ofSize: 30)
         viewCorrect.textColor = UIColor.white
         viewCorrect.textAlignment = .center
@@ -530,12 +534,12 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         
         var wrongString: String = "answers"
         if wrongAnswers.count == 1 {
-            wrongString = "answer"
+            wrongString = NSLocalizedString("answer:", comment: "")
         } else {
-            wrongString = "answers"
+            wrongString = NSLocalizedString("answers:", comment: "")
         }
         let viewWrong = UILabel()
-        viewWrong.text = "Wrong \(wrongString):"
+        viewWrong.text = NSLocalizedString("Wrong \(wrongString)", comment: "")
         viewWrong.font = UIFont.systemFont(ofSize: 26)
         viewWrong.textColor = UIColor.white
         viewWrong.textAlignment = .center

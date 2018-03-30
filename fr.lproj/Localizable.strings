@@ -1,0 +1,27 @@
+/* 
+  Localizable.strings
+  Simple Times Table Game
+
+  Created by Pieter Stragier on 09/03/2018.
+  Copyright © 2018 PWS-apps. All rights reserved.
+*/
+"1. Choose level" = "1. Choisissez le niveau";
+"2. Choose operator" = "2. Choisissez l'opérateur";
+"3. Choose one or more times tables" = "3. Choisissez une ou plusieurs tables de multiplication";
+"OK" = "OK";
+"Cancel" = "Annuler";
+"START exercise" = "Démarrez (exercise)";
+"START test" = "Démarrze (test)";
+"Your answer..." = "Votre réponse...";
+"Enter the result..." = "Entrez votre résultat...";
+"Progress will be lost!" = "Les progrès seront perdus!";
+"Are you sure you want to go back?" = "Êtes-vous sûr de vouloir revenir?";
+"Finished!" = "Fini!";
+"Buy Full version" = "Acheter la version complète";
+"Wrong answer:" = "Mauvaise réponse:";
+"Wrong answers:" = "Mauvaises réponses:";
+"You have" = "Vous avez";
+"correct answer." = "réponse correcte.";
+"correct answers." = "réponses correctes.";
+"All stars will be deleted!" = "Toutes les étoiles seront supprimées!";
+"Are you sure you want to delete all hard earned stars for the seleted operator?" = "Êtes-vous sûr de vouloir supprimer toutes les étoiles durement gagnées pour l'opérateur sélectionné?";

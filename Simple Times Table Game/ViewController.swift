@@ -40,9 +40,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.tableView.reloadData()
     }
     @IBAction func resetAllStarsButtonPressed(_ sender: UIButton) {
-        let controller = UIAlertController(title: "All stars will be deleted!", message: "Are you sure you want to delete all hard earned stars for the seleted operator?", preferredStyle: .alert)
-        let ok = UIAlertAction(title: "OK", style: .default) { alertAction in self.resetAllStars() }
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { alertAction in
+        let controller = UIAlertController(title: NSLocalizedString("All stars will be deleted!", comment: ""), message: NSLocalizedString("Are you sure you want to delete all hard earned stars for the seleted operator?", comment: ""), preferredStyle: .alert)
+        let ok = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default) { alertAction in self.resetAllStars() }
+        let cancel = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { alertAction in
         }
         
         controller.addAction(ok)
@@ -397,7 +397,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }()
     // MARK: - setup layout
     func setupLayout() {
-        buyFullVersionButton.setTitle("Buy Full version", for: .normal)
+        buyFullVersionButton.setTitle(NSLocalizedString("Buy Full version", comment: ""), for: .normal)
         
         if STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
             buyFullVersionButton.isHidden = true
