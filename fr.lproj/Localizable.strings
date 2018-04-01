@@ -5,6 +5,7 @@
   Created by Pieter Stragier on 09/03/2018.
   Copyright © 2018 PWS-apps. All rights reserved.
 */
+"CFBundleDisplayName" = "Tables de multiplication";
 "1. Choose level" = "1. Choisissez le niveau";
 "2. Choose operator" = "2. Choisissez l'opérateur";
 "3. Choose one or more times tables" = "3. Choisissez une ou plusieurs tables de multiplication";

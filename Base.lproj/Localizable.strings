@@ -5,6 +5,7 @@
   Created by Pieter Stragier on 09/03/2018.
   Copyright © 2018 PWS-apps. All rights reserved.
 */
+"CFBundleDisplayName" = "Simple Times Table Game";
 "1. Choose level" = "1. Choose level";
 "2. Choose operator" = "2. Choose operator";
 "3. Choose one or more times tables" = "3. Choose one or more times tables";
