@@ -24,7 +24,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelection="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="70" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dVg-EI-XO7">
-                                <rect key="frame" x="46" y="174" width="283" height="383"/>
+                                <rect key="frame" x="46" y="169" width="283" height="388"/>
                                 <color key="backgroundColor" red="1" green="1" blue="0.40000000600000002" alpha="0.0" colorSpace="calibratedRGB"/>
                                 <color key="tintColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
@@ -150,7 +150,7 @@
                                 </constraints>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3. Choose one or more times tables" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="xLe-Jm-Zov">
-                                <rect key="frame" x="30" y="126" width="315" height="33"/>
+                                <rect key="frame" x="30" y="128" width="315" height="33"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="28"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -158,7 +158,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="bottom" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="BaT-Ms-XhH" userLabel="Stack View Buttons">
                                 <rect key="frame" x="30" y="577" width="315" height="50"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Uct-Wf-0RK" userLabel="Selection">
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Uct-Wf-0RK" userLabel="Start exercise">
                                         <rect key="frame" x="0.0" y="0.0" width="153.5" height="50"/>
                                         <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="0.90410958900000005" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -173,13 +173,13 @@
                                             <segue destination="3yz-Lp-PFl" kind="show" identifier="SegueSelection" id="xEY-TH-g7x"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IHX-L2-CbD">
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="IHX-L2-CbD" userLabel="Start test">
                                         <rect key="frame" x="161.5" y="0.0" width="153.5" height="50"/>
                                         <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="0.90410958900000005" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="QhU-rK-XY2"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                         <color key="tintColor" red="0.08235294118" green="0.21176470589999999" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="START test">
                                             <color key="titleColor" red="0.08235294118" green="0.21176470589999999" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -190,8 +190,11 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pRX-bp-bTC">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="pRX-bp-bTC">
                                 <rect key="frame" x="30" y="629" width="96" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="zUk-ho-Tqh"/>
+                                </constraints>
                                 <state key="normal" title="Reset all stars">
                                     <color key="titleColor" red="0.08235294118" green="0.21176470589999999" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
@@ -199,9 +202,12 @@
                                     <action selector="resetAllStarsButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mL8-N5-Rjb"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D0M-NH-maE">
-                                <rect key="frame" x="299" y="629" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="D0M-NH-maE">
+                                <rect key="frame" x="237" y="629" width="108" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="lEg-OZ-8QD"/>
+                                </constraints>
+                                <state key="normal" title="Buy Full version"/>
                                 <connections>
                                     <action selector="unlockFullVersionButt:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0bC-sV-OYu"/>
                                 </connections>
@@ -211,7 +217,7 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="BaT-Ms-XhH" secondAttribute="trailing" constant="30" id="0HT-6c-4Bq"/>
                             <constraint firstItem="pRX-bp-bTC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="30" id="1nH-z7-4DI"/>
-                            <constraint firstItem="dVg-EI-XO7" firstAttribute="top" secondItem="xLe-Jm-Zov" secondAttribute="bottom" constant="15" id="4rx-D3-tKL"/>
+                            <constraint firstItem="dVg-EI-XO7" firstAttribute="top" secondItem="xLe-Jm-Zov" secondAttribute="bottom" constant="8" id="4rx-D3-tKL"/>
                             <constraint firstItem="BaT-Ms-XhH" firstAttribute="top" secondItem="dVg-EI-XO7" secondAttribute="bottom" constant="20" id="6Fe-2M-p2H"/>
                             <constraint firstAttribute="trailing" secondItem="D0M-NH-maE" secondAttribute="trailing" constant="30" id="AVg-xe-uOQ"/>
                             <constraint firstItem="BaT-Ms-XhH" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="30" id="JtN-Es-sMS"/>
@@ -223,7 +229,7 @@
                             <constraint firstItem="hmY-bn-6Zd" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="30" id="cdm-Mx-gn2"/>
                             <constraint firstAttribute="trailingMargin" secondItem="hmY-bn-6Zd" secondAttribute="trailing" constant="30" id="dMN-gO-zye"/>
                             <constraint firstItem="hmY-bn-6Zd" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="30" id="fFV-tN-DFW"/>
-                            <constraint firstItem="xLe-Jm-Zov" firstAttribute="top" secondItem="el8-0j-p9e" secondAttribute="bottom" constant="8" id="gpy-E9-DIf"/>
+                            <constraint firstItem="xLe-Jm-Zov" firstAttribute="top" secondItem="el8-0j-p9e" secondAttribute="bottom" constant="10" id="gpy-E9-DIf"/>
                             <constraint firstAttribute="trailing" secondItem="xLe-Jm-Zov" secondAttribute="trailing" constant="30" id="jPn-sR-EDw"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="BaT-Ms-XhH" secondAttribute="bottom" constant="40" id="nb9-oW-8oW"/>
                             <constraint firstItem="el8-0j-p9e" firstAttribute="top" secondItem="hmY-bn-6Zd" secondAttribute="bottom" constant="8" id="orv-fI-EtZ"/>
@@ -392,7 +398,7 @@
         <image name="empty_star" width="20" height="20"/>
         <image name="gold_star" width="20" height="20"/>
         <image name="silver_star" width="20" height="20"/>
-        <image name="sunCloud" width="150" height="50"/>
+        <image name="sunCloud" width="75" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="xEY-TH-g7x"/>
