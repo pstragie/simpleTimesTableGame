@@ -17,21 +17,21 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.PWSapps.SimpleTimesTableGame</string>
+	<string>com.PWS-apps.SimpleTimesTableGame</string>
 	<key>PROJECT_ID</key>
 	<string>simple-times-table-game-e990f</string>
 	<key>STORAGE_BUCKET</key>
 	<string>simple-times-table-game-e990f.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_GCM_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:124796705708:ios:285e4a0f16b1e45c</string>
 	<key>DATABASE_URL</key>

@@ -95,11 +95,12 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         } else {
             timerLabel.isHidden = true
         }
+        view.endEditing(false)
         /* iTunes Store link: "ca-app-pub-4147233946078865/2007865568" */
         /* Google ad test: ca-app-pub-3940256099942544/4411468910" */
         interstitial = GADInterstitial(adUnitID: "ca-app-pub-4147233946078865/2007865568")
         let request = GADRequest()
-        request.testDevices = [kGADSimulatorID]
+        //request.testDevices = [kGADSimulatorID]
         interstitial.load(request)
     }
     
@@ -485,6 +486,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
                 }
             }
             setupResultView(score: score, message: self.wrongAnswerMessage)
+            view.endEditing(true)
             resultView.isHidden = false
         }
         resultInputField.text = ""
