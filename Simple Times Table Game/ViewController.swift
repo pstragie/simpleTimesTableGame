@@ -21,6 +21,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var geselecteerdeBewerking: Array<String> = ["Vermenigvuldigen"]
     var scorePerTableDV: Dictionary<Int, Int> = [:]
     var iapProducts = [SKProduct]()
+    var activityIndicator = UIActivityIndicatorView()
+    var strLabel = UILabel()
+    let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     
     // MARK: - Outlets
     @IBOutlet weak var buttonResetStars: UIButton!
@@ -36,8 +39,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // MARK: - UNLOCK PREMIUM BUTTON
     @IBAction func unlockFullVersionButt(_ sender: Any) {
+        buyFullVersionButton.setTitleColor(.red, for: .highlighted)
+        activityIndicator("contacting AppStore...")
         STTGFull.store.buyProduct(iapProducts[0])
         self.tableView.reloadData()
+        self.effectView.removeFromSuperview()
     }
     @IBAction func resetAllStarsButtonPressed(_ sender: UIButton) {
         let controller = UIAlertController(title: NSLocalizedString("All stars will be deleted!", comment: ""), message: NSLocalizedString("Are you sure you want to delete all hard earned stars for the seleted operator?", comment: ""), preferredStyle: .alert)
@@ -92,6 +98,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         // print("view will layout subviews")
+        if STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
+            buyFullVersionButton.isHidden = true
+        } else {
+            buyFullVersionButton.isHidden = false
+        }
         if BewerkingControl.selectedSegmentIndex == 2 {
             do {
                 try self.fetchedResultsControllerVD.performFetch()
@@ -264,7 +275,30 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    
+    // MARK: - Activity Indicator
+    func activityIndicator(_ title: String) {
+        
+        strLabel.removeFromSuperview()
+        activityIndicator.removeFromSuperview()
+        effectView.removeFromSuperview()
+        
+        strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 160, height: 46))
+        strLabel.text = title
+        strLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
+        strLabel.textColor = UIColor(white: 0.9, alpha: 0.7)
+        
+        effectView.frame = CGRect(x: view.frame.midX - strLabel.frame.width/2, y: view.frame.midY - strLabel.frame.height/2 , width: 160, height: 46)
+        effectView.layer.cornerRadius = 15
+        effectView.layer.masksToBounds = true
+        
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 46, height: 46)
+        activityIndicator.startAnimating()
+        
+        effectView.addSubview(activityIndicator)
+        effectView.addSubview(strLabel)
+        view.addSubview(effectView)
+    }
     
     // MARK: - function Reset All Stars
     func resetAllStars() {
@@ -397,6 +431,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }()
     // MARK: - setup layout
     func setupLayout() {
+        activityIndicator.isHidden = true
         buyFullVersionButton.setTitle(NSLocalizedString("Buy Full version", comment: ""), for: .normal)
         
         if STTGFull.store.isProductPurchased(STTGFull.FullVersion) {

@@ -46,6 +46,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
     var resultView = UIView()
     var interstitial: GADInterstitial!
     var mode: String?
+    var totalNumber: Int = 10
     
     // MARK: - Outlets
     @IBOutlet weak var backButton: UIButton!
@@ -54,6 +55,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var bewerkingsTeken: UILabel!
+    @IBOutlet weak var progressLabel: UILabel!
     
     @IBOutlet weak var grassImagePattern: UIImageView!
     @IBAction func goBack(_ sender: UIButton) {
@@ -83,8 +85,8 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         //print("View did Load")
-        setupLayout()
         prepareNumbers()
+        setupLayout()
         self.resultInputField.delegate = self
 //        print("Number of Ex.: \(self.numberOfExercises)")
         if self.AllSelect == 1 {
@@ -95,6 +97,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         } else {
             timerLabel.isHidden = true
         }
+        
         view.endEditing(false)
         /* iTunes Store link: "ca-app-pub-4147233946078865/2007865568" */
         /* Google ad test: ca-app-pub-3940256099942544/4411468910" */
@@ -115,6 +118,11 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
+        if (totalNumber - numberOfExercises + 1) <= totalNumber {
+            self.progressLabel.text = "\(totalNumber - numberOfExercises + 1)/\(totalNumber)"
+        } else {
+            self.progressLabel.text = "\(totalNumber)/\(totalNumber)"
+        }
         if bewerkingen.count == 1 {
             for bew in bewerkingen {
                 if bew == "vermenigvuldigen" {
@@ -231,6 +239,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         backButton.layer.cornerRadius = 5
         submitButton.layer.cornerRadius = 5
         self.grassImagePattern.image = UIImage(named: "grassTextureTransparent.png")!.resizableImage(withCapInsets: UIEdgeInsets(top:0, left: 0, bottom: 0, right: 0))
+        self.progressLabel.text = "1/\(self.totalNumber)"
     }
     
     // MARK: - setup progress bar
@@ -321,10 +330,11 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         
         // Set number of exercises
         if self.AllSelect == 1 {
-            numberOfExercises = self.numberArray.count * tablesArrayV.count * self.bewerkingen.count
+            self.numberOfExercises = self.numberArray.count * tablesArrayV.count * self.bewerkingen.count
         } else if self.AllSelect == 0 {
-            numberOfExercises = 20 - max((20 - ((selectedTables?.count)! * 5)),0)
+            self.numberOfExercises = 20 - max((20 - ((selectedTables?.count)! * 5)),0)
         }
+        self.totalNumber = self.numberOfExercises
         // Shuffle multipliers and add to tableDictV
         for x in 0..<tablesArrayV.count {
             shuffledArray = shuffleArray(array: self.numberArray)
