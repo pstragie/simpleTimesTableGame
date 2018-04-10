@@ -593,7 +593,7 @@ extension ViewController: NSFetchedResultsControllerDelegate {
         cell.layer.masksToBounds = true
         cell.layer.borderWidth = 0
         
-        if STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
+        if !STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
             if indexPath.row == 5 || indexPath.row == 8 || indexPath.row == 3 {
                 cell.isUserInteractionEnabled = false
                 cell.star1.image = #imageLiteral(resourceName: "Black_Lock")
