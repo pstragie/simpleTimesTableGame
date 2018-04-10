@@ -1,0 +1,8 @@
+/* 
+  InfoPlist.strings
+  Simple Times Table Game
+
+  Created by Pieter Stragier on 02/04/2018.
+  Copyright © 2018 PWS-apps. All rights reserved.
+*/
+"CFBundleDisplayName" = "Simple Times Table Game";

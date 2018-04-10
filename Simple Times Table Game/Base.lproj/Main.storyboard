@@ -349,6 +349,16 @@
                                     <constraint firstAttribute="height" constant="50" id="evH-UD-MGl"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="hhm-PW-uXw">
+                                <rect key="frame" x="273" y="292" width="42" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="42" id="99K-44-EB9"/>
+                                    <constraint firstAttribute="height" constant="30" id="kkJ-aQ-6GS"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -358,11 +368,13 @@
                             <constraint firstItem="RcB-vQ-aZW" firstAttribute="top" secondItem="6F0-Q0-lgu" secondAttribute="bottom" constant="13" id="969-lc-PwL"/>
                             <constraint firstAttribute="trailingMargin" secondItem="MYe-ak-eML" secondAttribute="trailing" constant="80" id="AdS-9D-i4e"/>
                             <constraint firstItem="ek9-sS-YTM" firstAttribute="leading" secondItem="u6E-zS-f1D" secondAttribute="leadingMargin" constant="40" id="BFk-QD-fIf"/>
+                            <constraint firstItem="ek9-sS-YTM" firstAttribute="top" secondItem="hhm-PW-uXw" secondAttribute="bottom" constant="8" id="Br2-wJ-8oy"/>
                             <constraint firstItem="MYe-ak-eML" firstAttribute="leading" secondItem="u6E-zS-f1D" secondAttribute="leadingMargin" constant="80" id="Eau-Eo-5ZK"/>
                             <constraint firstItem="MYe-ak-eML" firstAttribute="top" secondItem="6F0-Q0-lgu" secondAttribute="bottom" constant="140" id="Iav-cu-fXr"/>
                             <constraint firstAttribute="trailing" secondItem="Vd5-93-sP9" secondAttribute="trailing" id="Iyr-qN-NCY"/>
                             <constraint firstItem="Vd5-93-sP9" firstAttribute="leading" secondItem="u6E-zS-f1D" secondAttribute="leading" id="Jaq-eu-aUy"/>
                             <constraint firstItem="8uM-ru-d9d" firstAttribute="top" secondItem="MYe-ak-eML" secondAttribute="bottom" constant="188" id="TRh-ee-Abf"/>
+                            <constraint firstAttribute="trailing" secondItem="hhm-PW-uXw" secondAttribute="trailing" constant="60" id="TY6-bM-fhs"/>
                             <constraint firstItem="ek9-sS-YTM" firstAttribute="centerX" secondItem="u6E-zS-f1D" secondAttribute="centerX" id="TkU-cE-epp"/>
                             <constraint firstItem="RcB-vQ-aZW" firstAttribute="trailing" secondItem="u6E-zS-f1D" secondAttribute="trailingMargin" id="VKP-nD-GYj"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ek9-sS-YTM" secondAttribute="trailing" constant="40" id="W9q-8L-l43"/>
@@ -379,6 +391,7 @@
                         <outlet property="backButton" destination="4Ss-99-bVl" id="6dk-rN-WyM"/>
                         <outlet property="bewerkingsTeken" destination="fqY-dr-Lbh" id="jn8-UP-Mxu"/>
                         <outlet property="grassImagePattern" destination="kl0-OJ-4nk" id="3go-P2-0r5"/>
+                        <outlet property="progressLabel" destination="hhm-PW-uXw" id="wo9-hy-KYG"/>
                         <outlet property="randomNumber" destination="PtK-HJ-Cv2" id="8bz-dk-vkS"/>
                         <outlet property="resultInputField" destination="ek9-sS-YTM" id="5N1-Df-fQ0"/>
                         <outlet property="submitButton" destination="8uM-ru-d9d" id="CsZ-Us-35m"/>

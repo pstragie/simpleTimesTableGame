@@ -1,0 +1,40 @@
+/* 
+  Localizable.strings
+  
+
+  Created by Pieter Stragier on 10/04/2018.
+
+*/
+"1. Choose level" = "1. Choisissez le niveau";
+"2. Choose operator" = "2. Choisissez l'opérateur";
+"3. Choose one or more times tables" = "3. Choisissez une ou plusieurs tables de multiplication";
+"OK" = "OK";
+"Cancel" = "Annuler";
+"START exercise" = "Démarrez (exercise)";
+"START test" = "Démarrze (test)";
+"Your answer..." = "Votre réponse...";
+"Enter the result..." = "Entrez votre résultat...";
+"Progress will be lost!" = "Les progrès seront perdus!";
+"Are you sure you want to go back?" = "Êtes-vous sûr de vouloir revenir?";
+"Finished!" = "Fini!";
+"Buy Full version" = "Acheter la version complète";
+"Wrong answer:" = "Mauvaise réponse:";
+"Wrong answers:" = "Mauvaises réponses:";
+"You have" = "Vous avez";
+"correct answer." = "réponse correcte.";
+"correct answers." = "réponses correctes.";
+"All stars will be deleted!" = "Toutes les étoiles seront supprimées!";
+"Are you sure you want to delete all hard earned stars for the seleted operator?" = "Êtes-vous sûr de vouloir supprimer toutes les étoiles durement gagnées pour l'opérateur sélectionné?";
+"contacting AppStore..." = "contactez AppStore...";
+"Purchase failed" = "Achat raté";
+"Purchases are disabled in your device" = "Les achats sont désactivés sur votre appareil";
+"Not allowed" = "Interdit";
+"Restore purchase" = "Restorez l'achat";
+"Success" = "Succès";
+"In-app purchases not enabled" = "In-app purchases not enabled";
+"Please enable in-app purchase in settings" = "Please enable in-app purchase in settings";
+"Restore purchase" = "Restorez l'achat";
+"No times table selected!" = "Pas de table selecté!";
+"Select at least one table." = "Selectez au moins une table de multiplication.";
+"Use Passcode" = "Utilisez code de pass";
+"Please authenticate to buy Full version (ad free)" = "Veuillez vous authentifier pour acheter la version complète (pas de advertisement)";

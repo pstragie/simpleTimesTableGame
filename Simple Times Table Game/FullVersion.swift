@@ -10,7 +10,7 @@ import Foundation
 
 public struct STTGFull {
     
-    public static let FullVersion = "com.PWSapps.SimpleTimesTableGame.FullAddFree"
+    public static let FullVersion = "STTGFull2"
     
     fileprivate static let productIdentifiers: Set<ProductIdentifier> = [STTGFull.FullVersion]
     

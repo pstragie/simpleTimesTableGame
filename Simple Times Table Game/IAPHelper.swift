@@ -7,6 +7,7 @@
 //
 
 import StoreKit
+import LocalAuthentication
 
 public typealias ProductIdentifier = String
 public typealias ProductsRequestCompletionHandler = (_ success: Bool, _ products: [SKProduct]?) -> ()
@@ -26,9 +27,9 @@ open class IAPHelper : NSObject  {
             let purchased = UserDefaults.standard.bool(forKey: productIdentifier)
             if purchased {
                 purchasedProductIdentifiers.insert(productIdentifier)
-                print("Previously purchased: \(productIdentifier)")
+//                print("Previously purchased: \(productIdentifier)")
             } else {
-                print("Not purchased: \(productIdentifier)")
+//                print("Not purchased: \(productIdentifier)")
             }
         }
         super.init()
@@ -60,11 +61,80 @@ extension IAPHelper {
     }
     
     public class func canMakePayments() -> Bool {
-        return true
+        return SKPaymentQueue.canMakePayments()
     }
     
     public func restorePurchases() {
         SKPaymentQueue.default().restoreCompletedTransactions()
+    }
+    
+    func evaluatePolicyFailErrorMessageForLA(errorCode: Int) -> String {
+        var message = ""
+        if #available(iOS 11.0, macOS 10.13, *) {
+            switch errorCode {
+            case LAError.touchIDNotAvailable.rawValue:
+                message = "Authentication could not start because the device does not support biometric authentication."
+                
+            case LAError.touchIDLockout.rawValue:
+                message = "Authentication could not continue because the user has been locked out of biometric authentication, due to failing authentication too many times."
+                
+            case LAError.touchIDNotEnrolled.rawValue:
+                message = "Authentication could not start because the user has not enrolled in biometric authentication."
+                
+            default:
+                message = "Did not find error code on LAError object"
+            }
+        } else {
+            switch errorCode {
+            case LAError.touchIDLockout.rawValue:
+                message = "Too many failed attempts."
+                
+            case LAError.touchIDNotAvailable.rawValue:
+                message = "TouchID is not available on the device"
+                
+            case LAError.touchIDNotEnrolled.rawValue:
+                message = "TouchID is not enrolled on the device"
+                
+            default:
+                message = "Did not find error code on LAError object"
+            }
+        }
+        
+        return message;
+    }
+    
+    func evaluateAuthenticationPolicyMessageForLA(errorCode: Int) -> String {
+        
+        var message = ""
+        
+        switch errorCode {
+            
+        case LAError.authenticationFailed.rawValue:
+            message = "The user failed to provide valid credentials"
+            
+        case LAError.appCancel.rawValue:
+            message = "Authentication was cancelled by application"
+            
+        case LAError.invalidContext.rawValue:
+            message = "The context is invalid"
+            
+        case LAError.passcodeNotSet.rawValue:
+            message = "Passcode is not set on the device"
+            
+        case LAError.systemCancel.rawValue:
+            message = "Authentication was cancelled by the system"
+            
+        case LAError.userCancel.rawValue:
+            message = "The user did cancel"
+            
+        case LAError.userFallback.rawValue:
+            message = "The user chose to use the fallback"
+            
+        default:
+            message = evaluatePolicyFailErrorMessageForLA(errorCode: errorCode)
+        }
+        
+        return message
     }
 }
 
@@ -84,8 +154,8 @@ extension IAPHelper: SKProductsRequestDelegate {
     }
     
     public func request(_ request: SKRequest, didFailWithError error: Error) {
-        print("Failed to load list of products.")
-        print("Error: \(error.localizedDescription)")
+//        print("Failed to load list of products.")
+//        print("Error: \(error.localizedDescription)")
         productsRequestCompletionHandler?(false, nil)
         clearRequestAndHandler()
     }
@@ -122,28 +192,39 @@ extension IAPHelper: SKPaymentTransactionObserver {
     }
     
     private func complete(transaction: SKPaymentTransaction) {
-        print("complete...")
+//        print("complete...")
         deliverPurchaseNotificationFor(identifier: transaction.payment.productIdentifier)
         SKPaymentQueue.default().finishTransaction(transaction)
+        if let otherViewController = UIApplication.shared.delegate?.window??.rootViewController as? ViewController {
+            let buyButton = otherViewController.buyFullVersionButton
+            buyButton?.isHidden = true
+            otherViewController.viewWillLayoutSubviews()
+        }
     }
     
     private func restore(transaction: SKPaymentTransaction) {
         guard let productIdentifier = transaction.original?.payment.productIdentifier else { return }
         
-        print("restore... \(productIdentifier)")
+//        print("restore... \(productIdentifier)")
         deliverPurchaseNotificationFor(identifier: productIdentifier)
         SKPaymentQueue.default().finishTransaction(transaction)
     }
     
     private func fail(transaction: SKPaymentTransaction) {
-        print("fail...")
+//        print("fail...")
         if let transactionError = transaction.error as NSError? {
             if transactionError.code != SKError.paymentCancelled.rawValue {
+                ErrorReporting.showMessage(title: NSLocalizedString("Purchase failed", comment: ""), msg: "\(String(describing: (transaction.error?.localizedDescription)!))")
                 print("Transaction Error: \(String(describing: transaction.error?.localizedDescription))")
             }
         }
-        
         SKPaymentQueue.default().finishTransaction(transaction)
+        // TO DO: - Show UI message that purchase failed!!!
+        if let otherViewController = UIApplication.shared.delegate?.window??.rootViewController as? ViewController {
+            let buyButton = otherViewController.buyFullVersionButton
+            buyButton?.isEnabled = true
+            otherViewController.viewWillLayoutSubviews()
+        }
     }
     
     private func deliverPurchaseNotificationFor(identifier: String?) {
@@ -153,5 +234,29 @@ extension IAPHelper: SKPaymentTransactionObserver {
         UserDefaults.standard.set(true, forKey: identifier)
         UserDefaults.standard.synchronize()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: IAPHelper.IAPHelperPurchaseNotification), object: identifier)
+    }
+}
+class ErrorReporting {
+    
+    static func showMessage(title: String, msg: String) {
+        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
+    }
+}
+extension UIApplication {
+    
+    static func topViewController(base: UIViewController? = UIApplication.shared.delegate?.window??.rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return topViewController(base: nav.visibleViewController)
+        }
+        if let tab = base as? UITabBarController, let selected = tab.selectedViewController {
+            return topViewController(base: selected)
+        }
+        if let presented = base?.presentedViewController {
+            return topViewController(base: presented)
+        }
+        
+        return base
     }
 }

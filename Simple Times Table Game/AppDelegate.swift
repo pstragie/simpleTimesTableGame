@@ -23,7 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+        for transaction in SKPaymentQueue.default().transactions {
+            SKPaymentQueue.default().finishTransaction(transaction)
+        }
         // MARK: Check current version
         guard let currentAppVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String, let previousVersion = localdata.string(forKey: "appVersion") else {
             // Key does not exist in UserDefaults, must be a fresh install

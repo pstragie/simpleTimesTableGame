@@ -103,7 +103,8 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         /* Google ad test: ca-app-pub-3940256099942544/4411468910" */
         interstitial = GADInterstitial(adUnitID: "ca-app-pub-4147233946078865/2007865568")
         let request = GADRequest()
-        //request.testDevices = [kGADSimulatorID]
+        // Remove following line in production version!
+        //request.testDevices = [kGADSimulatorID, "5db093027235efd63b99453220045ee50bdaf8fb"]
         interstitial.load(request)
     }
     

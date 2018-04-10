@@ -23,7 +23,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var iapProducts = [SKProduct]()
     var activityIndicator = UIActivityIndicatorView()
     var strLabel = UILabel()
-    let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     
     // MARK: - Outlets
     @IBOutlet weak var buttonResetStars: UIButton!
@@ -40,11 +40,45 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: - UNLOCK PREMIUM BUTTON
     @IBAction func unlockFullVersionButt(_ sender: Any) {
         buyFullVersionButton.setTitleColor(.red, for: .highlighted)
-        activityIndicator("contacting AppStore...")
-        STTGFull.store.buyProduct(iapProducts[0])
-        self.tableView.reloadData()
-        self.effectView.removeFromSuperview()
+        activityIndicatorShow(NSLocalizedString("contacting AppStore...", comment: ""))
+        
+        buyFullVersionButton.isEnabled = false
+        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(ViewController.enableButton), userInfo: nil, repeats: false)
+        if self.buyFullVersionButton.title(for: .normal) == NSLocalizedString("Restore purchase", comment: "") {
+            STTGFull.store.restorePurchases()
+            self.tableView.reloadData()
+            self.viewWillLayoutSubviews()
+        } else {
+            if IAPHelper.canMakePayments() {
+                STTGFull.store.buyProduct(iapProducts[0])
+                self.tableView.reloadData()
+                self.viewWillLayoutSubviews()
+            } else {           
+                let failController = UIAlertController(title: NSLocalizedString("In-app purchases not enabled", comment: ""), message: NSLocalizedString("Please enable in-app purchase in settings", comment: ""), preferredStyle: .alert)
+                let ok = UIAlertAction(title: "OK", style: .default) { alertAction in
+                }
+                let settings = UIAlertAction(title: "Settings", style: .default, handler: { alertAction in
+                    failController.dismiss(animated: true, completion: nil)
+                    let url: URL? = URL(string: UIApplicationOpenSettingsURLString)
+                    //let url: NSURL? = NSURL(string: UIApplicationOpenSettingsURLString)
+                    if url != nil {
+                        if UIApplication.shared.canOpenURL(url!) {
+                            if #available(iOS 10.0, *) {
+                                UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+                            } else {
+                                UIApplication.shared.openURL(url!)
+                            }
+                        }
+                    }
+                })
+                failController.addAction(ok)
+                failController.addAction(settings)
+                present(failController, animated: true, completion: nil)
+            }
+            self.effectView.removeFromSuperview()
+        }
     }
+    
     @IBAction func resetAllStarsButtonPressed(_ sender: UIButton) {
         let controller = UIAlertController(title: NSLocalizedString("All stars will be deleted!", comment: ""), message: NSLocalizedString("Are you sure you want to delete all hard earned stars for the seleted operator?", comment: ""), preferredStyle: .alert)
         let ok = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default) { alertAction in self.resetAllStars() }
@@ -61,6 +95,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        let orientationvalue = UIInterfaceOrientation.portrait.rawValue
+        UIDevice.current.setValue(orientationvalue, forKey: "orientation")
+        AppDelegate.AppUtility.lockOrientation(.portrait)
         setupLayout()
 //        print("localdata at load: \(String(describing: localdata.array(forKey: "Vermenigvuldigen")))")
         do {
@@ -108,8 +145,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 try self.fetchedResultsControllerVD.performFetch()
             } catch {
                 let fetchError = error as NSError
-                print("Unable to Perform Fetch Request")
-                print("\(fetchError), \(fetchError.localizedDescription)")
+//                print("Unable to Perform Fetch Request")
+//                print("\(fetchError), \(fetchError.localizedDescription)")
                 fatalError("Could not fetch records: \(fetchError)")
             }
         } else if BewerkingControl.selectedSegmentIndex == 1 {
@@ -117,8 +154,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 try self.fetchedResultsControllerD.performFetch()
             } catch {
                 let fetchError = error as NSError
-                print("Unable to Perform Fetch Request")
-                print("\(fetchError), \(fetchError.localizedDescription)")
+//                print("Unable to Perform Fetch Request")
+//                print("\(fetchError), \(fetchError.localizedDescription)")
                 fatalError("Could not fetch records: \(fetchError)")
             }
         } else {
@@ -126,14 +163,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 try self.fetchedResultsControllerV.performFetch()
             } catch {
                 let fetchError = error as NSError
-                print("Unable to Perform Fetch Request")
-                print("\(fetchError), \(fetchError.localizedDescription)")
+//                print("Unable to Perform Fetch Request")
+//                print("\(fetchError), \(fetchError.localizedDescription)")
                 fatalError("Could not fetch records: \(fetchError)")
             }
         }
         self.tableView.reloadData()
     }
 
+    func enableButton() {
+        self.buyFullVersionButton.isEnabled = true
+    }
+    
     // MARK: - Unwind
     @IBAction func unwindToOverview(segue: UIStoryboardSegue) {
         startButton.isEnabled = false
@@ -276,18 +317,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     // MARK: - Activity Indicator
-    func activityIndicator(_ title: String) {
+    func activityIndicatorShow(_ title: String) {
         
         strLabel.removeFromSuperview()
         activityIndicator.removeFromSuperview()
         effectView.removeFromSuperview()
         
-        strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 160, height: 46))
+        strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 220, height: 46))
         strLabel.text = title
         strLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
-        strLabel.textColor = UIColor(white: 0.9, alpha: 0.7)
+        strLabel.textColor = UIColor(white: 0.5, alpha: 0.7)
         
-        effectView.frame = CGRect(x: view.frame.midX - strLabel.frame.width/2, y: view.frame.midY - strLabel.frame.height/2 , width: 160, height: 46)
+        effectView.frame = CGRect(x: view.frame.midX - strLabel.frame.width/2, y: view.frame.midY - strLabel.frame.height/2 , width: 220, height: 46)
         effectView.layer.cornerRadius = 15
         effectView.layer.masksToBounds = true
         
@@ -298,6 +339,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         effectView.addSubview(activityIndicator)
         effectView.addSubview(strLabel)
         view.addSubview(effectView)
+        //view.bringSubview(toFront: effectView)
     }
     
     // MARK: - function Reset All Stars
@@ -338,7 +380,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         
         if tableView.indexPathsForSelectedRows == nil {
-            let controller = UIAlertController(title: "No times table selected!", message: "Select at least one table.", preferredStyle: .alert)
+            let controller = UIAlertController(title: NSLocalizedString("No times table selected!", comment: ""), message: NSLocalizedString("Select at least one table.", comment: ""), preferredStyle: .alert)
             let ok = UIAlertAction(title: "OK", style: .default)
             controller.addAction(ok)
             present(controller, animated: true, completion: nil)
@@ -361,7 +403,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             break
         }
         if tableView.indexPathsForSelectedRows == nil {
-            let controller = UIAlertController(title: "No times table selected!", message: "Select at least one table.", preferredStyle: .alert)
+            let controller = UIAlertController(title: NSLocalizedString("No times table selected!", comment: ""), message: NSLocalizedString("Select at least one table.", comment: ""), preferredStyle: .alert)
             let ok = UIAlertAction(title: "OK", style: .default)
             controller.addAction(ok)
             present(controller, animated: true, completion: nil)
@@ -430,10 +472,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return fetchedResultsController
     }()
     // MARK: - setup layout
-    func setupLayout() {
-        activityIndicator.isHidden = true
+    func setupLayout() {        
         buyFullVersionButton.setTitle(NSLocalizedString("Buy Full version", comment: ""), for: .normal)
-        
         if STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
             buyFullVersionButton.isHidden = true
         } else {
@@ -553,7 +593,7 @@ extension ViewController: NSFetchedResultsControllerDelegate {
         cell.layer.masksToBounds = true
         cell.layer.borderWidth = 0
         
-        if !STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
+        if STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
             if indexPath.row == 5 || indexPath.row == 8 || indexPath.row == 3 {
                 cell.isUserInteractionEnabled = false
                 cell.star1.image = #imageLiteral(resourceName: "Black_Lock")
