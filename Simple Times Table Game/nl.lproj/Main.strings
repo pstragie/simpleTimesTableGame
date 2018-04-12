@@ -49,3 +49,6 @@
 
 /* Class = "UILabel"; text = "3. Choose one or more times tables"; ObjectID = "xLe-Jm-Zov"; */
 "xLe-Jm-Zov.text" = "3. Kies één of meer tafels";
+
+/* Class = "UIButton"; normalTitle = "Restore"; ObjectID = "UWz-mA-ypA"; */
+"UWz-mA-ypA" = "Herstel aankoop";

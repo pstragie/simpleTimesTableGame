@@ -48,3 +48,6 @@
 
 /* Class = "UILabel"; text = "3. Choose one or more times tables"; ObjectID = "xLe-Jm-Zov"; */
 "xLe-Jm-Zov.text" = "3. Choisissez une ou plusieurs tables de multiplication";
+
+/* Class = "UIButton"; normalTitle = "Restore"; ObjectID = "UWz-mA-ypA"; */
+"UWz-mA-ypA" = "Restorez l'achat";

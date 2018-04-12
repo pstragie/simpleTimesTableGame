@@ -47,6 +47,8 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
     var interstitial: GADInterstitial!
     var mode: String?
     var totalNumber: Int = 10
+    var parentalGate = UIView()
+    var parentalCheck: Bool = false
     
     // MARK: - Outlets
     @IBOutlet weak var backButton: UIButton!
@@ -104,9 +106,21 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         /* Google ad test: ca-app-pub-3940256099942544/4411468910" */
         interstitial = GADInterstitial(adUnitID: "ca-app-pub-4147233946078865/2007865568")
         let request = GADRequest()
+        request.tag(forChildDirectedTreatment: true)
         // Remove following line in production version!
         //request.testDevices = [kGADSimulatorID, "5db093027235efd63b99453220045ee50bdaf8fb"]
         interstitial.load(request)
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        //check the url that opens
+        
+        //present parental control
+        if parentalGateControl() == true {
+            return true
+        }
+        //return true or false /open or reject opening safari/app store
+        return false
     }
     
     override func viewWillLayoutSubviews() {
@@ -236,6 +250,133 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
+    
+    // MARK: setup parental gate window
+    func setupParentalGateView(option: String) {
+        //        print("setup AppVersionView")
+        self.parentalGate.isHidden = true
+        self.parentalGate.translatesAutoresizingMaskIntoConstraints = false
+        let width: CGFloat = self.view.frame.width
+        let height: CGFloat = self.view.frame.height
+        self.parentalGate=UIView(frame:CGRect(x: (self.view.center.x)-(width/3), y: (self.view.center.y)-(height/3), width: width / 1.5, height: height / 1.5))
+        
+        parentalGate.backgroundColor = UIColor.orange
+        parentalGate.layer.cornerRadius = 8
+        parentalGate.layer.borderWidth = 1
+        parentalGate.layer.borderColor = UIColor.black.cgColor
+        self.view.addSubview(parentalGate)
+        self.parentalGate.isHidden = true
+        
+        let viewTitle = UILabel()
+        viewTitle.text = NSLocalizedString("Parental control", comment: "")
+        viewTitle.font = UIFont.boldSystemFont(ofSize: 40)
+        viewTitle.textColor = UIColor.white
+        viewTitle.textAlignment = .center
+        viewTitle.adjustsFontSizeToFitWidth = true
+        viewTitle.minimumScaleFactor = 0.2
+        viewTitle.translatesAutoresizingMaskIntoConstraints = false
+        
+        let parGateText = UILabel()
+        if option == "buy" {
+            parGateText.text = NSLocalizedString("Grown ups only!", comment: "") + "\n" + NSLocalizedString("Answer correct to buy the full version", comment: "")
+        } else {
+            parGateText.text = NSLocalizedString("Grown ups only!", comment: "") + "\n" + NSLocalizedString("Answer correct to continue", comment: "")
+        }
+        parGateText.font = UIFont.boldSystemFont(ofSize: 30)
+        parGateText.textColor = UIColor.white
+        parGateText.textAlignment = .center
+        parGateText.adjustsFontSizeToFitWidth = true
+        parGateText.minimumScaleFactor = 0.2
+        parGateText.translatesAutoresizingMaskIntoConstraints = false
+        
+        let parGateQuestion = UILabel()
+        parGateQuestion.text = NSLocalizedString("How much is SEVENTEEN + SEVEN - THIRTEEN? (in words)", comment: "")
+        parGateQuestion.font = UIFont.systemFont(ofSize: 26)
+        parGateQuestion.textColor = UIColor.white
+        parGateQuestion.textAlignment = .center
+        parGateQuestion.adjustsFontSizeToFitWidth = true
+        parGateQuestion.minimumScaleFactor = 0.2
+        parGateQuestion.translatesAutoresizingMaskIntoConstraints = false
+        
+        let answerField = UITextField()
+        answerField.font = UIFont.systemFont(ofSize: 26)
+        answerField.textColor = UIColor.black
+        answerField.textAlignment = .center
+        answerField.adjustsFontSizeToFitWidth = true
+        answerField.translatesAutoresizingMaskIntoConstraints = false
+        
+        // MARK: Cancel button!
+        let buttonCancel = UIButton()
+        buttonCancel.setTitle("Cancel", for: .normal)
+        buttonCancel.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        buttonCancel.setTitleColor(.blue, for: .normal)
+        buttonCancel.setTitleColor(.red, for: .highlighted)
+        buttonCancel.backgroundColor = .white
+        buttonCancel.titleLabel?.adjustsFontSizeToFitWidth = true
+        buttonCancel.titleLabel?.minimumScaleFactor = 0.2
+        buttonCancel.layer.cornerRadius = 8
+        buttonCancel.layer.borderWidth = 1
+        buttonCancel.layer.borderColor = UIColor.gray.cgColor
+        buttonCancel.showsTouchWhenHighlighted = true
+        buttonCancel.translatesAutoresizingMaskIntoConstraints = false
+        buttonCancel.addTarget(self, action: #selector(answerCancel), for: .touchUpInside)
+        
+        // MARK: OK button!
+        let buttonOK = UIButton()
+        buttonOK.setTitle("OK", for: .normal)
+        buttonOK.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        buttonOK.setTitleColor(.blue, for: .normal)
+        buttonOK.setTitleColor(.red, for: .highlighted)
+        buttonOK.backgroundColor = .white
+        buttonOK.titleLabel?.adjustsFontSizeToFitWidth = true
+        buttonOK.titleLabel?.minimumScaleFactor = 0.2
+        buttonOK.layer.cornerRadius = 8
+        buttonOK.layer.borderWidth = 1
+        buttonOK.layer.borderColor = UIColor.gray.cgColor
+        buttonOK.showsTouchWhenHighlighted = true
+        buttonOK.translatesAutoresizingMaskIntoConstraints = false
+        if answerField.text == "eleven" || answerField.text == "Eleven" || answerField.text == "ELEVEN" {
+            buttonOK.addTarget(self, action: #selector(answeredOK), for: .touchUpInside)
+        } else {
+        buttonOK.addTarget(self, action: #selector(answerCancel), for: .touchUpInside)
+        }
+        // MARK: Vertical stack
+        let vertStack = UIStackView(arrangedSubviews: [viewTitle, parGateText, parGateQuestion, answerField, buttonCancel, buttonOK])
+        
+        vertStack.axis = .vertical
+        vertStack.distribution = .fillProportionally
+        vertStack.alignment = .fill
+        vertStack.spacing = 8
+        vertStack.translatesAutoresizingMaskIntoConstraints = false
+        self.parentalGate.addSubview(vertStack)
+        
+        //Stackview Layout (constraints)
+        vertStack.leftAnchor.constraint(equalTo: parentalGate.leftAnchor, constant: 20).isActive = true
+        vertStack.topAnchor.constraint(equalTo: parentalGate.topAnchor, constant: 15).isActive = true
+        vertStack.rightAnchor.constraint(equalTo: parentalGate.rightAnchor, constant: -20).isActive = true
+        vertStack.heightAnchor.constraint(equalTo: parentalGate.heightAnchor, constant: -20).isActive = true
+        vertStack.layoutMargins = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
+        vertStack.isLayoutMarginsRelativeArrangement = true
+    }
+    
+    func parentalGateControl() -> Bool {
+        setupParentalGateView(option: "ad")
+        parentalGate.isHidden = false
+        if parentalCheck == true {
+            parentalCheck = false
+            return true
+        }
+        return false
+    }
+    func answeredOK() {
+        parentalGate.isHidden = true
+        parentalCheck = true
+    }
+    func answerCancel() {
+        parentalGate.isHidden = true
+        parentalCheck = false
+    }
+
     // MARK: - setup layout
     func setupLayout() {
         backButton.layer.cornerRadius = 5
