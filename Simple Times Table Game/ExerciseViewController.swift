@@ -85,6 +85,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         //print("View did Load")
+        resultInputField.delegate = self
         prepareNumbers()
         setupLayout()
         self.resultInputField.delegate = self
@@ -265,6 +266,13 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
+    {
+        let allowedCharacters = CharacterSet.decimalDigits
+        let characterSet = CharacterSet(charactersIn: string)
+        return allowedCharacters.isSuperset(of: characterSet)
+    }
+    
     // MARK: - check result function
     func checkResult() {
         if resultInputField.text != "" {
@@ -433,8 +441,10 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
     // MARK: - Check answer
     func checkAnswer(bewerking: String) {
         var correct: Bool = true
+        let antwoord = resultInputField.text?.trimmingCharacters(in: .whitespaces)
+        
         if bewerking == "delen" {
-            correct = Int(resultInputField.text!)! == self.multiplier! / self.tableMult!
+            correct = Int(antwoord!) == self.multiplier! / self.tableMult!
             if correct {
                 //print("Correct answer")
                 animateInputField(correct: true)
@@ -448,7 +458,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
                 wrongAnswers[self.multiplier!] = [bewerking:self.tableMult!]
             }
         } else if bewerking == "vermenigvuldigen" {
-            correct = Int(resultInputField.text!)! == self.multiplier! * self.tableMult!
+            correct = Int(antwoord!) == self.multiplier! * self.tableMult!
             if correct {
                 //print("Correct answer")
                 animateInputField(correct: true)
