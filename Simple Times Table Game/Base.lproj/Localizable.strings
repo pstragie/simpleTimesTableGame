@@ -18,6 +18,8 @@
 "Are you sure you want to go back?" = "Are you sure you want to go back?";
 "Finished!" = "Finished!";
 "Buy Full version" = "Buy Full version";
+"The answer you provided was not correct, try again." = "The answer you provided was not correct, try again.";
+"Wrong answer" = "Wrong answer";
 "Wrong answer:" = "Wrong answer:";
 "Wrong answers:" = "Wrong answers:";
 "You have" = "You have";
@@ -43,3 +45,6 @@
 "Answer correct to buy the full version" = "Answer correct to buy the full version";
 "Answer correct to continue" = "Answer correct to continue";
 "How much is SEVENTEEN + SEVEN - THIRTEEN? (in words)" = "How much is SEVENTEEN + SEVEN - THIRTEEN? (in words)";
+"restoring purchase..." = "restoring purchase...";
+"You need a working internet connection" = "You need a working internet connection";
+"Check your connection settings and try again." = "Check your connection settings and try again.";

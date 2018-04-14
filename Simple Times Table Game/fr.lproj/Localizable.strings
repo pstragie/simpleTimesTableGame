@@ -18,6 +18,8 @@
 "Are you sure you want to go back?" = "Êtes-vous sûr de vouloir revenir?";
 "Finished!" = "Fini!";
 "Buy Full version" = "Acheter la version complète";
+"The answer you provided was not correct, try again." = "La réponse n'était pas correcte, réessayez.";
+"Wrong answer" = "Mauvaise réponse";
 "Wrong answer:" = "Mauvaise réponse:";
 "Wrong answers:" = "Mauvaises réponses:";
 "You have" = "Vous avez";
@@ -43,3 +45,6 @@
 "Answer correct to buy the full version" = "Répondez pour continuer l'achat";
 "Answer correct to continue" = "Répondez pour continuer";
 "How much is SEVENTEEN + SEVEN - THIRTEEN? (in words)" = "How much is SEVENTEEN + SEVEN - THIRTEEN? (en anglais)";
+"restoring purchase..." = "restorer l'achat...";
+"You need a working internet connection" = "Il n'y a pas de connection à l'internet";
+"Check your connection settings and try again." = "Vérifiez la connection et re-essayez";

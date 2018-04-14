@@ -18,6 +18,8 @@
 "Are you sure you want to go back?" = "Ben je zeker dat je terug wilt gaan?";
 "Finished!" = "Klaar!";
 "Buy Full version" = "Activeer alle tafels";
+"The answer you provided was not correct, try again." = "Het antwoord was niet correct, probeer opnieuw.";
+"Wrong answer" = "Fout antwoord";
 "Wrong answer:" = "Fout antwoord:";
 "Wrong answers:" = "Foute antwoorden:";
 "You have" = "Je hebt";
@@ -43,3 +45,6 @@
 "Answer correct to buy the full version" = "Antwoord correct om verder te gaan met de aankoop";
 "Answer correct to continue" = "Antwoord correct om verder te gaan";
 "How much is SEVENTEEN + SEVEN - THIRTEEN? (in words)" = "Hoeveel is SEVENTEEN + SEVEN - THIRTEEN? (voluit in het Engels)";
+"restoring purchase..." = "aankoop herstellen...";
+"You need a working internet connection" = "Geen internetverbinding";
+"Check your connection settings and try again." = "Controleer de internetverbinding en probeer opnieuw.";

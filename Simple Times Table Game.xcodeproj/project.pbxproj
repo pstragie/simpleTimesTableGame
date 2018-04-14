@@ -40,6 +40,7 @@
 		F5B2D39C20503286005B93C8 /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D39B20503286005B93C8 /* TableCell.swift */; };
 		F5B2D39F205034DD005B93C8 /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F5B2D39D205034DD005B93C8 /* Datamodel.xcdatamodeld */; };
 		F5B2D3A120503E49005B93C8 /* begindataVermenigvuldigen.csv in Resources */ = {isa = PBXBuildFile; fileRef = F5B2D3A020503E49005B93C8 /* begindataVermenigvuldigen.csv */; };
+		F5B5949F2081FD6A0084892C /* ConnectionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B5949E2081FD6A0084892C /* ConnectionCheck.swift */; };
 		F5EA52E82060829200E0CA13 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5EA52E72060829200E0CA13 /* StoreKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -93,6 +94,7 @@
 		F5B2D39B20503286005B93C8 /* TableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
 		F5B2D39E205034DD005B93C8 /* Datamodel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Datamodel.xcdatamodel; sourceTree = "<group>"; };
 		F5B2D3A020503E49005B93C8 /* begindataVermenigvuldigen.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = begindataVermenigvuldigen.csv; sourceTree = "<group>"; };
+		F5B5949E2081FD6A0084892C /* ConnectionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionCheck.swift; sourceTree = "<group>"; };
 		F5EA52E72060829200E0CA13 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -181,6 +183,7 @@
 				F55AFE4B206D579100DCBCD0 /* IAPHelper.swift */,
 				F5B2D385204F26CC005B93C8 /* AppDelegate.swift */,
 				F5B2D387204F26CC005B93C8 /* ViewController.swift */,
+				F5B5949E2081FD6A0084892C /* ConnectionCheck.swift */,
 				F5B2D397204F4CAE005B93C8 /* ExerciseViewController.swift */,
 				F5B2D39B20503286005B93C8 /* TableCell.swift */,
 				F5B2D38C204F26CC005B93C8 /* Assets.xcassets */,
@@ -376,6 +379,7 @@
 				F5B2D39F205034DD005B93C8 /* Datamodel.xcdatamodeld in Sources */,
 				F5B2D386204F26CC005B93C8 /* AppDelegate.swift in Sources */,
 				F55AFE4D206D579100DCBCD0 /* IAPHelper.swift in Sources */,
+				F5B5949F2081FD6A0084892C /* ConnectionCheck.swift in Sources */,
 				F55AFE4C206D579100DCBCD0 /* FullVersion.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -542,6 +546,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.PWS-apps.SimpleTimesTableGame";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -560,6 +565,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.PWS-apps.SimpleTimesTableGame";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

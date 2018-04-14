@@ -51,7 +51,7 @@ extension IAPHelper {
     }
     
     public func buyProduct(_ product: SKProduct) {
-//        print("Buying \(product.productIdentifier)...")
+        print("Buying \(product.productIdentifier)...")
         let payment = SKPayment(product: product)
         SKPaymentQueue.default().add(payment)
     }
@@ -198,6 +198,7 @@ extension IAPHelper: SKPaymentTransactionObserver {
         if let otherViewController = UIApplication.shared.delegate?.window??.rootViewController as? ViewController {
             let buyButton = otherViewController.buyFullVersionButton
             buyButton?.isHidden = true
+            otherViewController.effectView.removeFromSuperview()
             otherViewController.viewWillLayoutSubviews()
         }
     }
@@ -205,9 +206,15 @@ extension IAPHelper: SKPaymentTransactionObserver {
     private func restore(transaction: SKPaymentTransaction) {
         guard let productIdentifier = transaction.original?.payment.productIdentifier else { return }
         
-//        print("restore... \(productIdentifier)")
+        print("restore... \(productIdentifier)")
         deliverPurchaseNotificationFor(identifier: productIdentifier)
         SKPaymentQueue.default().finishTransaction(transaction)
+        if let otherViewController = UIApplication.shared.delegate?.window??.rootViewController as? ViewController {
+            let buyButton = otherViewController.buyFullVersionButton
+            buyButton?.isHidden = true
+            otherViewController.effectView.removeFromSuperview()
+            otherViewController.viewWillLayoutSubviews()
+        }
     }
     
     private func fail(transaction: SKPaymentTransaction) {
@@ -223,6 +230,7 @@ extension IAPHelper: SKPaymentTransactionObserver {
         if let otherViewController = UIApplication.shared.delegate?.window??.rootViewController as? ViewController {
             let buyButton = otherViewController.buyFullVersionButton
             buyButton?.isEnabled = true
+            otherViewController.effectView.removeFromSuperview()
             otherViewController.viewWillLayoutSubviews()
         }
     }

@@ -132,6 +132,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        for transaction in SKPaymentQueue.default().transactions {
+            SKPaymentQueue.default().finishTransaction(transaction)
+        }
         AppDelegate.AppUtility.lockOrientation(.all)
         self.saveContext()
     }

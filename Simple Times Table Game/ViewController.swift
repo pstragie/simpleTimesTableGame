@@ -26,6 +26,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     var parentalGate = UIView()
     var parentalCheck: Bool = false
+    let answerField = UITextField()
     
     // MARK: - Outlets
     @IBOutlet weak var buttonResetStars: UIButton!
@@ -37,51 +38,77 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBAction func BewerkingControlChanged(_ sender: UISegmentedControl) {
         viewWillLayoutSubviews()
     }
+    @IBOutlet weak var restorePurchaseButton: UIButton!
     @IBOutlet weak var buyFullVersionButton: UIButton!
     @IBAction func RestorePurchase(_ sender: UIButton) {
+        restorePurchaseButton.setTitleColor(.red, for: .highlighted)
+        activityIndicatorShow(NSLocalizedString("restoring purchase...", comment: ""))
+        restorePurchaseButton.isEnabled = false
+        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(ViewController.enableButton), userInfo: nil, repeats: false)
         STTGFull.store.restorePurchases()
         self.tableView.reloadData()
         self.viewWillLayoutSubviews()
+
     }
     
     // MARK: - UNLOCK PREMIUM BUTTON
     @IBAction func unlockFullVersionButt(_ sender: Any) {
         buyFullVersionButton.setTitleColor(.red, for: .highlighted)
         activityIndicatorShow(NSLocalizedString("contacting AppStore...", comment: ""))
-        
         buyFullVersionButton.isEnabled = false
-        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(ViewController.enableButton), userInfo: nil, repeats: false)
-        if parentalGateControl() == true {
-            if IAPHelper.canMakePayments() {
-                STTGFull.store.buyProduct(iapProducts[0])
-                self.tableView.reloadData()
-                self.viewWillLayoutSubviews()
-            } else {
-                let failController = UIAlertController(title: NSLocalizedString("In-app purchases not enabled", comment: ""), message: NSLocalizedString("Please enable in-app purchase in settings", comment: ""), preferredStyle: .alert)
-                let ok = UIAlertAction(title: "OK", style: .default) { alertAction in
-                }
-                let settings = UIAlertAction(title: "Settings", style: .default, handler: { alertAction in
-                    failController.dismiss(animated: true, completion: nil)
-                    let url: URL? = URL(string: UIApplicationOpenSettingsURLString)
-                    //let url: NSURL? = NSURL(string: UIApplicationOpenSettingsURLString)
-                    if url != nil {
-                        if UIApplication.shared.canOpenURL(url!) {
-                            if #available(iOS 10.0, *) {
-                                UIApplication.shared.open(url!, options: [:], completionHandler: nil)
-                            } else {
-                                UIApplication.shared.openURL(url!)
+        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(ViewController.enableButton), userInfo: nil, repeats: false)
+        setupParentalGateView(option: "buy")
+        //parentalGate window will continue to passParentalControlAndBuy
+        parentalGate.isHidden = false
+        }
+    
+    func passParentalControlAndBuy() {
+        if ConnectionCheck.isConnectedToNetwork() {
+            if parentalCheck == true {
+    //            print("parental gate passed")
+                if IAPHelper.canMakePayments() {
+    //                print("Can make payments")
+                    STTGFull.store.buyProduct(iapProducts[0])
+                    self.tableView.reloadData()
+                    self.viewWillLayoutSubviews()
+                } else {
+                    // MARK: in-app-purchase fail message
+                    let failController = UIAlertController(title: NSLocalizedString("In-app purchases not enabled", comment: ""), message: NSLocalizedString("Please enable in-app purchase in settings", comment: ""), preferredStyle: .alert)
+                    let ok = UIAlertAction(title: "OK", style: .default) { alertAction in
+                    }
+                    let settings = UIAlertAction(title: "Settings", style: .default, handler: { alertAction in
+                        failController.dismiss(animated: true, completion: nil)
+                        let url: URL? = URL(string: UIApplicationOpenSettingsURLString)
+                        //let url: NSURL? = NSURL(string: UIApplicationOpenSettingsURLString)
+                        if url != nil {
+                            if UIApplication.shared.canOpenURL(url!) {
+                                if #available(iOS 10.0, *) {
+                                    UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+                                } else {
+                                    UIApplication.shared.openURL(url!)
+                                }
                             }
                         }
-                    }
-                })
-                failController.addAction(ok)
-                failController.addAction(settings)
-                present(failController, animated: true, completion: nil)
+                    })
+                    failController.addAction(ok)
+                    failController.addAction(settings)
+                    present(failController, animated: true, completion: nil)
+                }
+                self.tableView.reloadData()
+                parentalCheck = false
             }
+            self.viewWillLayoutSubviews()
+        } else {
+            self.answerField.resignFirstResponder()
+            let alertcontroller = UIAlertController(title: NSLocalizedString("You need a working internet connection", comment: ""), message: NSLocalizedString("Check your connection settings and try again.", comment: ""), preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertcontroller.addAction(ok)
+            present(alertcontroller, animated: true, completion: nil)
             self.effectView.removeFromSuperview()
         }
     }
     
+    // MARK: - Reset all stars
     @IBAction func resetAllStarsButtonPressed(_ sender: UIButton) {
         let controller = UIAlertController(title: NSLocalizedString("All stars will be deleted!", comment: ""), message: NSLocalizedString("Are you sure you want to delete all hard earned stars for the seleted operator?", comment: ""), preferredStyle: .alert)
         let ok = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default) { alertAction in self.resetAllStars() }
@@ -93,7 +120,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         present(controller, animated: true, completion: nil)
 
-        //resetAllStars()
     }
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -171,11 +197,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 fatalError("Could not fetch records: \(fetchError)")
             }
         }
+        if buyFullVersionButton.isHidden == true {
+            restorePurchaseButton.isHidden = false
+        } else {
+            restorePurchaseButton.isHidden = true
+        }
         self.tableView.reloadData()
     }
 
     func enableButton() {
         self.buyFullVersionButton.isEnabled = true
+        self.restorePurchaseButton.isEnabled = true
     }
     
     // MARK: - Unwind
@@ -341,8 +373,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         effectView.addSubview(activityIndicator)
         effectView.addSubview(strLabel)
-        view.addSubview(effectView)
-        //view.bringSubview(toFront: effectView)
+        self.view.addSubview(effectView)
     }
     
     // MARK: - function Reset All Stars
@@ -393,6 +424,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return true
     }
     
+    // MARK: - prepare
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
             
@@ -483,7 +515,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.parentalGate.translatesAutoresizingMaskIntoConstraints = false
         let width: CGFloat = self.view.frame.width
         let height: CGFloat = self.view.frame.height
-        self.parentalGate=UIView(frame:CGRect(x: (self.view.center.x)-(width/3), y: (self.view.center.y)-(height/3), width: width / 1.5, height: height / 1.5))
+        self.parentalGate=UIView(frame:CGRect(x: (self.view.center.x)-(width/3), y: (self.view.center.y)-(height/3), width: width / 1.5, height: height / 2.5))
         
         parentalGate.backgroundColor = UIColor.orange
         parentalGate.layer.cornerRadius = 8
@@ -494,7 +526,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let viewTitle = UILabel()
         viewTitle.text = NSLocalizedString("Parental control", comment: "")
-        viewTitle.font = UIFont.boldSystemFont(ofSize: 40)
+        viewTitle.font = UIFont.boldSystemFont(ofSize: 14)
         viewTitle.textColor = UIColor.white
         viewTitle.textAlignment = .center
         viewTitle.adjustsFontSizeToFitWidth = true
@@ -507,7 +539,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         } else {
             parGateText.text = NSLocalizedString("Grown ups only!", comment: "") + "\n" + NSLocalizedString("Answer correct to continue", comment: "")
         }
-        parGateText.font = UIFont.boldSystemFont(ofSize: 30)
+        parGateText.font = UIFont.boldSystemFont(ofSize: 16)
         parGateText.textColor = UIColor.white
         parGateText.textAlignment = .center
         parGateText.adjustsFontSizeToFitWidth = true
@@ -516,24 +548,32 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let parGateQuestion = UILabel()
         parGateQuestion.text = NSLocalizedString("How much is SEVENTEEN + SEVEN - THIRTEEN? (in words)", comment: "")
-        parGateQuestion.font = UIFont.systemFont(ofSize: 26)
+        parGateQuestion.font = UIFont.systemFont(ofSize: 20)
         parGateQuestion.textColor = UIColor.white
+        parGateQuestion.numberOfLines = 3
         parGateQuestion.textAlignment = .center
         parGateQuestion.adjustsFontSizeToFitWidth = true
         parGateQuestion.minimumScaleFactor = 0.2
         parGateQuestion.translatesAutoresizingMaskIntoConstraints = false
         
-        let answerField = UITextField()
-        answerField.font = UIFont.systemFont(ofSize: 26)
+        
+        answerField.font = UIFont.systemFont(ofSize: 20)
+        answerField.keyboardType = .alphabet
+        answerField.tintColor = UIColor.black
+        answerField.backgroundColor = UIColor.white
         answerField.textColor = UIColor.black
         answerField.textAlignment = .center
         answerField.adjustsFontSizeToFitWidth = true
+        answerField.layer.cornerRadius = 8
+        answerField.layer.borderWidth = 2
+        answerField.layer.borderColor = UIColor.black.cgColor
+        answerField.becomeFirstResponder()
         answerField.translatesAutoresizingMaskIntoConstraints = false
         
         // MARK: Cancel button!
         let buttonCancel = UIButton()
         buttonCancel.setTitle("Cancel", for: .normal)
-        buttonCancel.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        buttonCancel.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         buttonCancel.setTitleColor(.blue, for: .normal)
         buttonCancel.setTitleColor(.red, for: .highlighted)
         buttonCancel.backgroundColor = .white
@@ -549,7 +589,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // MARK: OK button!
         let buttonOK = UIButton()
         buttonOK.setTitle("OK", for: .normal)
-        buttonOK.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        buttonOK.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         buttonOK.setTitleColor(.blue, for: .normal)
         buttonOK.setTitleColor(.red, for: .highlighted)
         buttonOK.backgroundColor = .white
@@ -560,14 +600,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         buttonOK.layer.borderColor = UIColor.gray.cgColor
         buttonOK.showsTouchWhenHighlighted = true
         buttonOK.translatesAutoresizingMaskIntoConstraints = false
-        if answerField.text == "eleven" || answerField.text == "Eleven" || answerField.text == "ELEVEN" {
-            buttonOK.addTarget(self, action: #selector(answeredOK), for: .touchUpInside)
-        } else {
-            buttonOK.addTarget(self, action: #selector(answerCancel), for: .touchUpInside)
-        }
+        buttonOK.addTarget(self, action: #selector(answeredOK), for: .touchUpInside)
+        
         // MARK: Vertical
         
-        let vertStack = UIStackView(arrangedSubviews: [viewTitle, parGateText, parGateQuestion, answerField, buttonCancel, buttonOK])
+        let vertStack = UIStackView(arrangedSubviews: [parGateText, parGateQuestion, answerField, buttonCancel, buttonOK])
         
         vertStack.axis = .vertical
         vertStack.distribution = .fillProportionally
@@ -585,27 +622,36 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         vertStack.isLayoutMarginsRelativeArrangement = true
     }
     
-    func parentalGateControl() -> Bool {
-        setupParentalGateView(option: "buy")
-        parentalGate.isHidden = false
-        if parentalCheck == true {
-            parentalCheck = false
-            return true
-        }
-        return false
-    }
+    
     func answeredOK() {
+//        print("Answer: \(answerField.text!)")
+        let parAnswer = answerField.text?.trimmingCharacters(in: .whitespaces)
+        if parAnswer == "Eleven" || parAnswer == "eleven" || parAnswer == "ELEVEN" {
+            parentalCheck = true
+            passParentalControlAndBuy()
+        } else {
+            answerField.resignFirstResponder()
+            self.effectView.removeFromSuperview()
+            parentalCheck = false
+            let wrongAnswerAlert = UIAlertController(title: NSLocalizedString("Wrong answer", comment: ""), message: NSLocalizedString("The answer you provided was not correct, try again.", comment: ""), preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style: .default, handler: nil)
+            wrongAnswerAlert.addAction(ok)
+            present(wrongAnswerAlert, animated: true, completion: nil)
+        }
+        answerField.text = ""
+        answerField.resignFirstResponder()
         parentalGate.isHidden = true
-        parentalCheck = true
-        
     }
     func answerCancel() {
+        self.effectView.removeFromSuperview()
         parentalGate.isHidden = true
         parentalCheck = false
+        answerField.text = ""
+        answerField.resignFirstResponder()
     }
     
     // MARK: - setup layout
-    func setupLayout() {        
+    func setupLayout() {
         buyFullVersionButton.setTitle(NSLocalizedString("Buy Full version", comment: ""), for: .normal)
         if STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
             buyFullVersionButton.isHidden = true

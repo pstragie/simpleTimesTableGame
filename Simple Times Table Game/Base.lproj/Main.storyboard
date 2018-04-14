@@ -190,8 +190,20 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="D0M-NH-maE">
-                                <rect key="frame" x="237" y="629" width="108" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="pRX-bp-bTC">
+                                <rect key="frame" x="30" y="635" width="96" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="zUk-ho-Tqh"/>
+                                </constraints>
+                                <state key="normal" title="Reset all stars">
+                                    <color key="titleColor" red="0.08235294118" green="0.21176470589999999" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="resetAllStarsButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mL8-N5-Rjb"/>
+                                </connections>
+                            </button>
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="D0M-NH-maE">
+                                <rect key="frame" x="237" y="635" width="108" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="lEg-OZ-8QD"/>
@@ -202,7 +214,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UWz-mA-ypA">
-                                <rect key="frame" x="285" y="629" width="60" height="30"/>
+                                <rect key="frame" x="285" y="635" width="60" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="Sgc-tH-QQW"/>
                                     <constraint firstAttribute="width" constant="60" id="amX-tk-wod"/>
@@ -210,18 +222,6 @@
                                 <state key="normal" title="Restore"/>
                                 <connections>
                                     <action selector="RestorePurchase:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8qy-e9-5Xi"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="pRX-bp-bTC">
-                                <rect key="frame" x="30" y="629" width="96" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="zUk-ho-Tqh"/>
-                                </constraints>
-                                <state key="normal" title="Reset all stars">
-                                    <color key="titleColor" red="0.08235294118" green="0.21176470589999999" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="resetAllStarsButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mL8-N5-Rjb"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -233,9 +233,9 @@
                             <constraint firstItem="BaT-Ms-XhH" firstAttribute="top" secondItem="dVg-EI-XO7" secondAttribute="bottom" constant="20" id="6Fe-2M-p2H"/>
                             <constraint firstAttribute="trailing" secondItem="D0M-NH-maE" secondAttribute="trailing" constant="30" id="AVg-xe-uOQ"/>
                             <constraint firstItem="BaT-Ms-XhH" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="30" id="JtN-Es-sMS"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="D0M-NH-maE" secondAttribute="bottom" constant="8" id="Qjn-iT-NKi"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="UWz-mA-ypA" secondAttribute="bottom" constant="8" id="T4W-hK-HGt"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="pRX-bp-bTC" secondAttribute="bottom" constant="8" id="Uw9-7w-Z3k"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="D0M-NH-maE" secondAttribute="bottom" constant="2" id="Qjn-iT-NKi"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="UWz-mA-ypA" secondAttribute="bottom" constant="2" id="T4W-hK-HGt"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="pRX-bp-bTC" secondAttribute="bottom" constant="2" id="Uw9-7w-Z3k"/>
                             <constraint firstItem="el8-0j-p9e" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="30" id="XvB-PU-QFd"/>
                             <constraint firstAttribute="trailingMargin" secondItem="el8-0j-p9e" secondAttribute="trailing" constant="30" id="ZL0-0Z-7KX"/>
                             <constraint firstItem="dVg-EI-XO7" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="30" id="aDc-6h-6eG"/>
@@ -259,6 +259,7 @@
                         <outlet property="DifficultyControl" destination="28I-gy-m7I" id="v4a-IK-qbk"/>
                         <outlet property="buttonResetStars" destination="pRX-bp-bTC" id="RBg-LE-rnv"/>
                         <outlet property="buyFullVersionButton" destination="D0M-NH-maE" id="Hcx-Jx-dUQ"/>
+                        <outlet property="restorePurchaseButton" destination="UWz-mA-ypA" id="ZUA-ym-jY7"/>
                         <outlet property="startButton" destination="IHX-L2-CbD" id="O51-bD-y7o"/>
                         <outlet property="startButtonSelection" destination="Uct-Wf-0RK" id="njn-Ht-dCn"/>
                         <outlet property="tableView" destination="dVg-EI-XO7" id="hUv-3a-yU1"/>
