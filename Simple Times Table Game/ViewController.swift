@@ -929,7 +929,7 @@ extension ViewController: NSFetchedResultsControllerDelegate {
             } else if BewerkingControl.selectedSegmentIndex == 1 {
                 let stars = fetchedResultsControllerD.object(at: indexPath)
                 cell.timesTable.text = stars.timestable
-                
+                cell.isUserInteractionEnabled = true
                 if stars.star1 == "0" {
                     cell.star1.image = #imageLiteral(resourceName: "empty_star")
                 } else if stars.star1 == "1" {
@@ -962,7 +962,7 @@ extension ViewController: NSFetchedResultsControllerDelegate {
             } else {
                 let stars = fetchedResultsControllerV.object(at: indexPath)
                 cell.timesTable.text = stars.timestable
-                
+                cell.isUserInteractionEnabled = true
                 if stars.star1 == "0" {
                     cell.star1.image = #imageLiteral(resourceName: "empty_star")
                 } else if stars.star1 == "1" {

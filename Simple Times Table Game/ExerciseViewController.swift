@@ -47,6 +47,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
     var interstitial: GADInterstitial!
     var mode: String?
     var totalNumber: Int = 10
+    var keyboardSizeHeight: CGFloat?
     
     // MARK: - Outlets
     @IBOutlet weak var backButton: UIButton!
@@ -56,7 +57,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var bewerkingsTeken: UILabel!
     @IBOutlet weak var progressLabel: UILabel!
-    
+    @IBOutlet weak var textFieldBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var grassImagePattern: UIImageView!
     @IBAction func goBack(_ sender: UIButton) {
         //print("Back button pressed!")
@@ -236,7 +237,6 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-
     // MARK: - setup layout
     func setupLayout() {
         backButton.layer.cornerRadius = 5
@@ -533,7 +533,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         
         let viewTitle = UILabel()
         viewTitle.text = NSLocalizedString("Finished!", comment: "")
-        viewTitle.font = UIFont.boldSystemFont(ofSize: 40)
+        viewTitle.font = UIFont.boldSystemFont(ofSize: 26)
         viewTitle.textColor = UIColor.white
         viewTitle.textAlignment = .center
         viewTitle.adjustsFontSizeToFitWidth = true
@@ -548,10 +548,11 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
             answerString = NSLocalizedString("answers", comment: "")
         }
         viewCorrect.text = NSLocalizedString("You have", comment: "") + " \(score) " + NSLocalizedString("correct \(answerString).", comment: "")
-        viewCorrect.font = UIFont.boldSystemFont(ofSize: 30)
+        viewCorrect.font = UIFont.boldSystemFont(ofSize: 24)
         viewCorrect.textColor = UIColor.white
         viewCorrect.textAlignment = .center
         viewCorrect.adjustsFontSizeToFitWidth = true
+        viewCorrect.numberOfLines = 2
         viewCorrect.minimumScaleFactor = 0.2
         viewCorrect.translatesAutoresizingMaskIntoConstraints = false
         
@@ -564,7 +565,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         }
         let viewWrong = UILabel()
         viewWrong.text = NSLocalizedString("Wrong \(wrongString)", comment: "")
-        viewWrong.font = UIFont.systemFont(ofSize: 26)
+        viewWrong.font = UIFont.systemFont(ofSize: 22)
         viewWrong.textColor = UIColor.white
         viewWrong.textAlignment = .center
         viewWrong.adjustsFontSizeToFitWidth = true
@@ -573,23 +574,24 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         
         let viewWrongResults = UILabel()
         viewWrongResults.text = "\(message)"
-        viewWrongResults.font = UIFont.systemFont(ofSize: 26)
+        viewWrongResults.font = UIFont.systemFont(ofSize: 16)
         viewWrongResults.textColor = UIColor.white
         viewWrongResults.textAlignment = .center
         viewWrongResults.adjustsFontSizeToFitWidth = true
-        viewWrongResults.minimumScaleFactor = 0.2
+        viewWrongResults.adjustsFontForContentSizeCategory = true
+        viewWrongResults.minimumScaleFactor = 0.1
         viewWrongResults.numberOfLines = wrongAnswers.count + 1
         viewWrongResults.translatesAutoresizingMaskIntoConstraints = false
         
         // MARK: OK button!
         let buttonOK = UIButton()
         buttonOK.setTitle("OK", for: .normal)
-        buttonOK.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        buttonOK.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        buttonOK.titleLabel?.adjustsFontSizeToFitWidth = true
         buttonOK.setTitleColor(.blue, for: .normal)
         buttonOK.setTitleColor(.red, for: .highlighted)
         buttonOK.backgroundColor = .white
-        buttonOK.titleLabel?.adjustsFontSizeToFitWidth = true
-        buttonOK.titleLabel?.minimumScaleFactor = 0.2
+        buttonOK.titleLabel?.minimumScaleFactor = 0.1
         buttonOK.layer.cornerRadius = 8
         buttonOK.layer.borderWidth = 1
         buttonOK.layer.borderColor = UIColor.gray.cgColor
@@ -608,7 +610,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         vertStack.axis = .vertical
         vertStack.distribution = .fillProportionally
         vertStack.alignment = .fill
-        vertStack.spacing = 8
+        vertStack.spacing = 6
         vertStack.translatesAutoresizingMaskIntoConstraints = false
         self.resultView.addSubview(vertStack)
         
