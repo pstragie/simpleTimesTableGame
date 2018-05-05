@@ -572,7 +572,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         // MARK: Cancel button!
         let buttonCancel = UIButton()
-        buttonCancel.setTitle("Cancel", for: .normal)
+        buttonCancel.setTitle(NSLocalizedString("Cancel", comment: ""), for: .normal)
         buttonCancel.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         buttonCancel.setTitleColor(.blue, for: .normal)
         buttonCancel.setTitleColor(.red, for: .highlighted)
@@ -772,7 +772,7 @@ extension ViewController: NSFetchedResultsControllerDelegate {
         cell.layer.masksToBounds = true
         cell.layer.borderWidth = 0
         
-        if !STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
+        if STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
             if indexPath.row == 5 || indexPath.row == 8 || indexPath.row == 3 {
                 cell.isUserInteractionEnabled = false
                 cell.star1.image = #imageLiteral(resourceName: "Black_Lock")
