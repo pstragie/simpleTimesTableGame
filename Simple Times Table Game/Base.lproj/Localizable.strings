@@ -1,0 +1,50 @@
+/* 
+  Localizable.strings
+  
+
+  Created by Pieter Stragier on 10/04/2018.
+
+*/
+"1. Choose level" = "1. Choose level";
+"2. Choose operator" = "2. Choose operator";
+"3. Choose one or more times tables" = "3. Choose one or more times tables";
+"OK" = "OK";
+"Cancel" = "Cancel";
+"START exercise" = "START exercise";
+"START test" = "START test";
+"Your answer..." = "Your answer...";
+"Enter the result..." = "Enter the result...";
+"Progress will be lost!" = "Progress will be lost!";
+"Are you sure you want to go back?" = "Are you sure you want to go back?";
+"Finished!" = "Finished!";
+"Buy Full version" = "Buy Full version";
+"The answer you provided was not correct, try again." = "The answer you provided was not correct, try again.";
+"Wrong answer" = "Wrong answer";
+"Wrong answer:" = "Wrong answer:";
+"Wrong answers:" = "Wrong answers:";
+"You have" = "You have";
+"correct answer." = "correct answer.";
+"correct answers." = "correct answers.";
+"All stars will be deleted!" = "All stars will be deleted!";
+"Are you sure you want to delete all hard earned stars for the seleted operator?" = "Are you sure you want to delete all hard earned stars for the seleted operator?";
+"contacting AppStore..." = "contacting AppStore...";
+"Purchase failed" = "Purchase fail";
+"Purchases are disabled in your device" = "Purchases are disabled in your device";
+"Not allowed" = "Not allowed";
+"Success" = "Succes";
+"Restore purchase" = "Restore purchase";
+"In-app purchases not enabled" = "In-app purchases not enabled";
+"Please enable in-app purchase in settings" = "Please enable in-app purchase in settings";
+"Restore purchase" = "Restore purchase";
+"No times table selected!" = "No times table selected!";
+"Select at least one table." = "Select at least one table.";
+"Use Passcode" = "Use Passcode";
+"Please authenticate to buy Full version (ad free)" = "Please authenticate to buy Full version (ad free)";
+"Parental control" = "Parental control";
+"Grown ups only!" = "Grown ups only!";
+"Answer correct to buy the full version" = "Answer correct to buy the full version";
+"Answer correct to continue" = "Answer correct to continue";
+"How much is SEVENTEEN + SEVEN - THIRTEEN? (in words)" = "How much is SEVENTEEN + SEVEN - THIRTEEN? (in words)";
+"restoring purchase..." = "restoring purchase...";
+"You need a working internet connection" = "You need a working internet connection";
+"Check your connection settings and try again." = "Check your connection settings and try again.";

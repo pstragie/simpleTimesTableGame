@@ -1,0 +1,50 @@
+/* 
+  Localizable.strings
+  
+
+  Created by Pieter Stragier on 10/04/2018.
+
+*/
+"1. Choose level" = "1. Kies niveau";
+"2. Choose operator" = "2. Kies bewerking";
+"3. Choose one or more times tables" = "3. Kies één of meer tafels";
+"OK" = "OK";
+"Cancel" = "Annuleer";
+"START exercise" = "START oefenen";
+"START test" = "START test";
+"Your answer..." = "Jouw antwoord...";
+"Enter the result..." = "Geef je antwoord...";
+"Progress will be lost!" = "Test zal geannuleerd worden!";
+"Are you sure you want to go back?" = "Ben je zeker dat je terug wilt gaan?";
+"Finished!" = "Klaar!";
+"Buy Full version" = "Activeer alle tafels";
+"The answer you provided was not correct, try again." = "Het antwoord was niet correct, probeer opnieuw.";
+"Wrong answer" = "Fout antwoord";
+"Wrong answer:" = "Fout antwoord:";
+"Wrong answers:" = "Foute antwoorden:";
+"You have" = "Je hebt";
+"correct answer." = "juist antwoord.";
+"correct answers." = "juiste antwoorden.";
+"All stars will be deleted!" = "Alle sterren worden gewist!";
+"Are you sure you want to delete all hard earned stars for the seleted operator?" = "Ben je zeker dat je al je hardverdiende sterren wilt wissen voor deze bewerking?";
+"contacting AppStore..." = "AppStore contacteren...";
+"Purchase failed" = "Aankoop mislukt";
+"Purchases are disabled in your device" = "Aankopen zijn uitgeschakeld in je toestel";
+"Not allowed" = "Niet toegelaten";
+"Restore purchase" = "Herstel aankoop";
+"Success" = "Gelukt";
+"In-app purchases not enabled" = "In-app aankopen niet geactiveerd";
+"Please enable in-app purchase in settings" = "Activeer in-app aankopen in de instellingen";
+"Restore purchase" = "Herstel aankoop";
+"No times table selected!" = "Geen tafel geselecteerd!";
+"Select at least one table." = "Selecteer minstens 1 tafel.";
+"Use Passcode" = "Gebruik Paswoord";
+"Please authenticate to buy Full version (ad free)" = "Identificeer jezelf om de volledige versie te kopen (reclame-vrij)";
+"Parental control" = "Ouderlijk toezicht";
+"Grown ups only!" = "Enkel voor ouders!";
+"Answer correct to buy the full version" = "Antwoord correct om verder te gaan met de aankoop";
+"Answer correct to continue" = "Antwoord correct om verder te gaan";
+"How much is SEVENTEEN + SEVEN - THIRTEEN? (in words)" = "Hoeveel is SEVENTEEN + SEVEN - THIRTEEN? (voluit in het Engels)";
+"restoring purchase..." = "aankoop herstellen...";
+"You need a working internet connection" = "Geen internetverbinding";
+"Check your connection settings and try again." = "Controleer de internetverbinding en probeer opnieuw.";

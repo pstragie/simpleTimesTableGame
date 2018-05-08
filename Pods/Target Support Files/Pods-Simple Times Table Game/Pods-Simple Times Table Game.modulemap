@@ -1,0 +1,6 @@
+framework module Pods_Simple_Times_Table_Game {
+  umbrella header "Pods-Simple Times Table Game-umbrella.h"
+
+  export *
+  module * { export * }
+}
