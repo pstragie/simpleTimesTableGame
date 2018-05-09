@@ -205,7 +205,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.tableView.reloadData()
     }
 
-    func enableButton() {
+    @objc func enableButton() {
         self.buyFullVersionButton.isEnabled = true
         self.restorePurchaseButton.isEnabled = true
     }
@@ -360,7 +360,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 220, height: 46))
         strLabel.text = title
-        strLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
+        strLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
         strLabel.textColor = UIColor(white: 0.5, alpha: 0.7)
         
         effectView.frame = CGRect(x: view.frame.midX - strLabel.frame.width/2, y: view.frame.midY - strLabel.frame.height/2 , width: 220, height: 46)
@@ -623,7 +623,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     
-    func answeredOK() {
+    @objc func answeredOK() {
 //        print("Answer: \(answerField.text!)")
         let parAnswer = answerField.text?.trimmingCharacters(in: .whitespaces)
         if parAnswer == "Eleven" || parAnswer == "eleven" || parAnswer == "ELEVEN" {
@@ -642,7 +642,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         answerField.resignFirstResponder()
         parentalGate.isHidden = true
     }
-    func answerCancel() {
+    @objc func answerCancel() {
         self.effectView.removeFromSuperview()
         parentalGate.isHidden = true
         parentalCheck = false
@@ -684,7 +684,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         (DifficultyControl.subviews[1] as UIView).tintColor = UIColor(red: 204/255, green: 194/255, blue: 194/255, alpha: 1)
         (DifficultyControl.subviews[0] as UIView).tintColor = UIColor(red: 201/255, green: 137/255, blue: 16/255, alpha: 1)
         let font = UIFont.systemFont(ofSize: 25)
-        BewerkingControl.setTitleTextAttributes([NSFontAttributeName: font], for: .normal)
+        BewerkingControl.setTitleTextAttributes([NSAttributedStringKey.font: font], for: .normal)
     }
     
 }

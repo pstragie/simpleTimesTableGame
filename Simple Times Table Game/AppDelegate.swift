@@ -225,7 +225,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         // Store the value into the values array
                         values.append(value! as String)
                         // Retrieve the unscanned remainder of the string
-                        if textScanner.scanLocation < textScanner.string.characters.count {
+                        if textScanner.scanLocation < textScanner.string.count {
                             textToScan = (textScanner.string as NSString).substring(from: textScanner.scanLocation + 1)
                         } else {
                             textToScan = ""

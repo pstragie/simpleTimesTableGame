@@ -389,7 +389,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         RunLoop.current.add(self.timer, forMode: RunLoopMode.commonModes)
     }
     
-    func updateTimer() {
+    @objc func updateTimer() {
         seconds -= 1     //This will decrement(count down)the seconds.
         if seconds == 0 {
             timerLabel.textColor = UIColor.red
@@ -623,7 +623,7 @@ class ExerciseViewController: UIViewController, UITextFieldDelegate {
         vertStack.isLayoutMarginsRelativeArrangement = true
     }
     
-    func finishedOK() {
+    @objc func finishedOK() {
         resultView.isHidden = true
         if !STTGFull.store.isProductPurchased(STTGFull.FullVersion) {
             self.showGoogleMobileInterstitial()
