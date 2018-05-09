@@ -371,8 +371,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         activityIndicator.frame = CGRect(x: 0, y: 0, width: 46, height: 46)
         activityIndicator.startAnimating()
         
-        effectView.addSubview(activityIndicator)
-        effectView.addSubview(strLabel)
+        effectView.contentView.addSubview(activityIndicator)
+        effectView.contentView.addSubview(strLabel)
         self.view.addSubview(effectView)
     }
     
